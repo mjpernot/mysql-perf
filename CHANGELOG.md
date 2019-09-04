@@ -10,6 +10,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - mysql_stat:  Fixed problem with mutable default arguments issue.
 - mysql_stat_run:  Fixed problem with mutable default arguments issue.
 
+### Changed
+- mysql_stat_run:  Changed JSON dictionary keys to CamelCase.
+
 
 ## [2.1.1] - 2018-12-03
 ### Fixed

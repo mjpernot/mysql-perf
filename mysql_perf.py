@@ -145,16 +145,14 @@ def mysql_stat_run(SERVER, db_tbl=False, ofile=False, json_fmt=False,
 
     SERVER.upd_srv_stat()
     SERVER.upd_srv_perf()
-
     data = {"Server": SERVER.name,
-            "Asof": datetime.datetime.strftime(datetime.datetime.now(),
+            "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
                                                "%Y-%m-%d %H:%M:%S"),
-            "Perf_Stats": {}}
+            "PerfStats": {}}
 
     for x in perf_list:
         data["Perf_Stats"].update({x: getattr(SERVER, x)})
 
-    # Send data to output.
     if db_tbl:
         mongo_libs.json_2_out(data, db_tbl=db_tbl, **kwargs)
 
@@ -195,7 +193,7 @@ def mysql_stat(SERVER, args_array, **kwargs):
                  "indb_buf_free", "crt_tmp_tbls", "cur_conn", "uptime",
                  "indb_buf", "indb_log_buf", "max_conn"]
 
-    # Loop based on the -n option.
+    # Loop iteration based on the -n option.
     for x in range(0, int(args_array["-n"])):
         mysql_stat_run(SERVER, db_tbl, ofile, json_fmt, no_std, perf_list,
                        **kwargs)
