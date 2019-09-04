@@ -151,7 +151,7 @@ def mysql_stat_run(server, db_tbl=False, ofile=False, json_fmt=False,
             "PerfStats": {}}
 
     for x in perf_list:
-        data["Perf_Stats"].update({x: getattr(server, x)})
+        data["PerfStats"].update({x: getattr(server, x)})
 
     if db_tbl:
         mongo_libs.json_2_out(data, db_tbl=db_tbl, **kwargs)
