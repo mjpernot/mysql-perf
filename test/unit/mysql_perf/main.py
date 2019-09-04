@@ -51,8 +51,6 @@ class UnitTest(unittest.TestCase):
         test_help_false -> Test help if returns false.
         test_arg_req_true -> Test arg_require if returns true.
         test_arg_req_false -> Test arg_require if returns false.
-        test_arg_xor_false -> Test arg_xor_dict if returns false.
-        test_arg_xor_true -> Test arg_xor_dict if returns true.
         test_arg_cond_false -> Test arg_cond_req if returns false.
         test_arg_cond_true -> Test arg_cond_req if returns true.
         test_arg_dir_true -> Test arg_dir_chk_crt if returns true.
@@ -91,7 +89,6 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_perf.main())
 
-    @unittest.skip("not yet implemented")
     @mock.patch("mysql_perf.arg_parser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
     @mock.patch("mysql_perf.arg_parser.arg_parse2")
@@ -111,7 +108,6 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_perf.main())
 
-    @unittest.skip("not yet implemented")
     @mock.patch("mysql_perf.arg_parser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
     @mock.patch("mysql_perf.arg_parser.arg_parse2")
@@ -131,12 +127,11 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_perf.main())
 
-    @unittest.skip("not yet implemented")
-    @mock.patch("mysql_perf.arg_parser.arg_xor_dict")
+    @mock.patch("mysql_perf.arg_parser.arg_cond_req")
     @mock.patch("mysql_perf.arg_parser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
     @mock.patch("mysql_perf.arg_parser.arg_parse2")
-    def test_arg_req_false(self, mock_arg, mock_help, mock_req, mock_xor):
+    def test_arg_req_false(self, mock_arg, mock_help, mock_req, mock_cond):
 
         """Function:  test_arg_req_false
 
@@ -149,65 +144,15 @@ class UnitTest(unittest.TestCase):
         mock_arg.return_value = self.args_array
         mock_help.return_value = False
         mock_req.return_value = False
-        mock_xor.return_value = False
-
-        self.assertFalse(mysql_perf.main())
-
-    @unittest.skip("not yet implemented")
-    @mock.patch("mysql_perf.arg_parser.arg_xor_dict")
-    @mock.patch("mysql_perf.arg_parser.arg_require")
-    @mock.patch("mysql_perf.gen_libs.help_func")
-    @mock.patch("mysql_perf.arg_parser.arg_parse2")
-    def test_arg_xor_false(self, mock_arg, mock_help, mock_req, mock_xor):
-
-        """Function:  test_arg_xor_false
-
-        Description:  Test arg_xor_dict if returns false.
-
-        Arguments:
-
-        """
-
-        mock_arg.return_value = self.args_array
-        mock_help.return_value = False
-        mock_req.return_value = False
-        mock_xor.return_value = False
-
-        self.assertFalse(mysql_perf.main())
-
-    @unittest.skip("not yet implemented")
-    @mock.patch("mysql_perf.arg_parser.arg_cond_req")
-    @mock.patch("mysql_perf.arg_parser.arg_xor_dict")
-    @mock.patch("mysql_perf.arg_parser.arg_require")
-    @mock.patch("mysql_perf.gen_libs.help_func")
-    @mock.patch("mysql_perf.arg_parser.arg_parse2")
-    def test_arg_xor_true(self, mock_arg, mock_help, mock_req, mock_xor,
-                          mock_cond):
-
-        """Function:  test_arg_xor_true
-
-        Description:  Test arg_xor_dict if returns true.
-
-        Arguments:
-
-        """
-
-        mock_arg.return_value = self.args_array
-        mock_help.return_value = False
-        mock_req.return_value = False
-        mock_xor.return_value = True
         mock_cond.return_value = False
 
         self.assertFalse(mysql_perf.main())
 
-    @unittest.skip("not yet implemented")
     @mock.patch("mysql_perf.arg_parser.arg_cond_req")
-    @mock.patch("mysql_perf.arg_parser.arg_xor_dict")
     @mock.patch("mysql_perf.arg_parser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
     @mock.patch("mysql_perf.arg_parser.arg_parse2")
-    def test_arg_cond_false(self, mock_arg, mock_help, mock_req, mock_xor,
-                            mock_cond):
+    def test_arg_cond_false(self, mock_arg, mock_help, mock_req, mock_cond):
 
         """Function:  test_arg_cond_false
 
@@ -220,20 +165,17 @@ class UnitTest(unittest.TestCase):
         mock_arg.return_value = self.args_array
         mock_help.return_value = False
         mock_req.return_value = False
-        mock_xor.return_value = True
         mock_cond.return_value = False
 
         self.assertFalse(mysql_perf.main())
 
-    @unittest.skip("not yet implemented")
     @mock.patch("mysql_perf.arg_parser.arg_dir_chk_crt")
     @mock.patch("mysql_perf.arg_parser.arg_cond_req")
-    @mock.patch("mysql_perf.arg_parser.arg_xor_dict")
     @mock.patch("mysql_perf.arg_parser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
     @mock.patch("mysql_perf.arg_parser.arg_parse2")
-    def test_arg_cond_true(self, mock_arg, mock_help, mock_req, mock_xor,
-                           mock_cond, mock_dir):
+    def test_arg_cond_true(self, mock_arg, mock_help, mock_req, mock_cond,
+                           mock_dir):
 
         """Function:  test_arg_cond_true
 
@@ -246,21 +188,18 @@ class UnitTest(unittest.TestCase):
         mock_arg.return_value = self.args_array
         mock_help.return_value = False
         mock_req.return_value = False
-        mock_xor.return_value = True
         mock_cond.return_value = True
         mock_dir.return_value = True
 
         self.assertFalse(mysql_perf.main())
 
-    @unittest.skip("not yet implemented")
     @mock.patch("mysql_perf.arg_parser.arg_dir_chk_crt")
     @mock.patch("mysql_perf.arg_parser.arg_cond_req")
-    @mock.patch("mysql_perf.arg_parser.arg_xor_dict")
     @mock.patch("mysql_perf.arg_parser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
     @mock.patch("mysql_perf.arg_parser.arg_parse2")
-    def test_arg_dir_true(self, mock_arg, mock_help, mock_req, mock_xor,
-                          mock_cond, mock_dir):
+    def test_arg_dir_true(self, mock_arg, mock_help, mock_req, mock_cond,
+                          mock_dir):
 
         """Function:  test_arg_dir_true
 
@@ -273,13 +212,11 @@ class UnitTest(unittest.TestCase):
         mock_arg.return_value = self.args_array
         mock_help.return_value = False
         mock_req.return_value = False
-        mock_xor.return_value = True
         mock_cond.return_value = True
         mock_dir.return_value = True
 
         self.assertFalse(mysql_perf.main())
 
-    @unittest.skip("not yet implemented")
     @mock.patch("mysql_perf.gen_libs.help_func")
     @mock.patch("mysql_perf.arg_parser")
     def test_arg_dir_false(self, mock_arg, mock_help):
@@ -295,14 +232,12 @@ class UnitTest(unittest.TestCase):
         mock_arg.arg_parse2.return_value = self.args_array
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
-        mock_arg.arg_xor_dict.return_value = True
         mock_arg.arg_cond_req.return_value = True
         mock_arg.arg_dir_chk_crt.return_value = False
         mock_arg.arg_file_chk.return_value = True
 
         self.assertFalse(mysql_perf.main())
 
-    @unittest.skip("not yet implemented")
     @mock.patch("mysql_perf.gen_libs.help_func")
     @mock.patch("mysql_perf.arg_parser")
     def test_arg_file_true(self, mock_arg, mock_help):
@@ -318,14 +253,12 @@ class UnitTest(unittest.TestCase):
         mock_arg.arg_parse2.return_value = self.args_array
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
-        mock_arg.arg_xor_dict.return_value = True
         mock_arg.arg_cond_req.return_value = True
         mock_arg.arg_dir_chk_crt.return_value = False
         mock_arg.arg_file_chk.return_value = True
 
         self.assertFalse(mysql_perf.main())
 
-    @unittest.skip("not yet implemented")
     @mock.patch("mysql_perf.run_program")
     @mock.patch("mysql_perf.gen_libs.help_func")
     @mock.patch("mysql_perf.arg_parser")
@@ -342,7 +275,6 @@ class UnitTest(unittest.TestCase):
         mock_arg.arg_parse2.return_value = self.args_array
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
-        mock_arg.arg_xor_dict.return_value = True
         mock_arg.arg_cond_req.return_value = True
         mock_arg.arg_dir_chk_crt.return_value = False
         mock_arg.arg_file_chk.return_value = False
