@@ -13,6 +13,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ### Changed
 - mysql_stat_run:  Changed JSON dictionary keys to CamelCase.
 - mysql_stat_run:  Changed variable to standard naming convention.
+- mysql_stat:  Changed variable to standard naming convention.
 
 
 ## [2.1.1] - 2018-12-03

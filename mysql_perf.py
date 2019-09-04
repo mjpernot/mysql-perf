@@ -162,7 +162,7 @@ def mysql_stat_run(server, db_tbl=False, ofile=False, json_fmt=False,
         print(err_msg)
 
 
-def mysql_stat(SERVER, args_array, **kwargs):
+def mysql_stat(server, args_array, **kwargs):
 
     """Function:  mysql_stat
 
@@ -170,7 +170,7 @@ def mysql_stat(SERVER, args_array, **kwargs):
         the MySQL statistics based on count and interval options.
 
     Arguments:
-        (input) SERVER -> Database server instance.
+        (input) server -> Database server instance.
         (input) args_array -> Array of command line options and values.
         (input) **kwargs:
             class_cfg -> Mongo server configuration.
@@ -195,7 +195,7 @@ def mysql_stat(SERVER, args_array, **kwargs):
 
     # Loop iteration based on the -n option.
     for x in range(0, int(args_array["-n"])):
-        mysql_stat_run(SERVER, db_tbl, ofile, json_fmt, no_std, perf_list,
+        mysql_stat_run(server, db_tbl, ofile, json_fmt, no_std, perf_list,
                        **kwargs)
 
         # Do not sleep on the last loop.
