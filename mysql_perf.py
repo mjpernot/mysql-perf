@@ -140,6 +140,9 @@ def mysql_stat_run(SERVER, db_tbl=False, ofile=False, json_fmt=False,
     if perf_list is None:
         perf_list = []
 
+    else:
+        perf_list = list(perf_list)
+
     SERVER.upd_srv_stat()
     SERVER.upd_srv_perf()
 

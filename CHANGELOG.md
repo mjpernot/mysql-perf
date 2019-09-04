@@ -8,6 +8,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ### Fixed
 - run_program:  Fixed problem with mutable default arguments issue.
 - mysql_stat:  Fixed problem with mutable default arguments issue.
+- mysql_stat_run:  Fixed problem with mutable default arguments issue.
 
 
 ## [2.1.1] - 2018-12-03
