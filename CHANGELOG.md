@@ -39,7 +39,7 @@ Breaking Change
 ## [1.2.0] - 2017-08-15
 ### Changed
 - Change single quotes to double quotes.
-- Help_Message:  Replace docstring with printing the programs __doc__.
+- Help_Message:  Replace docstring with printing the programs \_\_doc\_\_.
 
 
 ## [1.1.0] - 2017-08-15
