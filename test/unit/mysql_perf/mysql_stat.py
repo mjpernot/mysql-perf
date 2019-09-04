@@ -83,6 +83,22 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.args_array = {"-n": 1, "-b": 1}
+        self.args_array2 = {"-n": 3, "-b": 1}
+
+    @mock.patch("mysql_perf.mysql_stat_run")
+    def test_multi_loop(self, mock_process):
+
+        """Function:  test_multi_loop
+
+        Description:  Test with multiple loops.
+
+        Arguments:
+
+        """
+
+        mock_process.return_value = True
+
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array2))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_default(self, mock_process):
