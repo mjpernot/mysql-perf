@@ -11,6 +11,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - mysql_stat_run:  Fixed problem with mutable default arguments issue.
 
 ### Changed
+- main:  Refactored "if" statements.
 - mysql_stat_run:  Changed JSON dictionary keys to CamelCase.
 - mysql_stat_run:  Changed variable to standard naming convention.
 - mysql_stat:  Changed variable to standard naming convention.
