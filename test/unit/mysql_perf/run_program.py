@@ -140,7 +140,6 @@ class UnitTest(unittest.TestCase):
         self.assertFalse(mysql_perf.run_program(self.args_array2,
                                                 self.func_dict))
 
-    @unittest.skip("not yet implemented")
     @mock.patch("mysql_perf.cmds_gen.disconnect")
     @mock.patch("mysql_perf.gen_libs.load_module")
     @mock.patch("mysql_perf.mysql_libs.create_instance")
