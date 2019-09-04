@@ -176,6 +176,7 @@ def mysql_stat(SERVER, args_array, **kwargs):
 
     """
 
+    args_array = dict(args_array)
     ofile = args_array.get("-o", False)
     db_tbl = args_array.get("-i", False)
     json_fmt = args_array.get("-j", False)
