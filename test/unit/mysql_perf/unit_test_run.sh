@@ -7,3 +7,7 @@
 echo ""
 echo "Unit testing..."
 test/unit/mysql_perf/help_message.py
+test/unit/mysql_perf/main.py
+test/unit/mysql_perf/mysql_stat.py
+test/unit/mysql_perf/mysql_stat_run.py
+test/unit/mysql_perf/run_program.py
