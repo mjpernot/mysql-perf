@@ -220,14 +220,14 @@ def run_program(args_array, func_dict, **kwargs):
     server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
     server.connect()
-    MONGO_SVR = None
+    mongo = None
 
     if args_array.get("-m", False):
-        MONGO_SVR = gen_libs.load_module(args_array["-m"], args_array["-d"])
+        mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
 
     # Intersect args_array and func_dict to determine which functions to call.
     for x in set(args_array.keys()) & set(func_dict.keys()):
-        func_dict[x](server, args_array, class_cfg=MONGO_SVR, **kwargs)
+        func_dict[x](server, args_array, class_cfg=mongo, **kwargs)
 
     cmds_gen.disconnect([server])
 
