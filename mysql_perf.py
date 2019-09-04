@@ -217,9 +217,9 @@ def run_program(args_array, func_dict, **kwargs):
 
     args_array = dict(args_array)
     func_dict = dict(func_dict)
-    SERVER = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
+    server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
-    SERVER.connect()
+    server.connect()
     MONGO_SVR = None
 
     if args_array.get("-m", False):
@@ -227,9 +227,9 @@ def run_program(args_array, func_dict, **kwargs):
 
     # Intersect args_array and func_dict to determine which functions to call.
     for x in set(args_array.keys()) & set(func_dict.keys()):
-        func_dict[x](SERVER, args_array, class_cfg=MONGO_SVR, **kwargs)
+        func_dict[x](server, args_array, class_cfg=MONGO_SVR, **kwargs)
 
-    cmds_gen.disconnect([SERVER])
+    cmds_gen.disconnect([server])
 
 
 def main():
