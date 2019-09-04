@@ -116,7 +116,7 @@ def help_message():
     print(__doc__)
 
 
-def mysql_stat_run(SERVER, db_tbl=False, ofile=False, json_fmt=False,
+def mysql_stat_run(server, db_tbl=False, ofile=False, json_fmt=False,
                    no_std=False, perf_list=None, **kwargs):
 
     """Function:  mysql_stat_run
@@ -126,7 +126,7 @@ def mysql_stat_run(SERVER, db_tbl=False, ofile=False, json_fmt=False,
         to a number of locations (e.g. standard out, database, and/or file).
 
     Arguments:
-        (input) SERVER -> Database server instance.
+        (input) server -> Database server instance.
         (input) db_tbl database:table_name -> Mongo database and table.
         (input) ofile -> file name - Name of output file.
         (input) json_fmt -> True|False - Print in JSON format.
@@ -143,15 +143,15 @@ def mysql_stat_run(SERVER, db_tbl=False, ofile=False, json_fmt=False,
     else:
         perf_list = list(perf_list)
 
-    SERVER.upd_srv_stat()
-    SERVER.upd_srv_perf()
-    data = {"Server": SERVER.name,
+    server.upd_srv_stat()
+    server.upd_srv_perf()
+    data = {"Server": server.name,
             "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
                                                "%Y-%m-%d %H:%M:%S"),
             "PerfStats": {}}
 
     for x in perf_list:
-        data["Perf_Stats"].update({x: getattr(SERVER, x)})
+        data["Perf_Stats"].update({x: getattr(server, x)})
 
     if db_tbl:
         mongo_libs.json_2_out(data, db_tbl=db_tbl, **kwargs)
