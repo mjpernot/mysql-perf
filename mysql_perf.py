@@ -213,11 +213,13 @@ def run_program(args_array, func_dict, **kwargs):
 
     """
 
+    args_array = dict(args_array)
+    func_dict = dict(func_dict)
     SERVER = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
     SERVER.connect()
-
     MONGO_SVR = None
+
     if args_array.get("-m", False):
         MONGO_SVR = gen_libs.load_module(args_array["-m"], args_array["-d"])
 

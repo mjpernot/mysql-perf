@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [2.2.0] - 2019-09-04
+### Fixed
+- run_program:  Fixed problem with mutable default arguments issue.
+
+
 ## [2.1.1] - 2018-12-03
 ### Fixed
 - mysql_stat_run:  Changed function parameter mutable argument default to immutable argument default.
