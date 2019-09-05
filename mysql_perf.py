@@ -99,7 +99,6 @@ import mysql_lib.mysql_libs as mysql_libs
 import mongo_lib.mongo_libs as mongo_libs
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -117,7 +116,7 @@ def help_message():
     print(__doc__)
 
 
-def mysql_stat_run(SERVER, db_tbl=False, ofile=False, json_fmt=False,
+def mysql_stat_run(server, db_tbl=False, ofile=False, json_fmt=False,
                    no_std=False, perf_list=None, **kwargs):
 
     """Function:  mysql_stat_run
@@ -127,7 +126,7 @@ def mysql_stat_run(SERVER, db_tbl=False, ofile=False, json_fmt=False,
         to a number of locations (e.g. standard out, database, and/or file).
 
     Arguments:
-        (input) SERVER -> Database server instance.
+        (input) server -> Database server instance.
         (input) db_tbl database:table_name -> Mongo database and table.
         (input) ofile -> file name - Name of output file.
         (input) json_fmt -> True|False - Print in JSON format.
@@ -141,20 +140,22 @@ def mysql_stat_run(SERVER, db_tbl=False, ofile=False, json_fmt=False,
     if perf_list is None:
         perf_list = []
 
-    SERVER.upd_srv_stat()
-    SERVER.upd_srv_perf()
+    else:
+        perf_list = list(perf_list)
 
-    data = {"Server": SERVER.name,
-            "Asof": datetime.datetime.strftime(datetime.datetime.now(),
+    server.upd_srv_stat()
+    server.upd_srv_perf()
+    data = {"Server": server.name,
+            "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
                                                "%Y-%m-%d %H:%M:%S"),
-            "Perf_Stats": {}}
+            "PerfStats": {}}
 
     for x in perf_list:
-        data["Perf_Stats"].update({x: getattr(SERVER, x)})
+        data["PerfStats"].update({x: getattr(server, x)})
 
-    # Send data to output.
-    if db_tbl:
-        mongo_libs.json_2_out(data, db_tbl=db_tbl, **kwargs)
+    if db_tbl and kwargs.get("class_cfg", False):
+        db, tbl = db_tbl.split(":")
+        mongo_libs.ins_doc(kwargs.get("class_cfg"), db, tbl, data)
 
     err_flag, err_msg = gen_libs.print_dict(data, ofile, json_fmt, no_std)
 
@@ -162,7 +163,7 @@ def mysql_stat_run(SERVER, db_tbl=False, ofile=False, json_fmt=False,
         print(err_msg)
 
 
-def mysql_stat(SERVER, args_array, **kwargs):
+def mysql_stat(server, args_array, **kwargs):
 
     """Function:  mysql_stat
 
@@ -170,13 +171,14 @@ def mysql_stat(SERVER, args_array, **kwargs):
         the MySQL statistics based on count and interval options.
 
     Arguments:
-        (input) SERVER -> Database server instance.
+        (input) server -> Database server instance.
         (input) args_array -> Array of command line options and values.
         (input) **kwargs:
             class_cfg -> Mongo server configuration.
 
     """
 
+    args_array = dict(args_array)
     ofile = args_array.get("-o", False)
     db_tbl = args_array.get("-i", False)
     json_fmt = args_array.get("-j", False)
@@ -192,9 +194,9 @@ def mysql_stat(SERVER, args_array, **kwargs):
                  "indb_buf_free", "crt_tmp_tbls", "cur_conn", "uptime",
                  "indb_buf", "indb_log_buf", "max_conn"]
 
-    # Loop based on the -n option.
+    # Loop iteration based on the -n option.
     for x in range(0, int(args_array["-n"])):
-        mysql_stat_run(SERVER, db_tbl, ofile, json_fmt, no_std, perf_list,
+        mysql_stat_run(server, db_tbl, ofile, json_fmt, no_std, perf_list,
                        **kwargs)
 
         # Do not sleep on the last loop.
@@ -211,24 +213,24 @@ def run_program(args_array, func_dict, **kwargs):
     Arguments:
         (input) args_array -> Dict of command line options and values.
         (input) func_dict -> Dictionary list of functions and options.
-        (input) **kwargs:
-            None
 
     """
 
-    SERVER = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
+    args_array = dict(args_array)
+    func_dict = dict(func_dict)
+    server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
-    SERVER.connect()
+    server.connect()
+    mongo = None
 
-    MONGO_SVR = None
     if args_array.get("-m", False):
-        MONGO_SVR = gen_libs.load_module(args_array["-m"], args_array["-d"])
+        mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
 
     # Intersect args_array and func_dict to determine which functions to call.
     for x in set(args_array.keys()) & set(func_dict.keys()):
-        func_dict[x](SERVER, args_array, class_cfg=MONGO_SVR, **kwargs)
+        func_dict[x](server, args_array, class_cfg=mongo, **kwargs)
 
-    cmds_gen.disconnect([SERVER])
+    cmds_gen.disconnect([server])
 
 
 def main():
@@ -268,13 +270,13 @@ def main():
     # Add required default options and values to argument dictionary.
     args_array = arg_parser.arg_add_def(args_array, opt_def_dict, opt_req_list)
 
-    if not gen_libs.help_func(args_array, __version__, help_message):
-        if not arg_parser.arg_require(args_array, opt_req_list) \
-           and arg_parser.arg_cond_req(args_array, opt_con_req_list) \
-           and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
-           and not arg_parser.arg_file_chk(args_array, file_chk_list,
-                                           file_crt_list):
-            run_program(args_array, func_dict)
+    if not gen_libs.help_func(args_array, __version__, help_message) \
+       and not arg_parser.arg_require(args_array, opt_req_list) \
+       and arg_parser.arg_cond_req(args_array, opt_con_req_list) \
+       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
+       and not arg_parser.arg_file_chk(args_array, file_chk_list,
+                                       file_crt_list):
+        run_program(args_array, func_dict)
 
 
 if __name__ == "__main__":
