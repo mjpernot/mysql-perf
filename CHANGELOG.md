@@ -4,13 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
-## [2.2.0] - 2019-09-04
+## [2.2.0] - 2019-09-05
 ### Fixed
 - run_program:  Fixed problem with mutable default arguments issue.
 - mysql_stat:  Fixed problem with mutable default arguments issue.
 - mysql_stat_run:  Fixed problem with mutable default arguments issue.
 
 ### Changed
+- mysql_stat_run: Replaced mongo_libs.json_2_out with internal code.
 - main:  Refactored "if" statements.
 - mysql_stat_run:  Changed JSON dictionary keys to CamelCase.
 - mysql_stat_run:  Changed variable to standard naming convention.
