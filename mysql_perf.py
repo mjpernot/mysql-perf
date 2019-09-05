@@ -153,8 +153,9 @@ def mysql_stat_run(server, db_tbl=False, ofile=False, json_fmt=False,
     for x in perf_list:
         data["PerfStats"].update({x: getattr(server, x)})
 
-    if db_tbl:
-        mongo_libs.json_2_out(data, db_tbl=db_tbl, **kwargs)
+    if db_tbl and kwargs.get("class_cfg", False):
+        db, tbl = db_tbl.split(":")
+        mongo_libs.ins_doc(kwargs.get("class_cfg"), db, tbl, data)
 
     err_flag, err_msg = gen_libs.print_dict(data, ofile, json_fmt, no_std)
 

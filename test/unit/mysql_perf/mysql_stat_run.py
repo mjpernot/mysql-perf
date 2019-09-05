@@ -151,7 +151,6 @@ class UnitTest(unittest.TestCase):
         setUp -> Initialize testing environment.
         test_error_handling -> Test error handling.
         test_mail -> Test with emailing out.
-        test_file -> Test with writing to file.
         test_mongo -> Test with mongo connection.
         test_default -> Test with default settings.
         test_perf_list -> Test with perf_list populated.
@@ -211,46 +210,7 @@ class UnitTest(unittest.TestCase):
         self.assertFalse(mysql_perf.mysql_stat_run(self.server,
                                                    mail=self.mail))
 
-    @unittest.skip("not yet implemented")
     @mock.patch("mysql_perf.mongo_libs.ins_doc")
-    @mock.patch("mysql_perf.gen_libs.write_file")
-    def test_file(self, mock_write, mock_mongo):
-
-        """Function:  test_file
-
-        Description:  Test with writing to file.
-
-        Arguments:
-
-        """
-
-        mock_write.return_value = True
-        mock_mongo.return_value = True
-
-        self.assertFalse(mysql_perf.mysql_stat_run(self.server,
-                                                   ofile="FileName"))
-
-    @unittest.skip("not yet implemented")
-    @mock.patch("mysql_perf.mongo_libs.ins_doc")
-    @mock.patch("mysql_perf.gen_libs.write_file")
-    def test_mongo2(self, mock_write, mock_mongo):
-
-        """Function:  test_mongo2
-
-        Description:  Test with mongo connection.
-
-        Arguments:
-
-        """
-
-        mock_write.return_value = True
-        mock_mongo.return_value = True
-
-        self.assertFalse(mysql_perf.mysql_stat_run(self.server,
-                                                   db_tbl="db:tbl",
-                                                   class_cfg="Cfg"))
-
-    @mock.patch("mysql_perf.mongo_libs.json_2_out")
     @mock.patch("mysql_perf.gen_libs.print_dict")
     def test_mongo(self, mock_print, mock_mongo):
 
@@ -267,7 +227,8 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_perf.mysql_stat_run(self.server,
                                                    db_tbl="db:tbl",
-                                                   perf_list=self.perf_list))
+                                                   perf_list=self.perf_list,
+                                                   class_cfg="Cfg"))
 
     @mock.patch("mysql_perf.gen_libs.print_dict")
     def test_default(self, mock_print):
@@ -299,24 +260,6 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_perf.mysql_stat_run(self.server,
                                                    perf_list=self.perf_list))
-
-    @unittest.skip("not yet implemented")
-    @mock.patch("mysql_perf.mongo_libs.ins_doc")
-    @mock.patch("mysql_perf.gen_libs.write_file")
-    def test_perf_list2(self, mock_write, mock_mongo):
-
-        """Function:  test_perf_list2
-
-        Description:  Test with perf_list populated.
-
-        Arguments:
-
-        """
-
-        mock_write.return_value = True
-        mock_mongo.return_value = True
-
-        self.assertFalse(mysql_perf.mysql_stat_run(self.server))
 
 
 if __name__ == "__main__":
