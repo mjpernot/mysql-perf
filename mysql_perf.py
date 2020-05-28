@@ -9,62 +9,80 @@
         formats or to the database.
 
     Usage:
-        mysql_perf.py -c file -d path {-S {-j | -n count | -b seconds |
-            -o dir_path/file | -i db_name:table_name [-m file] | -z}}
+        mysql_perf.py -c file -d path {-S} [-j] [-n count] [-b seconds]
+            [-o [dir_path]/file] [-z]
+            [-i [db_name:table_name] -m file]
             [-v | -h]
 
     Arguments:
         -c file => MySQL server configuration file.  Required arg.
         -d dir path => Directory path to config file (-c). Required arg.
         -S => MySQL Database Performance Statistics option.
-        -j => Return output in JSON format.  Required for -i option.
-        -n {count} => Number of loops to run the program.  Required arg.
+        -j => Return output in JSON format.
+        -n {count} => Number of loops to run the program.
             Default:  1
-        -b {seconds} => Polling interval in seconds.  Required arg.
+        -b {seconds} => Polling interval in seconds.
             Default:  1
         -i {database:collection} => Name of database and collection to insert
-            the database statistics data into.  Requires options:  -m and -j.
+            the database statistics data into.
+            Requires -m options.
             Default:  sysmon:mysql_perf
         -m file => Mongo config file.  Is loaded as a python, do not include
-            the .py extension with the name.  Required for -i option.
-        -o path/file => Directory path and file name for output.  Can be used
-            with -S option.
-            Format compability:  -S option => JSON and standard.
-        -z => No standard.  Do not send output to standard out.
+            the .py extension with the name.
+            Required for -i option.
+        -o [path]/file => Directory path and file name for output.
+        -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.
 
         NOTE 1:  -v and/or -h overrides all other options.
 
     Notes:
-        MySQL configuration file format (mysql_{host}.py):
-
-            # Configuration file for {MySQL Database Server}
-            user = "root"
-            passwd = "ROOT_PASSWORD"
+        MySQL configuration file format (config/mysql_cfg.py.TEMPLATE):
+            # Configuration file for Database:
+            user = "USER"
+            passwd = "PASSWORD"
             host = "IP_ADDRESS"
-            serv_os = "Linux" or "Solaris"
             name = "HOSTNAME"
-            port = PORT_NUMBER (default of mysql is 3306)
-            cfg_file = "DIRECTORY_PATH/my.cnf"
-            sid = "SERVER_ID"
-            extra_def_file = "DIRECTORY_PATH/mysql.cfg"
+            sid = SERVER_ID
+            extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
+            serv_os = "Linux"
+            port = 3306
+            cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
 
-        NOTE:  Include the cfg_file even if running remotely as the file will
-            be used in future releases.
+        NOTE 1:  Include the cfg_file even if running remotely as the
+            file will be used in future releases.
+        NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
+            the command line.  To suppress this warning, will require the use
+            of the --defaults-extra-file option (i.e. extra_def_file) in the
+            database configuration file.  See below for the
+            defaults-extra-file format.
 
-        Mongo configuration file format (mongo4mysql.py).  The configuration
-            file format for the Mongo connection used for inserting data into
-            a database.  There are two ways to connect:  single or replica set.
+        Defaults Extra File format (config/mysql.cfg.TEMPLATE):
+            [client]
+            password="PASSWORD"
+            socket="MYSQL_DIRECTORY/mysqld.sock"
+
+        NOTE 1:  The socket information can be obtained from the mysqld.cnf
+            file under ~/mysql directory.
+        NOTE 2:  The --defaults-extra-file option will be overridden if there
+            is a ~/.my.cnf or ~/.mylogin.cnf file located in the home directory
+            of the user running this program.  The extras file will in effect
+            be ignored.
+
+        Mongo configuration file format (config/mongo.py.TEMPLATE).  The
+            configuration file format for the Mongo connection used for
+            inserting data into a database.
+            There are two ways to connect:  single or replica set.
 
             1.)  Single database connection:
 
             # Single Configuration file for Mongo Database Server.
-            user = "root"
-            passwd = "ROOT_PASSWORD"
+            user = "USER"
+            passwd = "PASSWORD"
             host = "IP_ADDRESS"
             name = "HOSTNAME"
-            port = PORT_NUMBER (default of mysql is 27017)
+            port = 27017
             conf_file = None
             auth = True
 
