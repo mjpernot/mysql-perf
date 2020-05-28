@@ -65,25 +65,25 @@ pipeline {
                                 "pattern": "./*.py",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-perf/"
+                                "target": "pypi-proj-local/highpoint/mysql-perf/"
                             },
                             {
                                 "pattern": "./*.txt",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-perf/"
+                                "target": "pypi-proj-local/highpoint/mysql-perf/"
                             },
                             {
                                 "pattern": "./*.md",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-perf/"
+                                "target": "pypi-proj-local/highpoint/mysql-perf/"
                             },
                             {
                                 "pattern": "*.TEMPLATE",
                                 "recursive": true,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-perf/config/"
+                                "target": "pypi-proj-local/highpoint/mysql-perf/config/"
                             }
                         ]
                     }"""
