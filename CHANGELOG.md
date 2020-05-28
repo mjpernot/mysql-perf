@@ -9,6 +9,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -a option to allow for append of data to an existing output file.
 
 ### Changed
+- mysql_stat:  Added file mode option to writing data to a file.  Default is write.
 - mysql_stat:  Converted "-s" to "-z" to avoid confusion.
 - mysql_stat:  Converted mysql_stat_run arguments from positional to kwargs.
 - mysql_stat_run:  Refactored function to streamline the process, include append write mode, flattening of JSON, and moved a number of arguments to kwargs.

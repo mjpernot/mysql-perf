@@ -225,6 +225,10 @@ def mysql_stat(server, args_array, **kwargs):
     db_tbl = args_array.get("-i", False)
     json_fmt = args_array.get("-j", False)
     no_std = args_array.get("-z", False)
+    mode = "w"
+
+    if args_array.get("-a", False):
+        mode = "a"
 
     # List of performance statistics to be checked.
     perf_list = ["indb_buf_data", "indb_buf_tot", "indb_buf_data_pct",
@@ -239,7 +243,7 @@ def mysql_stat(server, args_array, **kwargs):
     # Loop iteration based on the -n option.
     for x in range(0, int(args_array["-n"])):
         mysql_stat_run(server, perf_list, db_tbl=db_tbl, ofile=ofile,
-                       json_fmt=json_fmt, no_std=no_std,  **kwargs)
+                       json_fmt=json_fmt, no_std=no_std, mode=mode, **kwargs)
 
         # Do not sleep on the last loop.
         if x != int(args_array["-n"]) - 1:
