@@ -10,7 +10,7 @@
 
     Usage:
         mysql_perf.py -c file -d path {-S} [-j] [-n count] [-b seconds]
-            [-o [dir_path]/file] [-z]
+            [-o [dir_path]/file [-a]] [-z]
             [-i [db_name:table_name] -m file]
             [-v | -h]
 
@@ -31,6 +31,7 @@
             the .py extension with the name.
             Required for -i option.
         -o [path]/file => Directory path and file name for output.
+        -a => Append output to output file.
         -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.

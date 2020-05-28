@@ -5,6 +5,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [2.2.1] - 2020-05-28
+### Added
+- Added -a option to allow for append of data to an existing output file.
+
 ### Changed
 - mysql_stat:  Converted "-s" to "-z" to avoid confusion.
 - mysql_stat:  Converted mysql_stat_run arguments from positional to kwargs.
