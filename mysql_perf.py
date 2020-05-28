@@ -116,8 +116,7 @@ def help_message():
     print(__doc__)
 
 
-def mysql_stat_run(server, db_tbl=False, ofile=False, json_fmt=False,
-                   no_std=False, perf_list=None, **kwargs):
+def mysql_stat_run(server, perf_list=None, **kwargs):
 
     """Function:  mysql_stat_run
 
@@ -127,15 +126,25 @@ def mysql_stat_run(server, db_tbl=False, ofile=False, json_fmt=False,
 
     Arguments:
         (input) server -> Database server instance.
-        (input) db_tbl database:table_name -> Mongo database and table.
-        (input) ofile -> file name - Name of output file.
-        (input) json_fmt -> True|False - Print in JSON format.
-        (input) no_std -> True|False - Do not print to standard out.
         (input) perf_list -> List of performance statistics.
         (input) **kwargs:
             class_cfg -> Mongo server configuration.
+            indent -> Indentation level for JSON document.
+            mode -> File write mode.
+            db_tbl -> database:collection - Name of db and collection.
+            ofile -> file name - Name of output file.
+            sup_std -> Suppress standard out.
+            json_fmt -> True|False - convert output to JSON format.
 
     """
+
+    json_fmt = kwargs.get("json_fmt", False)
+    indent = kwargs.get("indent", None)
+    mongo_cfg = kwargs.get("class_cfg", None)
+    db_tbl = kwargs.get("db_tbl", None)
+    ofile = kwargs.get("ofile", None)
+    mode = kwargs.get("mode", "w")
+    no_std = kwargs.get("no_std", False)
 
     if perf_list is None:
         perf_list = []
@@ -153,14 +162,25 @@ def mysql_stat_run(server, db_tbl=False, ofile=False, json_fmt=False,
     for x in perf_list:
         data["PerfStats"].update({x: getattr(server, x)})
 
-    if db_tbl and kwargs.get("class_cfg", False):
-        db, tbl = db_tbl.split(":")
-        mongo_libs.ins_doc(kwargs.get("class_cfg"), db, tbl, data)
+    if mongo_cfg and db_tbl:
+        dbn, tbl = db_tbl.split(":")
+        mongo_libs.ins_doc(mongo_cfg, dbn, tbl, data)
 
-    err_flag, err_msg = gen_libs.print_dict(data, ofile, json_fmt, no_std)
+    if json_fmt:
+        jdata = json.dumps(data, indent=indent)
 
-    if err_flag:
-        print(err_msg)
+        if ofile:
+            gen_libs.write_file(ofile, mode, jdata)
+
+        if not no_std:
+            gen_libs.print_data(jdata)
+
+    else:
+        err_flag, err_msg = gen_libs.print_dict(data, ofile=ofile,
+                                                no_std=no_std, mode=mode)
+
+        if err_flag:
+            print(err_msg)
 
 
 def mysql_stat(server, args_array, **kwargs):
