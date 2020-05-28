@@ -149,6 +149,10 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_json_file_stdout -> Test JSON on and output to a file and std out.
+        test_json_std_out -> Test with JSON on and no standard out.
+        test_json_nostd -> Test with JSON on and no standard out.
+        test_json_file -> Test with JSON on and output to a file.
         test_error_handling -> Test error handling.
         test_mail -> Test with emailing out.
         test_mongo -> Test with mongo connection.
@@ -173,6 +177,72 @@ class UnitTest(unittest.TestCase):
         self.args_array2 = {}
         self.perf_list = ["uptime_flush", "binlog_disk", "cur_conn", "uptime",
                           "max_conn"]
+        self.ofile = "/path/file"
+
+    @mock.patch("mysql_perf.gen_libs.print_data")
+    @mock.patch("mysql_perf.gen_libs.write_file")
+    def test_json_file_stdout(self, mock_file, mock_print):
+
+        """Function:  test_json_file_stdout
+
+        Description:  Test with JSON on and output to a file and std out.
+
+        Arguments:
+
+        """
+
+        mock_file.return_value = True
+        mock_print.return_value = True
+
+        self.assertFalse(mysql_perf.mysql_stat_run(
+            self.server, self.perf_list, json_fmt=True, ofile=self.ofile,
+            no_std=False))
+
+    @mock.patch("mysql_perf.gen_libs.print_data")
+    def test_json_std_out(self, mock_print):
+
+        """Function:  test_json_nostd
+
+        Description:  Test with JSON on and no standard out.
+
+        Arguments:
+
+        """
+
+        mock_print.return_value = True
+
+        self.assertFalse(mysql_perf.mysql_stat_run(
+            self.server, self.perf_list, json_fmt=True, no_std=False))
+
+    def test_json_nostd(self):
+
+        """Function:  test_json_nostd
+
+        Description:  Test with JSON on and no standard out.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_perf.mysql_stat_run(
+            self.server, self.perf_list, json_fmt=True, no_std=True))
+
+    @mock.patch("mysql_perf.gen_libs.write_file")
+    def test_json_file(self, mock_file):
+
+        """Function:  test_json_file
+
+        Description:  Test with JSON on and output to a file.
+
+        Arguments:
+
+        """
+
+        mock_file.return_value = True
+
+        self.assertFalse(mysql_perf.mysql_stat_run(
+            self.server, self.perf_list, json_fmt=True, ofile=self.ofile,
+            no_std=True))
 
     @mock.patch("mysql_perf.gen_libs.print_dict")
     def test_error_handling(self, mock_print):
