@@ -67,6 +67,9 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_file_write -> Test with setting file write.
+        test_file_append -> Test with setting file append.
+        test_multi_loop -> Test with multiple loops.
         test_default -> Test with default settings.
 
     """
@@ -84,6 +87,37 @@ class UnitTest(unittest.TestCase):
         self.server = Server()
         self.args_array = {"-n": 1, "-b": 1}
         self.args_array2 = {"-n": 3, "-b": 1}
+        self.args_array3 = {"-n": 1, "-b": 1, "-a": True}
+
+    @mock.patch("mysql_perf.mysql_stat_run")
+    def test_file_write(self, mock_process):
+
+        """Function:  test_file_write
+
+        Description:  Test with setting file write.
+
+        Arguments:
+
+        """
+
+        mock_process.return_value = True
+
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array3))
+
+    @mock.patch("mysql_perf.mysql_stat_run")
+    def test_file_append(self, mock_process):
+
+        """Function:  test_file_append
+
+        Description:  Test with setting file append.
+
+        Arguments:
+
+        """
+
+        mock_process.return_value = True
+
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array3))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_multi_loop(self, mock_process):
