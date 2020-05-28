@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [2.2.1] - 2020-05-28
+### Changed
+- config/mongo.py.TEMPLATE:  Changed format.
+- config/mysql.cfg.TEMPLATE:  Changed format.
+- config/mysql_cfg.py.TEMPLATE:  Changed format.
+- Documentation updates.
+
+
 ## [2.2.0] - 2019-09-05
 ### Fixed
 - run_program:  Fixed problem with mutable default arguments issue.
