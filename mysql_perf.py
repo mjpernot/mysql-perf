@@ -10,7 +10,7 @@
 
     Usage:
         mysql_perf.py -c file -d path {-S {-j | -n count | -b seconds |
-            -o dir_path/file | -i db_name:table_name [-m file] | -s}}
+            -o dir_path/file | -i db_name:table_name [-m file] | -z}}
             [-v | -h]
 
     Arguments:
@@ -30,7 +30,7 @@
         -o path/file => Directory path and file name for output.  Can be used
             with -S option.
             Format compability:  -S option => JSON and standard.
-        -s => No standard.  Do not send output to standard out.
+        -z => No standard.  Do not send output to standard out.
         -v => Display version of this program.
         -h => Help and usage message.
 
@@ -205,7 +205,7 @@ def mysql_stat(server, args_array, **kwargs):
     ofile = args_array.get("-o", False)
     db_tbl = args_array.get("-i", False)
     json_fmt = args_array.get("-j", False)
-    no_std = args_array.get("-s", False)
+    no_std = args_array.get("-z", False)
 
     # List of performance statistics to be checked.
     perf_list = ["indb_buf_data", "indb_buf_tot", "indb_buf_data_pct",

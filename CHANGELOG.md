@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [2.2.1] - 2020-05-28
 ### Changed
+- mysql_stat:  Converted "-s" to "-z" to avoid confusion.
 - mysql_stat:  Converted mysql_stat_run arguments from positional to kwargs.
 - mysql_stat_run:  Refactored function to streamline the process, include append write mode, flattening of JSON, and moved a number of arguments to kwargs.
 - config/mongo.py.TEMPLATE:  Changed format.
