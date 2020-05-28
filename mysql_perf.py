@@ -136,7 +136,7 @@ def mysql_stat_run(server, perf_list=None, **kwargs):
             mode -> File write mode.
             db_tbl -> database:collection - Name of db and collection.
             ofile -> file name - Name of output file.
-            sup_std -> Suppress standard out.
+            no_std -> Suppress standard out.
             json_fmt -> True|False - convert output to JSON format.
 
     """
