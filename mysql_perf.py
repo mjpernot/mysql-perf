@@ -90,6 +90,9 @@ import sys
 import datetime
 import time
 
+# Third-party
+import json
+
 # Local
 import lib.cmds_gen as cmds_gen
 import lib.arg_parser as arg_parser
@@ -139,7 +142,7 @@ def mysql_stat_run(server, perf_list=None, **kwargs):
     """
 
     json_fmt = kwargs.get("json_fmt", False)
-    indent = kwargs.get("indent", None)
+    indent = kwargs.get("indent", 4)
     mongo_cfg = kwargs.get("class_cfg", None)
     db_tbl = kwargs.get("db_tbl", None)
     ofile = kwargs.get("ofile", None)
@@ -216,8 +219,8 @@ def mysql_stat(server, args_array, **kwargs):
 
     # Loop iteration based on the -n option.
     for x in range(0, int(args_array["-n"])):
-        mysql_stat_run(server, db_tbl, ofile, json_fmt, no_std, perf_list,
-                       **kwargs)
+        mysql_stat_run(server, perf_list, db_tbl=db_tbl, ofile=ofile,
+                       json_fmt=json_fmt, no_std=no_std,  **kwargs)
 
         # Do not sleep on the last loop.
         if x != int(args_array["-n"]) - 1:
