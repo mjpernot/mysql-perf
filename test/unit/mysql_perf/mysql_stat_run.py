@@ -149,15 +149,20 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_json_file_no_stdout -> Test JSON & output to file but no std out.
         test_json_file_stdout -> Test JSON on and output to a file and std out.
         test_json_std_out -> Test with JSON on and no standard out.
         test_json_nostd -> Test with JSON on and no standard out.
         test_json_file -> Test with JSON on and output to a file.
         test_error_handling -> Test error handling.
         test_mail -> Test with emailing out.
+        test_no_mongo_cfg -> Test with no config for mongo passed.
+        test_no_mongo_db_tbl -> Test with no db_tbl for mongo passed.
         test_mongo -> Test with mongo connection.
         test_default -> Test with default settings.
         test_perf_list -> Test with perf_list populated.
+        test_perf_empty_list -> Test with perf_list empty.
+        test_no_perf_list -> Test with no perf_list passed.
 
     """
 
@@ -177,7 +182,25 @@ class UnitTest(unittest.TestCase):
         self.args_array2 = {}
         self.perf_list = ["uptime_flush", "binlog_disk", "cur_conn", "uptime",
                           "max_conn"]
+        self.perf_list2 = []
         self.ofile = "/path/file"
+
+    @mock.patch("mysql_perf.gen_libs.write_file")
+    def test_json_file_no_stdout(self, mock_file):
+
+        """Function:  test_json_file_stdout
+
+        Description:  Test with JSON on and output to a file but no std out.
+
+        Arguments:
+
+        """
+
+        mock_file.return_value = True
+
+        self.assertFalse(mysql_perf.mysql_stat_run(
+            self.server, self.perf_list, json_fmt=True, ofile=self.ofile,
+            no_std=True))
 
     @mock.patch("mysql_perf.gen_libs.print_data")
     @mock.patch("mysql_perf.gen_libs.write_file")
@@ -280,6 +303,38 @@ class UnitTest(unittest.TestCase):
         self.assertFalse(mysql_perf.mysql_stat_run(self.server,
                                                    mail=self.mail))
 
+    @mock.patch("mysql_perf.gen_libs.print_dict")
+    def test_no_mongo_cfg(self, mock_print):
+
+        """Function:  test_no_mongo_cfg
+
+        Description:  Test with no config for mongo passed.
+
+        Arguments:
+
+        """
+
+        mock_print.return_value = (False, None)
+
+        self.assertFalse(mysql_perf.mysql_stat_run(
+            self.server, perf_list=self.perf_list, db_tbl="db:tbl"))
+
+    @mock.patch("mysql_perf.gen_libs.print_dict")
+    def test_no_mongo_db_tbl(self, mock_print):
+
+        """Function:  test_no_mongo_db_tbl
+
+        Description:  Test with no db_tbl for mongo passed.
+
+        Arguments:
+
+        """
+
+        mock_print.return_value = (False, None)
+
+        self.assertFalse(mysql_perf.mysql_stat_run(
+            self.server, perf_list=self.perf_list, class_cfg="Cfg"))
+
     @mock.patch("mysql_perf.mongo_libs.ins_doc")
     @mock.patch("mysql_perf.gen_libs.print_dict")
     def test_mongo(self, mock_print, mock_mongo):
@@ -330,6 +385,37 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_perf.mysql_stat_run(self.server,
                                                    perf_list=self.perf_list))
+
+    @mock.patch("mysql_perf.gen_libs.print_dict")
+    def test_perf_empty_list(self, mock_print):
+
+        """Function:  test_perf_empty_list
+
+        Description:  Test with perf_list empty.
+
+        Arguments:
+
+        """
+
+        mock_print.return_value = (False, None)
+
+        self.assertFalse(mysql_perf.mysql_stat_run(self.server,
+                                                   perf_list=self.perf_list2))
+
+    @mock.patch("mysql_perf.gen_libs.print_dict")
+    def test_no_perf_list(self, mock_print):
+
+        """Function:  test_no_perf_list
+
+        Description:  Test with no perf_list passed.
+
+        Arguments:
+
+        """
+
+        mock_print.return_value = (False, None)
+
+        self.assertFalse(mysql_perf.mysql_stat_run(self.server))
 
 
 if __name__ == "__main__":
