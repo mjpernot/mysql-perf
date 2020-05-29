@@ -11,6 +11,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -a option to allow for append of data to an existing output file.
 
 ### Changed
+- main:  Added ProgramLock class to implement program locking.
 - mysql_stat:  Added indentation option for JSON structure flattening.  Default is set to 4.
 - mysql_stat:  Added file mode option to writing data to a file.  Default is write.
 - mysql_stat:  Converted "-s" to "-z" to avoid confusion.

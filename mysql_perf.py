@@ -43,7 +43,7 @@
 
     Notes:
         MySQL configuration file format (config/mysql_cfg.py.TEMPLATE):
-            # Configuration file for Database:
+            # Configuration file:
             user = "USER"
             passwd = "PASSWORD"
             host = "IP_ADDRESS"
@@ -317,7 +317,7 @@ def main():
     opt_def_dict = {"-i": "sysmon:mysql_perf", "-n": "1", "-b": "1"}
     opt_con_req_list = {"-i": ["-m", "-j"]}
     opt_req_list = ["-c", "-d", "-b", "-n"]
-    opt_val_list = ["-c", "-d", "-b", "-i", "-m", "-n", "-o"]
+    opt_val_list = ["-c", "-d", "-b", "-i", "-m", "-n", "-o", "-y"]
 
     # Process argument list from command line.
     args_array = arg_parser.arg_parse2(sys.argv, opt_val_list, opt_def_dict)
@@ -331,7 +331,16 @@ def main():
        and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
        and not arg_parser.arg_file_chk(args_array, file_chk_list,
                                        file_crt_list):
-        run_program(args_array, func_dict)
+
+        try:
+            proglock = gen_class.ProgramLock(sys.argv,
+                                             args_array.get("-y", ""))
+            run_program(args_array, func_dict)
+            del proglock
+
+        except gen_class.SingleInstanceException:
+            print("WARNING:  lock in place for mysql_perf with id of: %s"
+                  % (args_array.get("-y", "")))
 
 
 if __name__ == "__main__":
