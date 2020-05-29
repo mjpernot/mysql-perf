@@ -14,6 +14,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -a option to allow for append of data to an existing output file.
 
 ### Changed
+- mysql_stat_run:  Changed variable name to standard naming convention.
 - run_program:  Changed variable name to standard naming convention.
 - mysql_stat:  Changed variable name to standard naming convention.
 - main:  Added ProgramLock class to implement program locking.

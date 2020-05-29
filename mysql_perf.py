@@ -185,8 +185,8 @@ def mysql_stat_run(server, perf_list=None, **kwargs):
                                                "%Y-%m-%d %H:%M:%S"),
             "PerfStats": {}}
 
-    for x in perf_list:
-        data["PerfStats"].update({x: getattr(server, x)})
+    for item in perf_list:
+        data["PerfStats"].update({item: getattr(server, item)})
 
     if mongo_cfg and db_tbl:
         dbn, tbl = db_tbl.split(":")
