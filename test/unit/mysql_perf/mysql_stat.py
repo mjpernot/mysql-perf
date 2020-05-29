@@ -67,6 +67,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_json_flat -> Test with flatten indentation for JSON.
+        test_json_indent -> Test with default indentation for JSON.
         test_file_write -> Test with setting file write.
         test_file_append -> Test with setting file append.
         test_multi_loop -> Test with multiple loops.
@@ -88,6 +90,37 @@ class UnitTest(unittest.TestCase):
         self.args_array = {"-n": 1, "-b": 1}
         self.args_array2 = {"-n": 3, "-b": 1}
         self.args_array3 = {"-n": 1, "-b": 1, "-a": True}
+        self.args_array4 = {"-n": 1, "-b": 1, "-f": True}
+
+    @mock.patch("mysql_perf.mysql_stat_run")
+    def test_json_flat(self, mock_process):
+
+        """Function:  test_json_flat
+
+        Description:  Test with flatten indentation for JSON.
+
+        Arguments:
+
+        """
+
+        mock_process.return_value = True
+
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array4))
+
+    @mock.patch("mysql_perf.mysql_stat_run")
+    def test_json_indent(self, mock_process):
+
+        """Function:  test_json_indent
+
+        Description:  Test with default indentation for JSON.
+
+        Arguments:
+
+        """
+
+        mock_process.return_value = True
+
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_file_write(self, mock_process):
