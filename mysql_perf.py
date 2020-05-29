@@ -249,13 +249,13 @@ def mysql_stat(server, args_array, **kwargs):
                  "indb_buf", "indb_log_buf", "max_conn"]
 
     # Loop iteration based on the -n option.
-    for x in range(0, int(args_array["-n"])):
+    for item in range(0, int(args_array["-n"])):
         mysql_stat_run(server, perf_list, db_tbl=db_tbl, ofile=ofile,
                        json_fmt=json_fmt, no_std=no_std, mode=mode,
                        indent=indent, **kwargs)
 
         # Do not sleep on the last loop.
-        if x != int(args_array["-n"]) - 1:
+        if item != int(args_array["-n"]) - 1:
             time.sleep(float(args_array["-b"]))
 
 
