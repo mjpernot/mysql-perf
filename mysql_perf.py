@@ -9,7 +9,7 @@
         formats or to the database.
 
     Usage:
-        mysql_perf.py -c file -d path {-S} [-j] [-n count] [-b seconds]
+        mysql_perf.py -c file -d path {-S} [-j [-f]] [-n count] [-b seconds]
             [-o [dir_path]/file [-a]] [-z]
             [-i [db_name:table_name] -m file]
             [-v | -h]
@@ -19,6 +19,8 @@
         -d dir path => Directory path to config file (-c). Required arg.
         -S => MySQL Database Performance Statistics option.
         -j => Return output in JSON format.
+        -f => Flatten the JSON data structure to file and standard out.
+            For use with the -j option.
         -n {count} => Number of loops to run the program.
             Default:  1
         -b {seconds} => Polling interval in seconds.
