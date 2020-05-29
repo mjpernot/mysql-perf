@@ -10,8 +10,8 @@
 
     Usage:
         mysql_perf.py -c file -d path {-S} [-j [-f]] [-n count] [-b seconds]
-            [-o [dir_path]/file [-a]] [-z]
             [-i [db_name:table_name] -m file]
+            [-o [dir_path]/file [-a]] [-y flavor_id] [-z]
             [-v | -h]
 
     Arguments:
@@ -34,6 +34,7 @@
             Required for -i option.
         -o [path]/file => Directory path and file name for output.
         -a => Append output to output file.
+        -y value => A flavor id for the program lock.  To create unique lock.
         -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.
@@ -118,6 +119,7 @@ import json
 import lib.cmds_gen as cmds_gen
 import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
+import lib.gen_class as gen_class
 import mysql_lib.mysql_class as mysql_class
 import mysql_lib.mysql_libs as mysql_libs
 import mongo_lib.mongo_libs as mongo_libs
