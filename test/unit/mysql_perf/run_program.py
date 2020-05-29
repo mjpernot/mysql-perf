@@ -29,7 +29,6 @@ import mock
 # Local
 sys.path.append(os.getcwd())
 import mysql_perf
-import lib.gen_libs as gen_libs
 import version
 
 __version__ = version.__version__
@@ -49,7 +48,13 @@ def mysql_stat(server, args_array, **kwargs):
 
     """
 
-    return True
+    status = True
+    mongo_cfg = kwargs.get("class_cfg", None)
+
+    if server and args_array and mongo_cfg:
+        status = True
+
+    return status
 
 
 class Server(object):
