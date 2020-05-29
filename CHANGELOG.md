@@ -5,6 +5,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [2.2.1] - 2020-05-28
+### Fixed
+- main: Fixed handling command line arguments from SonarQube scan finding.
+
 ### Added
 - Added ProgramLock class to prevent multiple runs at the same time.
 - Added -f option to allow for flattening of JSON structure in output.

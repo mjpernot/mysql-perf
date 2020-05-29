@@ -310,6 +310,7 @@ def main():
 
     """
 
+    cmdline = gen_libs.get_inst(sys)
     dir_chk_list = ["-d"]
     file_chk_list = ["-o"]
     file_crt_list = ["-o"]
@@ -320,7 +321,8 @@ def main():
     opt_val_list = ["-c", "-d", "-b", "-i", "-m", "-n", "-o", "-y"]
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(sys.argv, opt_val_list, opt_def_dict)
+    args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
+                                       opt_def_dict)
 
     # Add required default options and values to argument dictionary.
     args_array = arg_parser.arg_add_def(args_array, opt_def_dict, opt_req_list)
@@ -333,7 +335,7 @@ def main():
                                        file_crt_list):
 
         try:
-            proglock = gen_class.ProgramLock(sys.argv,
+            proglock = gen_class.ProgramLock(cmdline.argv,
                                              args_array.get("-y", ""))
             run_program(args_array, func_dict)
             del proglock
