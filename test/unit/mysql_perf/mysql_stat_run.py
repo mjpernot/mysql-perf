@@ -281,8 +281,8 @@ class UnitTest(unittest.TestCase):
         mock_print.return_value = (True, "Error Message")
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_perf.mysql_stat_run(self.server,
-                             perf_list=self.perf_list))
+            self.assertFalse(mysql_perf.mysql_stat_run(
+                self.server, perf_list=self.perf_list))
 
     @unittest.skip("not yet implemented")
     @mock.patch("mysql_perf.mongo_libs.ins_doc")
