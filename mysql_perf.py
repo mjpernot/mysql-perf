@@ -9,62 +9,84 @@
         formats or to the database.
 
     Usage:
-        mysql_perf.py -c file -d path {-S {-j | -n count | -b seconds |
-            -o dir_path/file | -i db_name:table_name [-m file] | -s}}
+        mysql_perf.py -c file -d path {-S} [-j [-f]] [-n count] [-b seconds]
+            [-i [db_name:table_name] -m file]
+            [-o [dir_path]/file [-a]] [-y flavor_id] [-z]
             [-v | -h]
 
     Arguments:
         -c file => MySQL server configuration file.  Required arg.
         -d dir path => Directory path to config file (-c). Required arg.
         -S => MySQL Database Performance Statistics option.
-        -j => Return output in JSON format.  Required for -i option.
-        -n {count} => Number of loops to run the program.  Required arg.
+        -j => Return output in JSON format.
+        -f => Flatten the JSON data structure to file and standard out.
+            For use with the -j option.
+        -n {count} => Number of loops to run the program.
             Default:  1
-        -b {seconds} => Polling interval in seconds.  Required arg.
+        -b {seconds} => Polling interval in seconds.
             Default:  1
         -i {database:collection} => Name of database and collection to insert
-            the database statistics data into.  Requires options:  -m and -j.
+            the database statistics data into.
+            Requires -m options.
             Default:  sysmon:mysql_perf
         -m file => Mongo config file.  Is loaded as a python, do not include
-            the .py extension with the name.  Required for -i option.
-        -o path/file => Directory path and file name for output.  Can be used
-            with -S option.
-            Format compability:  -S option => JSON and standard.
-        -s => No standard.  Do not send output to standard out.
+            the .py extension with the name.
+            Required for -i option.
+        -o [path]/file => Directory path and file name for output.
+        -a => Append output to output file.
+        -y value => A flavor id for the program lock.  To create unique lock.
+        -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.
 
         NOTE 1:  -v and/or -h overrides all other options.
 
     Notes:
-        MySQL configuration file format (mysql_{host}.py):
-
-            # Configuration file for {MySQL Database Server}
-            user = "root"
-            passwd = "ROOT_PASSWORD"
+        MySQL configuration file format (config/mysql_cfg.py.TEMPLATE):
+            # Configuration file:
+            user = "USER"
+            passwd = "PASSWORD"
             host = "IP_ADDRESS"
-            serv_os = "Linux" or "Solaris"
             name = "HOSTNAME"
-            port = PORT_NUMBER (default of mysql is 3306)
-            cfg_file = "DIRECTORY_PATH/my.cnf"
-            sid = "SERVER_ID"
-            extra_def_file = "DIRECTORY_PATH/mysql.cfg"
+            sid = SERVER_ID
+            extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
+            serv_os = "Linux"
+            port = 3306
+            cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
 
-        NOTE:  Include the cfg_file even if running remotely as the file will
-            be used in future releases.
+        NOTE 1:  Include the cfg_file even if running remotely as the
+            file will be used in future releases.
+        NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
+            the command line.  To suppress this warning, will require the use
+            of the --defaults-extra-file option (i.e. extra_def_file) in the
+            database configuration file.  See below for the
+            defaults-extra-file format.
 
-        Mongo configuration file format (mongo4mysql.py).  The configuration
-            file format for the Mongo connection used for inserting data into
-            a database.  There are two ways to connect:  single or replica set.
+        Defaults Extra File format (config/mysql.cfg.TEMPLATE):
+            [client]
+            password="PASSWORD"
+            socket="MYSQL_DIRECTORY/mysqld.sock"
+
+        NOTE 1:  The socket information can be obtained from the mysqld.cnf
+            file under ~/mysql directory.
+        NOTE 2:  The --defaults-extra-file option will be overridden if there
+            is a ~/.my.cnf or ~/.mylogin.cnf file located in the home directory
+            of the user running this program.  The extras file will in effect
+            be ignored.
+
+        Mongo configuration file format (config/mongo.py.TEMPLATE).  The
+            configuration file format for the Mongo connection used for
+            inserting data into a database.
+            There are two ways to connect:  single or replica set.
 
             1.)  Single database connection:
 
             # Single Configuration file for Mongo Database Server.
-            user = "root"
-            passwd = "ROOT_PASSWORD"
+            user = "USER"
+            passwd = "PASSWORD"
             host = "IP_ADDRESS"
             name = "HOSTNAME"
-            port = PORT_NUMBER (default of mysql is 27017)
+            port = 27017
             conf_file = None
             auth = True
 
@@ -90,10 +112,14 @@ import sys
 import datetime
 import time
 
+# Third-party
+import json
+
 # Local
 import lib.cmds_gen as cmds_gen
 import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
+import lib.gen_class as gen_class
 import mysql_lib.mysql_class as mysql_class
 import mysql_lib.mysql_libs as mysql_libs
 import mongo_lib.mongo_libs as mongo_libs
@@ -116,8 +142,7 @@ def help_message():
     print(__doc__)
 
 
-def mysql_stat_run(server, db_tbl=False, ofile=False, json_fmt=False,
-                   no_std=False, perf_list=None, **kwargs):
+def mysql_stat_run(server, perf_list=None, **kwargs):
 
     """Function:  mysql_stat_run
 
@@ -127,15 +152,25 @@ def mysql_stat_run(server, db_tbl=False, ofile=False, json_fmt=False,
 
     Arguments:
         (input) server -> Database server instance.
-        (input) db_tbl database:table_name -> Mongo database and table.
-        (input) ofile -> file name - Name of output file.
-        (input) json_fmt -> True|False - Print in JSON format.
-        (input) no_std -> True|False - Do not print to standard out.
         (input) perf_list -> List of performance statistics.
         (input) **kwargs:
             class_cfg -> Mongo server configuration.
+            indent -> Indentation level for JSON document.
+            mode -> File write mode.
+            db_tbl -> database:collection - Name of db and collection.
+            ofile -> file name - Name of output file.
+            no_std -> Suppress standard out.
+            json_fmt -> True|False - convert output to JSON format.
 
     """
+
+    json_fmt = kwargs.get("json_fmt", False)
+    indent = kwargs.get("indent", 4)
+    mongo_cfg = kwargs.get("class_cfg", None)
+    db_tbl = kwargs.get("db_tbl", None)
+    ofile = kwargs.get("ofile", None)
+    mode = kwargs.get("mode", "w")
+    no_std = kwargs.get("no_std", False)
 
     if perf_list is None:
         perf_list = []
@@ -150,17 +185,28 @@ def mysql_stat_run(server, db_tbl=False, ofile=False, json_fmt=False,
                                                "%Y-%m-%d %H:%M:%S"),
             "PerfStats": {}}
 
-    for x in perf_list:
-        data["PerfStats"].update({x: getattr(server, x)})
+    for item in perf_list:
+        data["PerfStats"].update({item: getattr(server, item)})
 
-    if db_tbl and kwargs.get("class_cfg", False):
-        db, tbl = db_tbl.split(":")
-        mongo_libs.ins_doc(kwargs.get("class_cfg"), db, tbl, data)
+    if mongo_cfg and db_tbl:
+        dbn, tbl = db_tbl.split(":")
+        mongo_libs.ins_doc(mongo_cfg, dbn, tbl, data)
 
-    err_flag, err_msg = gen_libs.print_dict(data, ofile, json_fmt, no_std)
+    if json_fmt:
+        jdata = json.dumps(data, indent=indent)
 
-    if err_flag:
-        print(err_msg)
+        if ofile:
+            gen_libs.write_file(ofile, mode, jdata)
+
+        if not no_std:
+            gen_libs.print_data(jdata)
+
+    else:
+        err_flag, err_msg = gen_libs.print_dict(data, ofile=ofile,
+                                                no_std=no_std, mode=mode)
+
+        if err_flag:
+            print(err_msg)
 
 
 def mysql_stat(server, args_array, **kwargs):
@@ -182,7 +228,15 @@ def mysql_stat(server, args_array, **kwargs):
     ofile = args_array.get("-o", False)
     db_tbl = args_array.get("-i", False)
     json_fmt = args_array.get("-j", False)
-    no_std = args_array.get("-s", False)
+    no_std = args_array.get("-z", False)
+    mode = "w"
+    indent = 4
+
+    if args_array.get("-a", False):
+        mode = "a"
+
+    if args_array.get("-f", False):
+        indent = None
 
     # List of performance statistics to be checked.
     perf_list = ["indb_buf_data", "indb_buf_tot", "indb_buf_data_pct",
@@ -195,12 +249,13 @@ def mysql_stat(server, args_array, **kwargs):
                  "indb_buf", "indb_log_buf", "max_conn"]
 
     # Loop iteration based on the -n option.
-    for x in range(0, int(args_array["-n"])):
-        mysql_stat_run(server, db_tbl, ofile, json_fmt, no_std, perf_list,
-                       **kwargs)
+    for item in range(0, int(args_array["-n"])):
+        mysql_stat_run(server, perf_list, db_tbl=db_tbl, ofile=ofile,
+                       json_fmt=json_fmt, no_std=no_std, mode=mode,
+                       indent=indent, **kwargs)
 
         # Do not sleep on the last loop.
-        if x != int(args_array["-n"]) - 1:
+        if item != int(args_array["-n"]) - 1:
             time.sleep(float(args_array["-b"]))
 
 
@@ -227,8 +282,8 @@ def run_program(args_array, func_dict, **kwargs):
         mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
 
     # Intersect args_array and func_dict to determine which functions to call.
-    for x in set(args_array.keys()) & set(func_dict.keys()):
-        func_dict[x](server, args_array, class_cfg=mongo, **kwargs)
+    for opt in set(args_array.keys()) & set(func_dict.keys()):
+        func_dict[opt](server, args_array, class_cfg=mongo, **kwargs)
 
     cmds_gen.disconnect([server])
 
@@ -255,6 +310,7 @@ def main():
 
     """
 
+    cmdline = gen_libs.get_inst(sys)
     dir_chk_list = ["-d"]
     file_chk_list = ["-o"]
     file_crt_list = ["-o"]
@@ -262,10 +318,11 @@ def main():
     opt_def_dict = {"-i": "sysmon:mysql_perf", "-n": "1", "-b": "1"}
     opt_con_req_list = {"-i": ["-m", "-j"]}
     opt_req_list = ["-c", "-d", "-b", "-n"]
-    opt_val_list = ["-c", "-d", "-b", "-i", "-m", "-n", "-o"]
+    opt_val_list = ["-c", "-d", "-b", "-i", "-m", "-n", "-o", "-y"]
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(sys.argv, opt_val_list, opt_def_dict)
+    args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
+                                       opt_def_dict)
 
     # Add required default options and values to argument dictionary.
     args_array = arg_parser.arg_add_def(args_array, opt_def_dict, opt_req_list)
@@ -276,7 +333,16 @@ def main():
        and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
        and not arg_parser.arg_file_chk(args_array, file_chk_list,
                                        file_crt_list):
-        run_program(args_array, func_dict)
+
+        try:
+            proglock = gen_class.ProgramLock(cmdline.argv,
+                                             args_array.get("-y", ""))
+            run_program(args_array, func_dict)
+            del proglock
+
+        except gen_class.SingleInstanceException:
+            print("WARNING:  lock in place for mysql_perf with id of: %s"
+                  % (args_array.get("-y", "")))
 
 
 if __name__ == "__main__":
