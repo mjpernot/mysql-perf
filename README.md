@@ -24,8 +24,6 @@
 # Prerequisites:
 
   * List of Linux packages that need to be installed on the server.
-    - python-libs
-    - python-devel
     - git
     - python-pip
 
@@ -33,6 +31,7 @@
     - lib/cmds_gen
     - lib/arg_parser
     - lib/gen_libs
+    - lib/gen_class
     - mysql_lib/mysql_libs
     - mysql_lib/mysql_class
     - mongo_lib/mongo_libs
@@ -81,15 +80,36 @@ cp mysql_cfg.py.TEMPLATE mysql_cfg.py
 
 Make the appropriate change to the environment.
   * Change these entries in the MySQL setup:
-    - passwd = "ROOT_PASSWORD"
-    - host = "HOST_IP"
-    - name = "HOSTNAME"
+    - user = "USER"
+    - passwd = "PASSWORD"
+    - host = "SERVER_IP"
+    - name = "HOST_NAME"
     - sid = SERVER_ID
+    - extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
+    - cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
+  * Change these entries only if required:
+    - serv_os = "Linux"
+    - port = 3306
 
 ```
 vim mysql_cfg.py
 chmod 600 mysql_cfg.py
 ```
+
+Create MySQL definition file.
+
+```
+cp mysql.cfg.TEMPLATE mysql.cfg
+```
+
+Make the appropriate change to the environment.
+  * Change these entries in the MySQL definition file:
+    - password="PASSWORD"
+    - socket="MYSQL_DIRECTORY/mysqld.sock"
+
+```
+vim mysql.cfg
+chmod 600 mysql.cfg
 
 Create Mongo configuration file. (Optional:  Only required if sending results to the database.)
 
@@ -98,12 +118,18 @@ cp mongo.py.TEMPLATE mongo.py
 ```
 
 Make the appropriate change to the environment.
-  * Change these entries in the Mongo setup:
-    - passwd = "ROOT_PASSWORD"
+  * Make the appropriate changes to connect to a Mongo database.
+    - user = "USER"
+    - passwd = "PASSWORD"
     - host = "HOST_IP"
     - name = "HOSTNAME"
 
-  * If connecting to a MySQL replica set, otherwise set to None.
+  * Change these entries only if required:
+    - port = 27017
+    - conf_file = None
+    - auth = True
+
+  * If connecting to a Mongo replica set:
     - repset = "REPLICA_SET_NAME"
     - repset_hosts = "HOST_1:PORT, HOST_2:PORT, ..."
     - db_auth = "AUTHENTICATION_DATABASE"
@@ -127,8 +153,6 @@ chmod 600 mongo.py
 # Testing:
 
 # Unit Testing:
-
-### Description: Testing consists of unit testing for the functions in the mysql_perf.py program.
 
 ### Installation:
   * Replace **{Python_Project}** with the baseline path of the python program.
@@ -160,25 +184,17 @@ pip install -r requirements-mongo-lib.txt --target mongo_lib --trusted-host pypi
 pip install -r requirements-python-lib.txt --target mongo_lib/lib --trusted-host pypi.appdev.proj.coe.ic.gov
 ```
 
-# Unit test runs for mysql_perf.py:
+### Testing:
   * Replace **{Python_Project}** with the baseline path of the python program.
 
 ```
 cd {Python_Project}/mysql-perf
-test/unit/mysql_perf/help_message.py
-test/unit/mysql_perf/main.py
-test/unit/mysql_perf/mysql_stat.py
-test/unit/mysql_perf/mysql_stat_run.py
-test/unit/mysql_perf/run_program.py
-```
-
-### All unit testing
-```
 test/unit/mysql_perf/unit_test_run.sh
 ```
 
-### Code coverage program
+### Code coverage:
 ```
+cd {Python_Project}/mysql-perf
 test/unit/mysql_perf/code_coverage.sh
 ```
 

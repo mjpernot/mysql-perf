@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [2.2.1] - 2020-05-28
+### Fixed
+- main: Fixed handling command line arguments from SonarQube scan finding.
+
+### Added
+- Added ProgramLock class to prevent multiple runs at the same time.
+- Added -f option to allow for flattening of JSON structure in output.
+- Added -a option to allow for append of data to an existing output file.
+
+### Changed
+- mysql_stat_run:  Changed variable name to standard naming convention.
+- run_program:  Changed variable name to standard naming convention.
+- mysql_stat:  Changed variable name to standard naming convention.
+- main:  Added ProgramLock class to implement program locking.
+- mysql_stat:  Added indentation option for JSON structure flattening.  Default is set to 4.
+- mysql_stat:  Added file mode option to writing data to a file.  Default is write.
+- mysql_stat:  Converted "-s" to "-z" to avoid confusion.
+- mysql_stat:  Converted mysql_stat_run arguments from positional to kwargs.
+- mysql_stat_run:  Refactored function to streamline the process, include append write mode, flattening of JSON, and moved a number of arguments to kwargs.
+- config/mongo.py.TEMPLATE:  Changed format.
+- config/mysql.cfg.TEMPLATE:  Changed format.
+- config/mysql_cfg.py.TEMPLATE:  Changed format.
+- Documentation updates.
+
+
 ## [2.2.0] - 2019-09-05
 ### Fixed
 - run_program:  Fixed problem with mutable default arguments issue.

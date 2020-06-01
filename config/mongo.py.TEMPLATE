@@ -3,8 +3,8 @@
 # Unclassified until filled.
 
 # All Mongo configuration settings.
-user = "root"
-passwd = "ROOT_PASSWORD"
+user = "USER"
+passwd = "PASSWORD"
 # Mongo DB host information
 host = "HOST_IP"
 name = "HOSTNAME"
@@ -18,13 +18,13 @@ auth = True
 # Replica Set Mongo configuration settings.
 # Replica set name.
 #    None means the Mongo database is not part of a replica set.
-#    Example:  repset = "REPLICA_SET_NAME"
+#    Syntax:  repset = "REPLICA_SET_NAME"
 repset = None
 # Replica host listing.
 #    None means the Mongo database is not part of a replica set.
-#    Example:  repset_hosts = "HOST1:PORT, HOST2:PORT, [...]"
+#    Syntax:  repset_hosts = "HOST1:PORT, HOST2:PORT, [...]"
 repset_hosts = None
 # Database to authentication to.
-#    Example:  db_auth = "AUTHENTICATION_DATABASE"
+#    Syntax:  db_auth = "AUTHENTICATION_DATABASE"
 db_auth = None 
 
