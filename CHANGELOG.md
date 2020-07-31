@@ -8,6 +8,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ### Fixed
 - mysql_stat:  Set file mode to append after first loop.
 
+### Added
+- is_pos_int:  Checks to see if number is an integer and positive.
+
 
 ## [2.2.1] - 2020-05-28
 ### Fixed

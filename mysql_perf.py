@@ -291,6 +291,21 @@ def run_program(args_array, func_dict, **kwargs):
     cmds_gen.disconnect([server])
 
 
+def is_pos_int(num, **kwargs):
+
+    """Function:  is_pos_int
+
+    Description:  Checks to see if number is an integer and positive.
+
+    Arguments:
+        (input) num -> Integer value.
+        (output) True|False -> Number is an integer and positive.
+
+    """
+
+    return isinstance(num, int) and num > 0
+
+
 def main():
 
     """Function:  main
