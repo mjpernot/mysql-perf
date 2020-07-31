@@ -254,6 +254,9 @@ def mysql_stat(server, args_array, **kwargs):
                        json_fmt=json_fmt, no_std=no_std, mode=mode,
                        indent=indent, **kwargs)
 
+        # Append to file after first loop.
+        mode = "a"
+
         # Do not sleep on the last loop.
         if item != int(args_array["-n"]) - 1:
             time.sleep(float(args_array["-b"]))

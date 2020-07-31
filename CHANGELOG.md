@@ -5,6 +5,8 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [2.3.0] - 2020-07-31
+### Fixed
+- mysql_stat:  Set file mode to append after first loop.
 
 
 ## [2.2.1] - 2020-05-28
