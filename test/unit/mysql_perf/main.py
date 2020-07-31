@@ -88,6 +88,12 @@ class UnitTest(unittest.TestCase):
         test_programlock_true -> Test with ProgramLock returns True.
         test_programlock_false -> Test with ProgramLock returns False.
         test_programlock_id -> Test ProgramLock with flavor ID.
+        test_interval_positive -> Test with positive interval value.
+        test_interval_zero -> Test with zero interval value.
+        test_interval_negative -> Test with negative interval value.
+        test_loop_positive -> Test with positive loop value.
+        test_loop_zero -> Test with zero loop value.
+        test_loop_negative -> Test with negative loop value.
 
     """
 
@@ -103,6 +109,12 @@ class UnitTest(unittest.TestCase):
 
         self.args_array = {"-c": "CfgFile", "-d": "CfgDir"}
         self.args_array2 = {"-c": "CfgFile", "-d": "CfgDir", "-y": "Flavor"}
+        self.args_array3 = {"-c": "CfgFile", "-d": "CfgDir", "-b": "1"}
+        self.args_array4 = {"-c": "CfgFile", "-d": "CfgDir", "-b": "0"}
+        self.args_array5 = {"-c": "CfgFile", "-d": "CfgDir", "-b": "-1"}
+        self.args_array6 = {"-c": "CfgFile", "-d": "CfgDir", "-n": "1"}
+        self.args_array7 = {"-c": "CfgFile", "-d": "CfgDir", "-n": "0"}
+        self.args_array8 = {"-c": "CfgFile", "-d": "CfgDir", "-n": "-1"}
         self.proglock = ProgramLock(["cmdline"], "FlavorID")
 
     @mock.patch("mysql_perf.gen_libs.help_func")
@@ -405,6 +417,150 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array2
+        mock_help.return_value = False
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_cond_req.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_file_chk.return_value = False
+        mock_lock.return_value = self.proglock
+
+        self.assertFalse(mysql_perf.main())
+
+    @mock.patch("mysql_perf.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_perf.gen_class.ProgramLock")
+    @mock.patch("mysql_perf.gen_libs.help_func")
+    @mock.patch("mysql_perf.arg_parser")
+    def test_interval_positive(self, mock_arg, mock_help, mock_lock):
+
+        """Function:  test_interval_positive
+
+        Description:  Test with positive interval value.
+
+        Arguments:
+
+        """
+
+        mock_arg.arg_parse2.return_value = self.args_array3
+        mock_help.return_value = False
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_cond_req.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_file_chk.return_value = False
+        mock_lock.return_value = self.proglock
+
+        self.assertFalse(mysql_perf.main())
+
+    @mock.patch("mysql_perf.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_perf.gen_class.ProgramLock")
+    @mock.patch("mysql_perf.gen_libs.help_func")
+    @mock.patch("mysql_perf.arg_parser")
+    def test_interval_zero(self, mock_arg, mock_help, mock_lock):
+
+        """Function:  test_interval_zero
+
+        Description:  Test with zero interval value.
+
+        Arguments:
+
+        """
+
+        mock_arg.arg_parse2.return_value = self.args_array4
+        mock_help.return_value = False
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_cond_req.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_file_chk.return_value = False
+        mock_lock.return_value = self.proglock
+
+        self.assertFalse(mysql_perf.main())
+
+    @mock.patch("mysql_perf.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_perf.gen_class.ProgramLock")
+    @mock.patch("mysql_perf.gen_libs.help_func")
+    @mock.patch("mysql_perf.arg_parser")
+    def test_interval_negative(self, mock_arg, mock_help, mock_lock):
+
+        """Function:  test_interval_negative
+
+        Description:  Test with negative interval value.
+
+        Arguments:
+
+        """
+
+        mock_arg.arg_parse2.return_value = self.args_array5
+        mock_help.return_value = False
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_cond_req.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_file_chk.return_value = False
+        mock_lock.return_value = self.proglock
+
+        self.assertFalse(mysql_perf.main())
+
+    @mock.patch("mysql_perf.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_perf.gen_class.ProgramLock")
+    @mock.patch("mysql_perf.gen_libs.help_func")
+    @mock.patch("mysql_perf.arg_parser")
+    def test_loop_positive(self, mock_arg, mock_help, mock_lock):
+
+        """Function:  test_loop_positive
+
+        Description:  Test with positive loop value.
+
+        Arguments:
+
+        """
+
+        mock_arg.arg_parse2.return_value = self.args_array6
+        mock_help.return_value = False
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_cond_req.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_file_chk.return_value = False
+        mock_lock.return_value = self.proglock
+
+        self.assertFalse(mysql_perf.main())
+
+    @mock.patch("mysql_perf.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_perf.gen_class.ProgramLock")
+    @mock.patch("mysql_perf.gen_libs.help_func")
+    @mock.patch("mysql_perf.arg_parser")
+    def test_loop_zero(self, mock_arg, mock_help, mock_lock):
+
+        """Function:  test_loop_zero
+
+        Description:  Test with zero loop value.
+
+        Arguments:
+
+        """
+
+        mock_arg.arg_parse2.return_value = self.args_array7
+        mock_help.return_value = False
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_cond_req.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_file_chk.return_value = False
+        mock_lock.return_value = self.proglock
+
+        self.assertFalse(mysql_perf.main())
+
+    @mock.patch("mysql_perf.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_perf.gen_class.ProgramLock")
+    @mock.patch("mysql_perf.gen_libs.help_func")
+    @mock.patch("mysql_perf.arg_parser")
+    def test_loop_negative(self, mock_arg, mock_help, mock_lock):
+
+        """Function:  test_loop_negative
+
+        Description:  Test with negative loop value.
+
+        Arguments:
+
+        """
+
+        mock_arg.arg_parse2.return_value = self.args_array8
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
