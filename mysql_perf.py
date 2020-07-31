@@ -345,6 +345,12 @@ def main():
     # Add required default options and values to argument dictionary.
     args_array = arg_parser.arg_add_def(args_array, opt_def_dict, opt_req_list)
 
+    if not is_pos_int(int(args_array["-b"])):
+        args_array["-b"] = "1"
+
+    if not is_pos_int(int(args_array["-n"])):
+        args_array["-n"] = "1"
+
     if not gen_libs.help_func(args_array, __version__, help_message) \
        and not arg_parser.arg_require(args_array, opt_req_list) \
        and arg_parser.arg_cond_req(args_array, opt_con_req_list) \

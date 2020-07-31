@@ -11,6 +11,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ### Added
 - is_pos_int:  Checks to see if number is an integer and positive.
 
+### Changed
+- main:  Added checks for positive integers for loop and interval options.
+
 
 ## [2.2.1] - 2020-05-28
 ### Fixed
