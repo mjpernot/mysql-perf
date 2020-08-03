@@ -101,7 +101,6 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
-        test_email -> Test with email option.
         test_mongo -> Test with mongo option.
         test_run_program -> Test run_program function.
 
@@ -123,27 +122,6 @@ class UnitTest(unittest.TestCase):
         self.args_array2 = {"-m": True, "-d": True, "-c": True, "-S": True,
                             "-e": "ToEmail", "-s": "SubjectLine"}
         self.args_array3 = {"-d": True, "-c": True, "-S": True}
-
-    @unittest.skip("not yet implemented")
-    @mock.patch("mysql_perf.cmds_gen.disconnect")
-    @mock.patch("mysql_perf.gen_libs.load_module")
-    @mock.patch("mysql_perf.mysql_libs.create_instance")
-    def test_email(self, mock_inst, mock_mongo, mock_disconn):
-
-        """Function:  test_email
-
-        Description:  Test with email option.
-
-        Arguments:
-
-        """
-
-        mock_inst.return_value = self.server
-        mock_mongo.return_value = True
-        mock_disconn.return_value = True
-
-        self.assertFalse(mysql_perf.run_program(self.args_array2,
-                                                self.func_dict))
 
     @mock.patch("mysql_perf.cmds_gen.disconnect")
     @mock.patch("mysql_perf.gen_libs.load_module")
