@@ -153,6 +153,31 @@ def help_message():
     print(__doc__)
 
 
+def convert_dict(data, mail, **kwargs):
+
+    """Function:  convert_dict
+
+    Description:  Convert dictionary document to standard format and add to
+        mail body.
+
+    Arguments:
+        (input) data -> Dictionary document.
+        (input) mail -> Mail class instance.
+
+    """
+
+    data = dict(data)
+
+    for key, val in data.iteritems():
+
+        if isinstance(val, dict):
+            convert_dict(val, mail)
+            mail.add_2_msg("{0}:".format(key))
+
+        else:
+            mail.add_2_msg("{0}:  {1}".format(key, val))
+
+
 def mysql_stat_run(server, perf_list=None, **kwargs):
 
     """Function:  mysql_stat_run
