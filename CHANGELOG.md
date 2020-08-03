@@ -9,6 +9,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - mysql_stat:  Set file mode to append after first loop.
 
 ### Added
+- Added email capability to send performance reports to email addresses.
 - is_pos_int:  Checks to see if number is an integer and positive.
 
 ### Changed

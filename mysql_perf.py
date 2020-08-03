@@ -10,6 +10,7 @@
 
     Usage:
         mysql_perf.py -c file -d path {-S} [-j [-f]] [-n count] [-b seconds]
+            [-t email_addr {email_addr2 ...} {-s subject_line}]
             [-i [db_name:table_name] -m file]
             [-o [dir_path]/file [-a]] [-y flavor_id] [-z]
             [-v | -h]
@@ -34,12 +35,19 @@
             Required for -i option.
         -o [path]/file => Directory path and file name for output.
         -a => Append output to output file.
+        -t email_addr email_addr2 => Enables emailing capability for an option
+            if the option allows it.  Sends output to one or more email
+            addresses.
+        -s subject_line => Subject line of email.  If none is provided then a
+            default one will be used.
         -y value => A flavor id for the program lock.  To create unique lock.
         -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.
 
         NOTE 1:  -v and/or -h overrides all other options.
+        NOTE 2:  If email is used, only a compilation of all performance
+            reports from a multiple loop run will be emailed out.
 
     Notes:
         MySQL configuration file format (config/mysql_cfg.py.TEMPLATE):
@@ -126,6 +134,9 @@ import mongo_lib.mongo_libs as mongo_libs
 import version
 
 __version__ = version.__version__
+
+# Global
+SUBJ_LINE = "MySQL_Performance"
 
 
 def help_message():
