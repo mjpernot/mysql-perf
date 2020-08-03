@@ -29,6 +29,7 @@ pipeline {
                 pip2 install mock==2.0.0 --user
                 pip2 install mysql-connector-python==8.0.16 --user
                 pip2 install pymongo==3.2.0 --user
+                ./test/unit/mysql_perf/_process_json.py
                 ./test/unit/mysql_perf/convert_dict.py
                 ./test/unit/mysql_perf/help_message.py
                 ./test/unit/mysql_perf/is_pos_int.py
