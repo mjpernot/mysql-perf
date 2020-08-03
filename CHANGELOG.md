@@ -13,6 +13,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - is_pos_int:  Checks to see if number is an integer and positive.
 
 ### Changed
+- main:  Added -s and -t options to parsing for email capability.
 - main:  Added checks for positive integers for loop and interval options.
 
 

@@ -331,6 +331,7 @@ def main():
         func_dict -> dictionary list for the function calls or other options.
         opt_def_dict -> contains options with their default values.
         opt_con_req_list -> contains the options that require other options.
+        opt_multi_list -> contains the options that will have multiple values.
         opt_req_list -> contains options that are required for the program.
         opt_val_list -> contains options which require values.
 
@@ -345,13 +346,14 @@ def main():
     file_crt_list = ["-o"]
     func_dict = {"-S": mysql_stat}
     opt_def_dict = {"-i": "sysmon:mysql_perf", "-n": "1", "-b": "1"}
-    opt_con_req_list = {"-i": ["-m", "-j"]}
+    opt_con_req_list = {"-i": ["-m", "-j"], "-s": ["-t"]}
+    opt_multi_list = ["-s", "-t"]
     opt_req_list = ["-c", "-d", "-b", "-n"]
-    opt_val_list = ["-c", "-d", "-b", "-i", "-m", "-n", "-o", "-y"]
+    opt_val_list = ["-c", "-d", "-b", "-i", "-m", "-n", "-o", "-s", "-t", "-y"]
 
     # Process argument list from command line.
     args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
-                                       opt_def_dict)
+                                       opt_def_dict, multi_val=opt_multi_list)
 
     # Add required default options and values to argument dictionary.
     args_array = arg_parser.arg_add_def(args_array, opt_def_dict, opt_req_list)
