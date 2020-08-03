@@ -110,7 +110,7 @@ class UnitTest(unittest.TestCase):
         self.args_array = {"-c": "CfgFile", "-d": "CfgDir", "-b": "1",
                            "-n": "1"}
         self.args_array2 = {"-c": "CfgFile", "-d": "CfgDir", "-y": "Flavor",
-                           "-b": "1", "-n": "1"}
+                            "-b": "1", "-n": "1"}
         self.args_array3 = {"-c": "CfgFile", "-d": "CfgDir", "-b": "1",
                             "-n": "1"}
         self.args_array4 = {"-c": "CfgFile", "-d": "CfgDir", "-b": "0",
