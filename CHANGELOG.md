@@ -10,6 +10,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ### Added
 - Added email capability to send performance reports to email addresses.
+- \_process_json:  Process JSON formatted data, private function for mysql_stat_run.
 - convert_dict:  Convert dictionary document to standard format and add to mail body.
 - is_pos_int:  Checks to see if number is an integer and positive.
 

@@ -253,6 +253,32 @@ def mysql_stat_run(server, perf_list=None, **kwargs):
             convert_dict(data, mail)
 
 
+def _process_json(jdata, ofile, mail, mode, no_std, **kwargs):
+
+    """Function:  _process_json
+
+    Description:  Process JSON formatted data.  Private function for
+        mysql_stat_run.
+
+    Arguments:
+        (input) jdata -> JSON formatted dictionary data.
+        (input) ofile -> Name of output file.
+        (input) mail -> Mail class instance.
+        (input) mode -> File write mode.
+        (input) no_std -> Suppress standard out.
+
+    """
+
+    if ofile:
+        gen_libs.write_file(ofile, mode, jdata)
+
+    if not no_std:
+        gen_libs.print_data(jdata)
+
+    if mail:
+        mail.add_2_msg(jdata)
+
+
 def mysql_stat(server, args_array, **kwargs):
 
     """Function:  mysql_stat
