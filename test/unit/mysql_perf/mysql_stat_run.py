@@ -43,13 +43,12 @@ class Mail(object):
 
     Methods:
         __init__ -> Class initialization.
-        get_time -> Stub method holder for SlaveRep.get_time.
-        get_name -> Stub method holder for SlaveRep.get_name.
-        upd_slv_time -> Stub method holder for SlaveRep.upd_slv_time.
+        add_2_msg -> Stub method holder for Mail.add_2_msg.
+        send_mail -> Stub method holder for Mail.send_mail.
 
     """
 
-    def __init__(self, lag_time=1):
+    def __init__(self):
 
         """Method:  __init__
 
@@ -59,7 +58,6 @@ class Mail(object):
 
         """
 
-        self.lag_time = lag_time
         self.data = None
 
     def add_2_msg(self, data):
@@ -78,7 +76,7 @@ class Mail(object):
 
     def send_mail(self):
 
-        """Method:  get_name
+        """Method:  send_mail
 
         Description:  Stub method holder for Mail.send_mail.
 
@@ -152,13 +150,14 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_mail_std -> Test with email in standard format.
+        test_mail_json -> Test with email in JSON format.
         test_json_file_no_stdout -> Test JSON & output to file but no std out.
         test_json_file_stdout -> Test JSON on and output to a file and std out.
         test_json_std_out -> Test with JSON on and no standard out.
         test_json_nostd -> Test with JSON on and no standard out.
         test_json_file -> Test with JSON on and output to a file.
         test_error_handling -> Test error handling.
-        test_mail -> Test with emailing out.
         test_no_mongo_cfg -> Test with no config for mongo passed.
         test_no_mongo_db_tbl -> Test with no db_tbl for mongo passed.
         test_mongo -> Test with mongo connection.
@@ -187,6 +186,34 @@ class UnitTest(unittest.TestCase):
                           "max_conn"]
         self.perf_list2 = []
         self.ofile = "/path/file"
+
+    def test_mail_std(self):
+
+        """Function:  test_mail_std
+
+        Description:  Test with email in standard format.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_perf.mysql_stat_run(
+            self.server, self.perf_list, json_fmt=True, mail=self.mail,
+            no_std=True))
+
+    def test_mail_json(self):
+
+        """Function:  test_mail_json
+
+        Description:  Test with email in JSON format.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_perf.mysql_stat_run(
+            self.server, self.perf_list, json_fmt=False, mail=self.mail,
+            no_std=True))
 
     @mock.patch("mysql_perf.gen_libs.write_file")
     def test_json_file_no_stdout(self, mock_file):
@@ -286,25 +313,6 @@ class UnitTest(unittest.TestCase):
         with gen_libs.no_std_out():
             self.assertFalse(mysql_perf.mysql_stat_run(
                 self.server, perf_list=self.perf_list))
-
-    @unittest.skip("not yet implemented")
-    @mock.patch("mysql_perf.mongo_libs.ins_doc")
-    @mock.patch("mysql_perf.gen_libs.write_file")
-    def test_mail(self, mock_write, mock_mongo):
-
-        """Function:  test_mail
-
-        Description:  Test with emailing out.
-
-        Arguments:
-
-        """
-
-        mock_write.return_value = True
-        mock_mongo.return_value = True
-
-        self.assertFalse(mysql_perf.mysql_stat_run(self.server,
-                                                   mail=self.mail))
 
     @mock.patch("mysql_perf.gen_libs.print_dict")
     def test_no_mongo_cfg(self, mock_print):
