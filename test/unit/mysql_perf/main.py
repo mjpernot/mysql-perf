@@ -107,18 +107,26 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.args_array = {"-c": "CfgFile", "-d": "CfgDir"}
-        self.args_array2 = {"-c": "CfgFile", "-d": "CfgDir", "-y": "Flavor"}
-        self.args_array3 = {"-c": "CfgFile", "-d": "CfgDir", "-b": "1"}
-        self.args_array4 = {"-c": "CfgFile", "-d": "CfgDir", "-b": "0"}
-        self.args_array5 = {"-c": "CfgFile", "-d": "CfgDir", "-b": "-1"}
-        self.args_array6 = {"-c": "CfgFile", "-d": "CfgDir", "-n": "1"}
-        self.args_array7 = {"-c": "CfgFile", "-d": "CfgDir", "-n": "0"}
-        self.args_array8 = {"-c": "CfgFile", "-d": "CfgDir", "-n": "-1"}
+        self.args_array = {"-c": "CfgFile", "-d": "CfgDir", "-b": "1",
+                           "-n": "1"}
+        self.args_array2 = {"-c": "CfgFile", "-d": "CfgDir", "-y": "Flavor",
+                           "-b": "1", "-n": "1"}
+        self.args_array3 = {"-c": "CfgFile", "-d": "CfgDir", "-b": "1",
+                            "-n": "1"}
+        self.args_array4 = {"-c": "CfgFile", "-d": "CfgDir", "-b": "0",
+                            "-n": "1"}
+        self.args_array5 = {"-c": "CfgFile", "-d": "CfgDir", "-b": "-1",
+                            "-n": "1"}
+        self.args_array6 = {"-c": "CfgFile", "-d": "CfgDir", "-n": "1",
+                            "-b": "1"}
+        self.args_array7 = {"-c": "CfgFile", "-d": "CfgDir", "-n": "0",
+                            "-b": "1"}
+        self.args_array8 = {"-c": "CfgFile", "-d": "CfgDir", "-n": "-1",
+                            "-b": "1"}
         self.proglock = ProgramLock(["cmdline"], "FlavorID")
 
     @mock.patch("mysql_perf.gen_libs.help_func")
-    @mock.patch("mysql_perf.arg_parser.arg_parse2")
+    @mock.patch("mysql_perf.arg_parser")
     def test_help_true(self, mock_arg, mock_help):
 
         """Function:  test_help_true
@@ -129,14 +137,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = True
 
         self.assertFalse(mysql_perf.main())
 
     @mock.patch("mysql_perf.arg_parser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
-    @mock.patch("mysql_perf.arg_parser.arg_parse2")
+    @mock.patch("mysql_perf.arg_parser")
     def test_help_false(self, mock_arg, mock_help, mock_req):
 
         """Function:  test_help_false
@@ -147,7 +156,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = False
         mock_req.return_value = True
 
@@ -155,7 +165,7 @@ class UnitTest(unittest.TestCase):
 
     @mock.patch("mysql_perf.arg_parser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
-    @mock.patch("mysql_perf.arg_parser.arg_parse2")
+    @mock.patch("mysql_perf.arg_parser")
     def test_arg_req_true(self, mock_arg, mock_help, mock_req):
 
         """Function:  test_arg_req_true
@@ -166,7 +176,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = False
         mock_req.return_value = True
 
@@ -175,7 +186,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_perf.arg_parser.arg_cond_req")
     @mock.patch("mysql_perf.arg_parser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
-    @mock.patch("mysql_perf.arg_parser.arg_parse2")
+    @mock.patch("mysql_perf.arg_parser")
     def test_arg_req_false(self, mock_arg, mock_help, mock_req, mock_cond):
 
         """Function:  test_arg_req_false
@@ -186,7 +197,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = False
         mock_req.return_value = False
         mock_cond.return_value = False
@@ -196,7 +208,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_perf.arg_parser.arg_cond_req")
     @mock.patch("mysql_perf.arg_parser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
-    @mock.patch("mysql_perf.arg_parser.arg_parse2")
+    @mock.patch("mysql_perf.arg_parser")
     def test_arg_cond_false(self, mock_arg, mock_help, mock_req, mock_cond):
 
         """Function:  test_arg_cond_false
@@ -207,7 +219,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = False
         mock_req.return_value = False
         mock_cond.return_value = False
@@ -218,7 +231,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_perf.arg_parser.arg_cond_req")
     @mock.patch("mysql_perf.arg_parser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
-    @mock.patch("mysql_perf.arg_parser.arg_parse2")
+    @mock.patch("mysql_perf.arg_parser")
     def test_arg_cond_true(self, mock_arg, mock_help, mock_req, mock_cond,
                            mock_dir):
 
@@ -230,7 +243,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = False
         mock_req.return_value = False
         mock_cond.return_value = True
@@ -242,7 +256,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_perf.arg_parser.arg_cond_req")
     @mock.patch("mysql_perf.arg_parser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
-    @mock.patch("mysql_perf.arg_parser.arg_parse2")
+    @mock.patch("mysql_perf.arg_parser")
     def test_arg_dir_true(self, mock_arg, mock_help, mock_req, mock_cond,
                           mock_dir):
 
@@ -254,7 +268,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = False
         mock_req.return_value = False
         mock_cond.return_value = True
@@ -275,6 +290,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
@@ -296,6 +312,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
@@ -319,6 +336,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
@@ -343,6 +361,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
@@ -367,6 +386,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
@@ -391,6 +411,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_add_def.return_value = self.args_array
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
@@ -417,6 +438,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array2
+        mock_arg.arg_add_def.return_value = self.args_array2
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
@@ -441,6 +463,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array3
+        mock_arg.arg_add_def.return_value = self.args_array3
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
@@ -465,6 +488,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array4
+        mock_arg.arg_add_def.return_value = self.args_array4
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
@@ -489,6 +513,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array5
+        mock_arg.arg_add_def.return_value = self.args_array5
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
@@ -513,6 +538,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array6
+        mock_arg.arg_add_def.return_value = self.args_array6
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
@@ -537,6 +563,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array7
+        mock_arg.arg_add_def.return_value = self.args_array7
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
@@ -561,6 +588,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array8
+        mock_arg.arg_add_def.return_value = self.args_array8
         mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
