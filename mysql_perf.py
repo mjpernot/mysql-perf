@@ -250,7 +250,7 @@ def mysql_stat_run(server, perf_list=None, **kwargs):
             print(err_msg)
 
         if mail:
-            mail.add_2_msg(data)
+            convert_dict(data, mail)
 
 
 def mysql_stat(server, args_array, **kwargs):
