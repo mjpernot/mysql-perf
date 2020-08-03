@@ -232,15 +232,7 @@ def mysql_stat_run(server, perf_list=None, **kwargs):
 
     if json_fmt:
         jdata = json.dumps(data, indent=indent)
-
-        if ofile:
-            gen_libs.write_file(ofile, mode, jdata)
-
-        if not no_std:
-            gen_libs.print_data(jdata)
-
-        if mail:
-            mail.add_2_msg(jdata)
+        _process_json(jdata, ofile, mail, mode, no_std)
 
     else:
         err_flag, err_msg = gen_libs.print_dict(data, ofile=ofile,
