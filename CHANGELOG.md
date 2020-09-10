@@ -24,6 +24,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - main:  Added checks for positive integers for loop and interval options.
 - Documentation updates.
 
+### Removed
+- Removed datetime module.
+
 
 ## [2.2.1] - 2020-05-28
 ### Fixed

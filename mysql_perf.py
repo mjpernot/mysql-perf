@@ -117,7 +117,6 @@
 
 # Standard
 import sys
-import datetime
 import time
 
 # Third-party
