@@ -21,6 +21,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - mysql_stat:  Setup email instance and pass to performance function.
 - main:  Added -s and -t options to parsing for email capability.
 - main:  Added checks for positive integers for loop and interval options.
+- Documentation updates.
 
 
 ## [2.2.1] - 2020-05-28

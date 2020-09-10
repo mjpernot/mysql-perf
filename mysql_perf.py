@@ -53,7 +53,7 @@
         MySQL configuration file format (config/mysql_cfg.py.TEMPLATE):
             # Configuration file:
             user = "USER"
-            passwd = "PASSWORD"
+            japd = "PASSWORD"
             host = "IP_ADDRESS"
             name = "HOSTNAME"
             sid = SERVER_ID
