@@ -219,8 +219,7 @@ def mysql_stat_run(server, perf_list=None, **kwargs):
     server.upd_srv_stat()
     server.upd_srv_perf()
     data = {"Server": server.name,
-            "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
-                                               "%Y-%m-%d %H:%M:%S"),
+            "AsOf": gen_libs.get_date() + " " + gen_libs.get_time(),
             "PerfStats": {}}
 
     for item in perf_list:
