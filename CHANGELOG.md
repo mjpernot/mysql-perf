@@ -8,6 +8,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use the mysql_libs v5.0.0 library.
 
 ### Fixed
+- config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 - mysql_stat:  Set file mode to append after first loop.
 
 ### Added
