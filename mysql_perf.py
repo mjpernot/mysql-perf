@@ -53,7 +53,7 @@
         MySQL configuration file format (config/mysql_cfg.py.TEMPLATE):
             # Configuration file:
             user = "USER"
-            japd = "PASSWORD"
+            japd = "PSWORD"
             host = "IP_ADDRESS"
             name = "HOSTNAME"
             sid = SERVER_ID
@@ -91,12 +91,15 @@
 
             # Single Configuration file for Mongo Database Server.
             user = "USER"
-            passwd = "PASSWORD"
+            japd = "PSWORD"
             host = "IP_ADDRESS"
             name = "HOSTNAME"
             port = 27017
             conf_file = None
             auth = True
+            auth_db = "admin"
+            use_arg = True
+            use_uri = False
 
             2.)  Replica Set connection:  Same format as above, but with these
                 additional entries at the end of the configuration file:
