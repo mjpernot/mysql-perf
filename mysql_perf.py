@@ -9,39 +9,38 @@
         formats or to the database.
 
     Usage:
-        mysql_perf.py -c file -d path {-S} [-j [-f]] [-n count] [-b seconds]
-            [-t email_addr {email_addr2 ...} {-s subject_line}]
-            [-i [db_name:table_name] -m file]
-            [-o [dir_path]/file [-a]] [-y flavor_id] [-z]
+        mysql_perf.py -c file -d path
+            {-S [-j [-f]] [-n count] [-b seconds]
+                [-t email_addr [email_addr2 ...] [-s subject_line]]
+                [-i [db_name:table_name] -m file]
+                [-o [dir_path]/file [-a]] [-z]}
+            [-y flavor_id]
             [-v | -h]
 
     Arguments:
         -c file => MySQL server configuration file.  Required arg.
         -d dir path => Directory path to config file (-c). Required arg.
+        
         -S => MySQL Database Performance Statistics option.
-        -j => Return output in JSON format.
-        -f => Flatten the JSON data structure to file and standard out.
-            For use with the -j option.
-        -n {count} => Number of loops to run the program.
-            Default:  1
-        -b {seconds} => Polling interval in seconds.
-            Default:  1
-        -i {database:collection} => Name of database and collection to insert
-            the database statistics data into.
-            Requires -m options.
-            Default:  sysmon:mysql_perf
-        -m file => Mongo config file.  Is loaded as a python, do not include
-            the .py extension with the name.
-            Required for -i option.
-        -o [path]/file => Directory path and file name for output.
-        -a => Append output to output file.
-        -t email_addr email_addr2 => Enables emailing capability for an option
-            if the option allows it.  Sends output to one or more email
-            addresses.
-        -s subject_line => Subject line of email.  If none is provided then a
-            default one will be used.
+            -j => Return output in JSON format.
+                -f => Flatten the JSON data structure to file and standard out.
+            -n count => Number of loops to run the program.  Default:  1
+            -b seconds => Polling interval in seconds.  Default:  1
+            -i [database:collection] => Name of database and collection to
+                insert the database statistics data into.
+                Default:  sysmon:mysql_perf
+            -m file => Mongo config file.  Is loaded as a python, do not
+                include the .py extension with the name.
+            -o [path]/file => Directory path and file name for output.
+            -a => Append output to output file.
+            -t email_addr email_addr2 => Enables emailing capability for an
+                option if the option allows it.  Sends output to one or more
+                email addresses.
+                -s subject_line => Subject line of email.  If none is provided
+                    then a default one will be used.
+            -z => Suppress standard out.
+
         -y value => A flavor id for the program lock.  To create unique lock.
-        -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.
 
