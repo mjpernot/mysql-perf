@@ -43,9 +43,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -a option to allow for append of data to an existing output file.
 
 ### Changed
-- mysql_stat_run:  Changed variable name to standard naming convention.
-- run_program:  Changed variable name to standard naming convention.
-- mysql_stat:  Changed variable name to standard naming convention.
+- mysql_stat, run_program, mysql_stat_run:  Changed variable name to standard naming convention.
 - main:  Added ProgramLock class to implement program locking.
 - mysql_stat:  Added indentation option for JSON structure flattening.  Default is set to 4.
 - mysql_stat:  Added file mode option to writing data to a file.  Default is write.
@@ -60,17 +58,13 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [2.2.0] - 2019-09-05
 ### Fixed
-- run_program:  Fixed problem with mutable default arguments issue.
-- mysql_stat:  Fixed problem with mutable default arguments issue.
-- mysql_stat_run:  Fixed problem with mutable default arguments issue.
+- mysql_stat, run_program, mysql_stat_run:  Fixed problem with mutable default arguments issue.
 
 ### Changed
 - mysql_stat_run: Replaced mongo_libs.json_2_out with internal code.
 - main:  Refactored "if" statements.
 - mysql_stat_run:  Changed JSON dictionary keys to CamelCase.
-- mysql_stat_run:  Changed variable to standard naming convention.
-- mysql_stat:  Changed variable to standard naming convention.
-- run_program:  Changed variables to standard naming convention.
+- mysql_stat, run_program, mysql_stat_run:  Changed variable to standard naming convention.
 
 
 ## [2.1.1] - 2018-12-03
@@ -87,10 +81,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 Breaking Change
 
 ### Changed
-- Changed "mongo_libs" calls to new naming schema.
-- Changed "mysql_libs" calls to new naming schema.
-- Changed "gen_libs" calls to new naming schema.
-- Changed "arg_parser" calls to new naming schema.
+- Changed "mongo_libs", "mysql_libs", "gen_libs", "arg_parser" calls to new naming schema.
 - Changed function names from uppercase to lowercase.
 - Setup single-source version control.
 
