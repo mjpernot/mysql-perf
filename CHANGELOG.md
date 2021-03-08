@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [2.3.0] - 2020-07-31
 - Updated to use the mysql_libs v5.0.2 library.
+- Updated to use pymongo v3.8.0.
 
 ### Fixed
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
