@@ -150,6 +150,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_insert_fail -> Test with failed insert into Mongo.
+        test_insert_success -> Test with successful insert into Mongo.
         test_mail_std -> Test with email in standard format.
         test_mail_json -> Test with email in JSON format.
         test_json_file_no_stdout -> Test JSON & output to file but no std out.
@@ -186,6 +188,47 @@ class UnitTest(unittest.TestCase):
                           "max_conn"]
         self.perf_list2 = []
         self.ofile = "/path/file"
+
+    @mock.patch("mysql_perf.mongo_libs.ins_doc")
+    @mock.patch("mysql_perf.gen_libs.print_dict")
+    def test_insert_fail(self, mock_print, mock_mongo):
+
+        """Function:  test_insert_fail
+
+        Description:  Test with failed insert into Mongo.
+
+        Arguments:
+
+        """
+
+        mock_print.return_value = (False, None)
+        mock_mongo.return_value = (False, "Connection Error")
+
+        with gen_libs.no_std_out():
+            self.assertFalse(
+                mysql_perf.mysql_stat_run(
+                    self.server, db_tbl="db:tbl", perf_list=self.perf_list,
+                    class_cfg="Cfg"))
+
+    @mock.patch("mysql_perf.mongo_libs.ins_doc")
+    @mock.patch("mysql_perf.gen_libs.print_dict")
+    def test_insert_success(self, mock_print, mock_mongo):
+
+        """Function:  test_insert_success
+
+        Description:  Test with successful insert into Mongo.
+
+        Arguments:
+
+        """
+
+        mock_print.return_value = (False, None)
+        mock_mongo.return_value = (True, None)
+
+        self.assertFalse(
+            mysql_perf.mysql_stat_run(
+                self.server, db_tbl="db:tbl", perf_list=self.perf_list,
+                class_cfg="Cfg"))
 
     def test_mail_std(self):
 
@@ -359,12 +402,12 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_print.return_value = (False, None)
-        mock_mongo.return_value = True
+        mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_perf.mysql_stat_run(self.server,
-                                                   db_tbl="db:tbl",
-                                                   perf_list=self.perf_list,
-                                                   class_cfg="Cfg"))
+        self.assertFalse(
+            mysql_perf.mysql_stat_run(
+                self.server, db_tbl="db:tbl", perf_list=self.perf_list,
+                class_cfg="Cfg"))
 
     @mock.patch("mysql_perf.gen_libs.print_dict")
     def test_default(self, mock_print):
