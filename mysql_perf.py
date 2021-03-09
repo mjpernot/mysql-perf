@@ -402,7 +402,7 @@ def main():
     file_crt_list = ["-o"]
     func_dict = {"-S": mysql_stat}
     opt_def_dict = {"-i": "sysmon:mysql_perf", "-n": "1", "-b": "1"}
-    opt_con_req_list = {"-i": ["-m", "-j"], "-s": ["-t"]}
+    opt_con_req_list = {"-i": ["-m", "-j"], "-s": ["-t"] "-u": ["-t"]}
     opt_multi_list = ["-s", "-t"]
     opt_req_list = ["-c", "-d", "-b", "-n"]
     opt_val_list = ["-c", "-d", "-b", "-i", "-m", "-n", "-o", "-s", "-t", "-y"]
