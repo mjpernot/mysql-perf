@@ -360,7 +360,7 @@ def run_program(args_array, func_dict, **kwargs):
     for opt in set(args_array.keys()) & set(func_dict.keys()):
         func_dict[opt](server, args_array, class_cfg=mongo, **kwargs)
 
-    cmds_gen.disconnect([server])
+    mysql_libs.disconnect([server])
 
 
 def is_pos_int(num):
