@@ -20,7 +20,7 @@
     Arguments:
         -c file => MySQL server configuration file.  Required arg.
         -d dir path => Directory path to config file (-c). Required arg.
-        
+
         -S => MySQL Database Performance Statistics option.
             -j => Return output in JSON format.
                 -f => Flatten the JSON data structure to file and standard out.
@@ -154,7 +154,7 @@ def help_message():
     print(__doc__)
 
 
-def convert_dict(data, mail, **kwargs):
+def convert_dict(data, mail):
 
     """Function:  convert_dict
 
@@ -245,7 +245,7 @@ def mysql_stat_run(server, perf_list=None, **kwargs):
             convert_dict(data, mail)
 
 
-def _process_json(jdata, ofile, mail, mode, no_std, **kwargs):
+def _process_json(jdata, ofile, mail, mode, no_std):
 
     """Function:  _process_json
 
@@ -363,7 +363,7 @@ def run_program(args_array, func_dict, **kwargs):
     cmds_gen.disconnect([server])
 
 
-def is_pos_int(num, **kwargs):
+def is_pos_int(num):
 
     """Function:  is_pos_int
 

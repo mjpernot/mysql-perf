@@ -19,6 +19,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - is_pos_int:  Checks to see if number is an integer and positive.
 
 ### Changed
+- Removed unnesscary \*\*kwargs from function parameters lists.
 - config/mongo.py.TEMPLATE:  Changed configuration entry name and added a number of configuration entries.
 - mysql_stat_run:  Replaced datetime call with calls to gen_libs.get_date and gen_libs.get_time.
 - config/mysql_cfg.py.TEMPLATE:  Changed configuration entry name.
