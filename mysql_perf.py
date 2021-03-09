@@ -13,7 +13,7 @@
             {-S [-j [-f]] [-n count] [-b seconds]
                 [-t email_addr [email_addr2 ...] [-s subject_line]]
                 [-i [db_name:table_name] -m file]
-                [-o [dir_path]/file [-a]] [-z]}
+                [-o [dir_path]/file [-a]] [-w] [-z]}
             [-y flavor_id]
             [-v | -h]
 
@@ -38,6 +38,7 @@
                 email addresses.
                 -s subject_line => Subject line of email.  If none is provided
                     then a default one will be used.
+            -w => Suppress printing initial connection errors.
             -z => Suppress standard out.
 
         -y value => A flavor id for the program lock.  To create unique lock.
@@ -356,11 +357,11 @@ def run_program(args_array, func_dict, **kwargs):
                                         mysql_class.Server)
     server.connect(silent=True)
 
-    if server.conn_msg:
+    if server.conn_msg and not args_array.get("-w", False):
         print("run_program:  Error encountered on server(%s):  %s" %
               (server.name, server.conn_msg))
 
-    else:
+    elif not server.conn_msg:
         if args_array.get("-m", False):
             mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
 

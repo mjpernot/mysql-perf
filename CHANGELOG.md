@@ -13,12 +13,14 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - mysql_stat:  Set file mode to append after first loop.
 
 ### Added
+- Added -w option to suppress printing the inital connection error.
 - Added email capability to send performance reports to email addresses.
 - \_process_json:  Process JSON formatted data, private function for mysql_stat_run.
 - convert_dict:  Convert dictionary document to standard format and add to mail body.
 - is_pos_int:  Checks to see if number is an integer and positive.
 
 ### Changed
+- run_program:  Added check for -w option to ignore initial connection error.
 - run_program:  Check on connection status and process accordingly.
 - mysql_stat_run:  Process status return from mongo_libs.ins_doc call.
 - run_program:  Replaced cmds_gen.disconnect with mysql_libs.disconnect call.
