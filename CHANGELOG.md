@@ -9,6 +9,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use pymongo v3.8.0.
 
 ### Fixed
+- convert_dict:  Fixed formatting problem and printing all dictionary keys in nested dictionaries.
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 - mysql_stat:  Set file mode to append after first loop.
 

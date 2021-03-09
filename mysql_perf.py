@@ -156,7 +156,7 @@ def help_message():
     print(__doc__)
 
 
-def convert_dict(data, mail):
+def convert_dict(data, mail, **kwargs):
 
     """Function:  convert_dict
 
@@ -166,19 +166,23 @@ def convert_dict(data, mail):
     Arguments:
         (input) data -> Dictionary document.
         (input) mail -> Mail class instance.
+        (input) kwargs:
+            indent -> Level of indentation for printing.
 
     """
 
     data = dict(data)
+    indent = kwargs.get("indent", 0)
+    spc = " "
 
     for key, val in data.iteritems():
 
         if isinstance(val, dict):
-            convert_dict(val, mail)
-            mail.add_2_msg("{0}:".format(key))
+            mail.add_2_msg("{0}{1}:\n".format(spc * indent, key))
+            convert_dict(val, mail, indent=indent + 4)
 
         else:
-            mail.add_2_msg("{0}:  {1}".format(key, val))
+            mail.add_2_msg("{0}{1}:  {2}\n".format(spc * indent, key, val))
 
 
 def mysql_stat_run(server, perf_list=None, **kwargs):
