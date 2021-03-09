@@ -108,6 +108,7 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_conn_fail_suppress -> Test with failed conn with suppression.
         test_connect_failure -> Test with failed connection.
         test_connect_success -> Test with successful connection.
         test_mongo -> Test with mongo option.
@@ -131,10 +132,28 @@ class UnitTest(unittest.TestCase):
         self.args_array2 = {"-m": True, "-d": True, "-c": True, "-S": True,
                             "-e": "ToEmail", "-s": "SubjectLine"}
         self.args_array3 = {"-d": True, "-c": True, "-S": True}
+        self.args_array4 = {"-d": True, "-c": True, "-S": True, "-w": True}
 
-    @mock.patch("mysql_perf.mysql_libs.disconnect")
     @mock.patch("mysql_perf.mysql_libs.create_instance")
-    def test_connect_failure(self, mock_inst, mock_disconn):
+    def test_conn_fail_suppress(self, mock_inst):
+
+        """Function:  test_conn_fail_suppress
+
+        Description:  Test with failed conn with suppression.
+
+        Arguments:
+
+        """
+
+        self.server.conn_msg = "Error connection message"
+
+        mock_inst.return_value = self.server
+
+        self.assertFalse(mysql_perf.run_program(self.args_array4,
+                                                self.func_dict))
+
+    @mock.patch("mysql_perf.mysql_libs.create_instance")
+    def test_connect_failure(self, mock_inst):
 
         """Function:  test_connect_failure
 
