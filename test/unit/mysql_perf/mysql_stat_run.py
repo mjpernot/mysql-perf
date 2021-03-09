@@ -188,6 +188,7 @@ class UnitTest(unittest.TestCase):
                           "max_conn"]
         self.perf_list2 = []
         self.ofile = "/path/file"
+        self.db_tbl = "db:tbl"
 
     @mock.patch("mysql_perf.mongo_libs.ins_doc")
     @mock.patch("mysql_perf.gen_libs.print_dict")
@@ -207,7 +208,7 @@ class UnitTest(unittest.TestCase):
         with gen_libs.no_std_out():
             self.assertFalse(
                 mysql_perf.mysql_stat_run(
-                    self.server, db_tbl="db:tbl", perf_list=self.perf_list,
+                    self.server, db_tbl=self.db_tbl, perf_list=self.perf_list,
                     class_cfg="Cfg"))
 
     @mock.patch("mysql_perf.mongo_libs.ins_doc")
@@ -227,7 +228,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(
             mysql_perf.mysql_stat_run(
-                self.server, db_tbl="db:tbl", perf_list=self.perf_list,
+                self.server, db_tbl=self.db_tbl, perf_list=self.perf_list,
                 class_cfg="Cfg"))
 
     def test_mail_std(self):
@@ -371,7 +372,7 @@ class UnitTest(unittest.TestCase):
         mock_print.return_value = (False, None)
 
         self.assertFalse(mysql_perf.mysql_stat_run(
-            self.server, perf_list=self.perf_list, db_tbl="db:tbl"))
+            self.server, perf_list=self.perf_list, db_tbl=self.db_tbl))
 
     @mock.patch("mysql_perf.gen_libs.print_dict")
     def test_no_mongo_db_tbl(self, mock_print):
@@ -406,7 +407,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(
             mysql_perf.mysql_stat_run(
-                self.server, db_tbl="db:tbl", perf_list=self.perf_list,
+                self.server, db_tbl=self.db_tbl, perf_list=self.perf_list,
                 class_cfg="Cfg"))
 
     @mock.patch("mysql_perf.gen_libs.print_dict")
