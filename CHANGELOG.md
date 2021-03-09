@@ -5,8 +5,10 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [2.3.0] - 2020-07-31
-- Updated to use the mysql_libs v5.0.2 library.
+- Updated to use the mysql_libs v5.0.4 library.
 - Updated to use pymongo v3.8.0.
+- Updated to be used in FIPS 140-2 environment.
+- Updated to work with (much older) mysql.connector v1.1.6 library module.
 
 ### Fixed
 - convert_dict:  Fixed formatting problem and printing all dictionary keys in nested dictionaries.
