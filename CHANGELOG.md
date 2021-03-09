@@ -20,6 +20,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - is_pos_int:  Checks to see if number is an integer and positive.
 
 ### Changed
+- main:  Replaced is_pos_int with gen_libs.is_pos_int call.
 - run_program:  Added check for -w option to ignore initial connection error.
 - run_program:  Check on connection status and process accordingly.
 - mysql_stat_run:  Process status return from mongo_libs.ins_doc call.

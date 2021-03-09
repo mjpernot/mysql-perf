@@ -428,10 +428,10 @@ def main():
     # Add required default options and values to argument dictionary.
     args_array = arg_parser.arg_add_def(args_array, opt_def_dict, opt_req_list)
 
-    if not is_pos_int(int(args_array["-b"])):
+    if not gen_libs.is_pos_int(int(args_array["-b"])):
         args_array["-b"] = "1"
 
-    if not is_pos_int(int(args_array["-n"])):
+    if not gen_libs.is_pos_int(int(args_array["-n"])):
         args_array["-n"] = "1"
 
     if not gen_libs.help_func(args_array, __version__, help_message) \
