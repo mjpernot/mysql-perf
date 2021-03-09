@@ -127,7 +127,6 @@ import time
 import json
 
 # Local
-import lib.cmds_gen as cmds_gen
 import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
 import lib.gen_class as gen_class
