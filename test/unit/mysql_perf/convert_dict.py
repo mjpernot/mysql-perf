@@ -66,8 +66,8 @@ class UnitTest(unittest.TestCase):
         self.data4 = {"key1": {"key1a": "value1a"}}
         self.data5 = {"key1": {"key1a": "value1a"}, "key2": "value2"}
         self.data6 = {"key1": "value1",
-                      "key2": { "key2A": "value2A", "key2B": "value2B"},
-                      "key3": { "key3A": { "key3AA": "value3AA"}}}
+                      "key2": {"key2A": "value2A", "key2B": "value2B"},
+                      "key3": {"key3A": {"key3AA": "value3AA"}}}
         self.mail = gen_class.setup_mail("email_addr", subj="subject_line")
         self.results = ""
         self.results2 = "key1:  value1\n"
