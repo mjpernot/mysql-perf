@@ -123,7 +123,7 @@ class UnitTest(unittest.TestCase):
                             "-e": "ToEmail", "-s": "SubjectLine"}
         self.args_array3 = {"-d": True, "-c": True, "-S": True}
 
-    @mock.patch("mysql_perf.cmds_gen.disconnect")
+    @mock.patch("mysql_perf.mysql_libs.disconnect")
     @mock.patch("mysql_perf.gen_libs.load_module")
     @mock.patch("mysql_perf.mysql_libs.create_instance")
     def test_mongo(self, mock_inst, mock_mongo, mock_disconn):
@@ -143,7 +143,7 @@ class UnitTest(unittest.TestCase):
         self.assertFalse(mysql_perf.run_program(self.args_array,
                                                 self.func_dict))
 
-    @mock.patch("mysql_perf.cmds_gen.disconnect")
+    @mock.patch("mysql_perf.mysql_libs.disconnect")
     @mock.patch("mysql_perf.mysql_libs.create_instance")
     def test_run_program(self, mock_inst, mock_disconn):
 
