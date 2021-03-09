@@ -73,17 +73,23 @@ class Mail(object):
 
         return True
 
-    def send_mail(self):
+    def send_mail(self, use_mailx=False):
 
         """Method:  send_mail
 
         Description:  Stub method holder for Mail.send_mail.
 
         Arguments:
+            (input) use_mailx -> True|False - To use mailx command.
 
         """
 
-        return True
+        status = True
+
+        if use_mailx:
+            status = True
+
+        return status
 
 
 class Server(object):
@@ -118,6 +124,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_email_no_subj_mailx -> Test with email but no subject using mailx.
+        test_email_mailx -> Test with email option set using mailx.
         test_email_no_subj -> Test with email but no subject in args.
         test_email -> Test with email option set.
         test_interval_zero -> Test with -b option set to zero.
@@ -157,7 +165,46 @@ class UnitTest(unittest.TestCase):
         self.args_array10 = {"-n": -1, "-b": 1}
         self.args_array11 = {"-n": 1, "-b": 1, "-t": "email_addr",
                              "-s": "subject_line"}
+        self.args_array11a = {"-n": 1, "-b": 1, "-t": "email_addr",
+                              "-s": "subject_line", "-u": True}
         self.args_array12 = {"-n": 1, "-b": 1, "-t": "email_addr"}
+        self.args_array12a = {"-n": 1, "-b": 1, "-t": "email_addr", "-u": True}
+
+    @mock.patch("mysql_perf.gen_class.setup_mail")
+    @mock.patch("mysql_perf.mysql_stat_run")
+    def test_email_no_subj_mailx(self, mock_process, mock_mail):
+
+        """Function:  test_email_no_subj_mailx
+
+        Description:  Test with email but no subject using mailx.
+
+        Arguments:
+
+        """
+
+        mock_process.return_value = True
+        mock_mail.return_value = self.mail
+
+        self.assertFalse(mysql_perf.mysql_stat(self.server,
+                                               self.args_array12a))
+
+    @mock.patch("mysql_perf.gen_class.setup_mail")
+    @mock.patch("mysql_perf.mysql_stat_run")
+    def test_email_mailx(self, mock_process, mock_mail):
+
+        """Function:  test_email_mailx
+
+        Description:  Test with email option set using mailx.
+
+        Arguments:
+
+        """
+
+        mock_process.return_value = True
+        mock_mail.return_value = self.mail
+
+        self.assertFalse(mysql_perf.mysql_stat(self.server,
+                                               self.args_array11a))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     @mock.patch("mysql_perf.mysql_stat_run")
