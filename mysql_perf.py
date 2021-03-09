@@ -228,7 +228,10 @@ def mysql_stat_run(server, perf_list=None, **kwargs):
 
     if mongo_cfg and db_tbl:
         dbn, tbl = db_tbl.split(":")
-        mongo_libs.ins_doc(mongo_cfg, dbn, tbl, data)
+        status = mongo_libs.ins_doc(mongo_cfg, dbn, tbl, data)
+
+        if not status[0]:
+            print("Insert error:  %s" % (status[1]))
 
     if json_fmt:
         jdata = json.dumps(data, indent=indent)
