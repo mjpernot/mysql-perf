@@ -336,7 +336,7 @@ def mysql_stat(server, args_array, **kwargs):
             time.sleep(float(args_array["-b"]))
 
     if mail:
-        mail.send_mail()
+        mail.send_mail(use_mailx=args_array.get("-u", False))
 
 
 def run_program(args_array, func_dict, **kwargs):
@@ -402,7 +402,7 @@ def main():
     file_crt_list = ["-o"]
     func_dict = {"-S": mysql_stat}
     opt_def_dict = {"-i": "sysmon:mysql_perf", "-n": "1", "-b": "1"}
-    opt_con_req_list = {"-i": ["-m", "-j"], "-s": ["-t"] "-u": ["-t"]}
+    opt_con_req_list = {"-i": ["-m", "-j"], "-s": ["-t"], "-u": ["-t"]}
     opt_multi_list = ["-s", "-t"]
     opt_req_list = ["-c", "-d", "-b", "-n"]
     opt_val_list = ["-c", "-d", "-b", "-i", "-m", "-n", "-o", "-s", "-t", "-y"]

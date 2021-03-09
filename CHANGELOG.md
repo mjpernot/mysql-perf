@@ -21,6 +21,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - is_pos_int:  Checks to see if number is an integer and positive.
 
 ### Changed
+- mysql_stat:  Set the use_mailx argument in the mail.send_mail command.
 - main:  Added -u option to allow for mailx use.
 - main:  Replaced is_pos_int with gen_libs.is_pos_int call.
 - run_program:  Added check for -w option to ignore initial connection error.
