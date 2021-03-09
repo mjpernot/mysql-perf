@@ -77,7 +77,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ### Changed
 - mysql_stat_run: Replaced mongo_libs.json_2_out with internal code.
 - main:  Refactored "if" statements.
-- mysql_stat_run:  Changed JSON dictionary keys to CamelCase.
+- mysql_stat_run:  Changed JSON dictionary keys to PascalCase.
 - mysql_stat, run_program, mysql_stat_run:  Changed variable to standard naming convention.
 
 
