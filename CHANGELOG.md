@@ -13,6 +13,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - mysql_stat:  Set file mode to append after first loop.
 
 ### Added
+- Added -u option to override postfix and use mailx command.
 - Added -w option to suppress printing the inital connection error.
 - Added email capability to send performance reports to email addresses.
 - \_process_json:  Process JSON formatted data, private function for mysql_stat_run.

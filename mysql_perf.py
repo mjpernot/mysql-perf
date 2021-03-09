@@ -11,7 +11,7 @@
     Usage:
         mysql_perf.py -c file -d path
             {-S [-j [-f]] [-n count] [-b seconds]
-                [-t email_addr [email_addr2 ...] [-s subject_line]]
+                [-t email_addr [email_addr2 ...] [-s subject_line] [-u]]
                 [-i [db_name:table_name] -m file]
                 [-o [dir_path]/file [-a]] [-w] [-z]}
             [-y flavor_id]
@@ -38,6 +38,7 @@
                 email addresses.
                 -s subject_line => Subject line of email.  If none is provided
                     then a default one will be used.
+                -u => Override the default mail command and use mailx.
             -w => Suppress printing initial connection errors.
             -z => Suppress standard out.
 
