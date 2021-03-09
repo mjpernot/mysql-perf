@@ -65,12 +65,33 @@ class UnitTest(unittest.TestCase):
         self.data3 = {"key1": "value1", "key2": "value2"}
         self.data4 = {"key1": {"key1a": "value1a"}}
         self.data5 = {"key1": {"key1a": "value1a"}, "key2": "value2"}
+        self.data6 = {"key1": "value1",
+                      "key2": { "key2A": "value2A", "key2B": "value2B"},
+                      "key3": { "key3A": { "key3AA": "value3AA"}}}
         self.mail = gen_class.setup_mail("email_addr", subj="subject_line")
         self.results = ""
-        self.results2 = "key1:  value1"
-        self.results3 = "key2:  value2key1:  value1"
-        self.results4 = "key1a:  value1akey1:"
-        self.results5 = "key2:  value2key1a:  value1akey1:"
+        self.results2 = "key1:  value1\n"
+        self.results3 = "key2:  value2\nkey1:  value1\n"
+        self.results4 = "key1:\n    key1a:  value1a\n"
+        self.results5 = "key2:  value2\nkey1:\n    key1a:  value1a\n"
+        self.sub = "key1:  value1\n"
+        self.sub2 = "key3:\n    key3A:\n        key3AA:  value3AA\n"
+        self.sub3 = "key2:\n    key2B:  value2B\n    key2A:  value2A\n"
+        self.results6 = self.sub2 + self.sub3 + self.sub
+
+    def test_nested_dicts(self):
+
+        """Function:  test_nested_dicts
+
+        Description:  Test with nested dictionaries.
+
+        Arguments:
+
+        """
+
+        mysql_perf.convert_dict(self.data6, self.mail)
+
+        self.assertEqual(self.mail.msg, self.results6)
 
     def test_multi_key_lvl(self):
 
