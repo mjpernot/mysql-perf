@@ -349,21 +349,26 @@ def run_program(args_array, func_dict, **kwargs):
 
     """
 
+    mongo = None
     args_array = dict(args_array)
     func_dict = dict(func_dict)
     server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
-    server.connect()
-    mongo = None
+    server.connect(silent=True)
 
-    if args_array.get("-m", False):
-        mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
+    if server.conn_msg:
+        print("run_program:  Error encountered on server(%s):  %s" %
+              (server.name, server.conn_msg))
 
-    # Intersect args_array and func_dict to determine which functions to call.
-    for opt in set(args_array.keys()) & set(func_dict.keys()):
-        func_dict[opt](server, args_array, class_cfg=mongo, **kwargs)
+    else:
+        if args_array.get("-m", False):
+            mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
 
-    mysql_libs.disconnect([server])
+        # Call function(s) - intersection of command line and function dict.
+        for opt in set(args_array.keys()) & set(func_dict.keys()):
+            func_dict[opt](server, args_array, class_cfg=mongo, **kwargs)
+
+        mysql_libs.disconnect(server)
 
 
 def is_pos_int(num):
