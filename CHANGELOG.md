@@ -9,6 +9,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use pymongo v3.8.0.
 - Updated to be used in FIPS 140-2 environment.
 - Updated to work with (much older) mysql.connector v1.1.6 library module.
+- Validated against MySQL 5.7 database.
 
 ### Fixed
 - convert_dict:  Fixed formatting problem and printing all dictionary keys in nested dictionaries.
