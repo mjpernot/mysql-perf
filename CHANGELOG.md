@@ -5,7 +5,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [2.4.0] - 2021-09-07
-- Updated to work in MySQL 8.0 and 5.7 environments.
+- Updated to work in MySQL 8.0 environment.
 - Updated to work in a SSL environment.
 - Updated to use the mysql_libs v5.2.2 library.
 - Updated to use gen_libs v2.8.4 library.
@@ -16,7 +16,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use pymongo v3.8.0.
 - Updated to be used in FIPS 140-2 environment.
 - Updated to work with (much older) mysql.connector v1.1.6 library module.
-- Validated against MySQL 5.7 database.
+- Validated against MySQL 5.7 environment.
 
 ### Fixed
 - convert_dict:  Fixed formatting problem and printing all dictionary keys in nested dictionaries.
