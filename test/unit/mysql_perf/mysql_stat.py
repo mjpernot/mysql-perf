@@ -6,7 +6,7 @@
     Description:  Unit testing of mysql_stat in mysql_perf.py.
 
     Usage:
-        test/unit/mysql_db_admin/mysql_stat.py
+        test/unit/mysql_perf/mysql_stat.py
 
     Arguments:
 
@@ -41,9 +41,9 @@ class Mail(object):
     Description:  Class stub holder for gen_class.Mail class.
 
     Methods:
-        __init__ -> Class initialization.
-        add_2_msg -> Stub method holder for Mail.add_2_msg.
-        send_mail -> Stub method holder for Mail.send_mail.
+        __init__
+        add_2_msg
+        send_mail
 
     """
 
@@ -99,7 +99,7 @@ class Server(object):
     Description:  Class stub holder for mysql_class.Server class.
 
     Methods:
-        __init__ -> Class initialization.
+        __init__
 
     """
 
@@ -123,22 +123,22 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_email_no_subj_mailx -> Test with email but no subject using mailx.
-        test_email_mailx -> Test with email option set using mailx.
-        test_email_no_subj -> Test with email but no subject in args.
-        test_email -> Test with email option set.
-        test_interval_zero -> Test with -b option set to zero.
-        test_interval_one -> Test with -b option set to one.
-        test_interval_two -> Test with -b option set to > one.
-        test_loop_negative -> Test with -n option set to negative number.
-        test_zero_loop -> Test with -n option set to zero.
-        test_json_flat -> Test with flatten indentation for JSON.
-        test_json_indent -> Test with default indentation for JSON.
-        test_file_write -> Test with setting file write.
-        test_file_append -> Test with setting file append.
-        test_multi_loop -> Test with multiple loops.
-        test_default -> Test with default settings.
+        setUp
+        test_email_no_subj_mailx
+        test_email_mailx
+        test_email_no_subj
+        test_email
+        test_interval_zero
+        test_interval_one
+        test_interval_two
+        test_loop_negative
+        test_zero_loop
+        test_json_flat
+        test_json_indent
+        test_file_write
+        test_file_append
+        test_multi_loop
+        test_default
 
     """
 
