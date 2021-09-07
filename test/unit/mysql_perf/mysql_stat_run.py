@@ -42,9 +42,9 @@ class Mail(object):
     Description:  Class stub holder for gen_class.Mail class.
 
     Methods:
-        __init__ -> Class initialization.
-        add_2_msg -> Stub method holder for Mail.add_2_msg.
-        send_mail -> Stub method holder for Mail.send_mail.
+        __init__
+        add_2_msg
+        send_mail
 
     """
 
@@ -94,9 +94,9 @@ class Server(object):
     Description:  Class stub holder for mysql_class.Server class.
 
     Methods:
-        __init__ -> Class initialization.
-        upd_srv_stat -> Stub method holder for mysql_class.Server.upd_srv_stat.
-        upd_srv_perf -> Stub method holder for mysql_class.Server.upd_srv_perf.
+        __init__
+        upd_srv_stat
+        upd_srv_perf
 
     """
 
@@ -149,24 +149,24 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_insert_fail -> Test with failed insert into Mongo.
-        test_insert_success -> Test with successful insert into Mongo.
-        test_mail_std -> Test with email in standard format.
-        test_mail_json -> Test with email in JSON format.
-        test_json_file_no_stdout -> Test JSON & output to file but no std out.
-        test_json_file_stdout -> Test JSON on and output to a file and std out.
-        test_json_std_out -> Test with JSON on and no standard out.
-        test_json_nostd -> Test with JSON on and no standard out.
-        test_json_file -> Test with JSON on and output to a file.
-        test_error_handling -> Test error handling.
-        test_no_mongo_cfg -> Test with no config for mongo passed.
-        test_no_mongo_db_tbl -> Test with no db_tbl for mongo passed.
-        test_mongo -> Test with mongo connection.
-        test_default -> Test with default settings.
-        test_perf_list -> Test with perf_list populated.
-        test_perf_empty_list -> Test with perf_list empty.
-        test_no_perf_list -> Test with no perf_list passed.
+        setUp
+        test_insert_fail
+        test_insert_success
+        test_mail_std
+        test_mail_json
+        test_json_file_no_stdout
+        test_json_file_stdout
+        test_json_std_out
+        test_json_nostd
+        test_json_file
+        test_error_handling
+        test_no_mongo_cfg
+        test_no_mongo_db_tbl
+        test_mongo
+        test_default
+        test_perf_list
+        test_perf_empty_list
+        test_no_perf_list
 
     """
 
