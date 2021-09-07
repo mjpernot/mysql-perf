@@ -4,6 +4,51 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [2.3.0] - 2020-07-31
+- Updated to use the mysql_libs v5.0.4 library.
+- Updated to use pymongo v3.8.0.
+- Updated to be used in FIPS 140-2 environment.
+- Updated to work with (much older) mysql.connector v1.1.6 library module.
+- Validated against MySQL 5.7 database.
+
+### Fixed
+- convert_dict:  Fixed formatting problem and printing all dictionary keys in nested dictionaries.
+- config/mysql.cfg.TEMPLATE:  Point to correct socket file.
+- mysql_stat:  Set file mode to append after first loop.
+
+### Added
+- Added -u option to override postfix and use mailx command.
+- Added -w option to suppress printing the inital connection error.
+- Added email capability to send performance reports to email addresses.
+- \_process_json:  Process JSON formatted data, private function for mysql_stat_run.
+- convert_dict:  Convert dictionary document to standard format and add to mail body.
+- is_pos_int:  Checks to see if number is an integer and positive.
+
+### Changed
+- mysql_stat:  Set the use_mailx argument in the mail.send_mail command.
+- main:  Added -u option to allow for mailx use.
+- main:  Replaced is_pos_int with gen_libs.is_pos_int call.
+- run_program:  Added check for -w option to ignore initial connection error.
+- run_program:  Check on connection status and process accordingly.
+- mysql_stat_run:  Process status return from mongo_libs.ins_doc call.
+- run_program:  Replaced cmds_gen.disconnect with mysql_libs.disconnect call.
+- Removed unnesscary \*\*kwargs from function parameters lists.
+- config/mongo.py.TEMPLATE:  Changed configuration entry name and added a number of configuration entries.
+- mysql_stat_run:  Replaced datetime call with calls to gen_libs.get_date and gen_libs.get_time.
+- config/mysql_cfg.py.TEMPLATE:  Changed configuration entry name.
+- mysql_stat_run:  Replaced code to process JSON data with call to \_process_json.
+- mysql_stat_run:  Add to email body if email is setup.
+- mysql_stat:  Setup email instance and pass to performance function.
+- main:  Added -s and -t options to parsing for email capability.
+- main:  Added checks for positive integers for loop and interval options.
+- Documentation updates.
+
+### Removed
+- Removed lib.cmds_gen module.
+- Removed is_pos_int function.
+- Removed datetime module.
+
+
 ## [2.2.1] - 2020-05-28
 ### Fixed
 - main: Fixed handling command line arguments from SonarQube scan finding.
@@ -14,9 +59,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -a option to allow for append of data to an existing output file.
 
 ### Changed
-- mysql_stat_run:  Changed variable name to standard naming convention.
-- run_program:  Changed variable name to standard naming convention.
-- mysql_stat:  Changed variable name to standard naming convention.
+- mysql_stat, run_program, mysql_stat_run:  Changed variable name to standard naming convention.
 - main:  Added ProgramLock class to implement program locking.
 - mysql_stat:  Added indentation option for JSON structure flattening.  Default is set to 4.
 - mysql_stat:  Added file mode option to writing data to a file.  Default is write.
@@ -31,17 +74,13 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [2.2.0] - 2019-09-05
 ### Fixed
-- run_program:  Fixed problem with mutable default arguments issue.
-- mysql_stat:  Fixed problem with mutable default arguments issue.
-- mysql_stat_run:  Fixed problem with mutable default arguments issue.
+- mysql_stat, run_program, mysql_stat_run:  Fixed problem with mutable default arguments issue.
 
 ### Changed
 - mysql_stat_run: Replaced mongo_libs.json_2_out with internal code.
 - main:  Refactored "if" statements.
-- mysql_stat_run:  Changed JSON dictionary keys to CamelCase.
-- mysql_stat_run:  Changed variable to standard naming convention.
-- mysql_stat:  Changed variable to standard naming convention.
-- run_program:  Changed variables to standard naming convention.
+- mysql_stat_run:  Changed JSON dictionary keys to PascalCase.
+- mysql_stat, run_program, mysql_stat_run:  Changed variable to standard naming convention.
 
 
 ## [2.1.1] - 2018-12-03
@@ -58,10 +97,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 Breaking Change
 
 ### Changed
-- Changed "mongo_libs" calls to new naming schema.
-- Changed "mysql_libs" calls to new naming schema.
-- Changed "gen_libs" calls to new naming schema.
-- Changed "arg_parser" calls to new naming schema.
+- Changed "mongo_libs", "mysql_libs", "gen_libs", "arg_parser" calls to new naming schema.
 - Changed function names from uppercase to lowercase.
 - Setup single-source version control.
 
