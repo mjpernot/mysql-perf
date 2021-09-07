@@ -41,9 +41,9 @@ class Mail(object):
     Description:  Class stub holder for gen_class.Mail class.
 
     Methods:
-        __init__ -> Class initialization.
-        add_2_msg -> Stub method holder for Mail.add_2_msg.
-        send_mail -> Stub method holder for Mail.send_mail.
+        __init__
+        add_2_msg
+        send_mail
 
     """
 
@@ -93,13 +93,13 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_mail_json -> Test with email in JSON format.
-        test_json_file_no_stdout -> Test JSON & output to file but no std out.
-        test_json_file_stdout -> Test JSON on and output to a file and std out.
-        test_json_std_out -> Test with JSON on and no standard out.
-        test_json_no_std -> Test with JSON on and no standard out.
-        test_json_file -> Test with JSON on and output to a file.
+        setUp
+        test_mail_json
+        test_json_file_no_stdout
+        test_json_file_stdout
+        test_json_std_out
+        test_json_no_std
+        test_json_file
 
     """
 
