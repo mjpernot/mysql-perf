@@ -65,7 +65,8 @@ class Server(object):
     Description:  Class stub holder for mysql_class.Server class.
 
     Methods:
-        __init__ -> Class initialization.
+        __init__
+        connect
 
     """
 
@@ -107,12 +108,12 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_conn_fail_suppress -> Test with failed conn with suppression.
-        test_connect_failure -> Test with failed connection.
-        test_connect_success -> Test with successful connection.
-        test_mongo -> Test with mongo option.
-        test_run_program -> Test run_program function.
+        setUp
+        test_conn_fail_suppress
+        test_connect_failure
+        test_connect_success
+        test_mongo
+        test_run_program
 
     """
 
