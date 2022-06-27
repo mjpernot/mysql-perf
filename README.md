@@ -67,9 +67,9 @@ Install supporting classes and libraries.
 ```
 pip install -r requirements-python-lib.txt --target lib --trusted-host pypi.appdev.proj.coe.ic.gov
 pip install -r requirements-mysql-lib.txt --target mysql_lib --trusted-host pypi.appdev.proj.coe.ic.gov
-pip install -r requirements-python-lib.txt --target mysql_lib/lib --trusted-host pypi.appdev.proj.coe.ic.gov
+pip install -r requirements-mysql-python-lib.txt --target mysql_lib/lib --trusted-host pypi.appdev.proj.coe.ic.gov
 pip install -r requirements-mongo-lib.txt --target mongo_lib --trusted-host pypi.appdev.proj.coe.ic.gov
-pip install -r requirements-python-lib.txt --target mongo_lib/lib --trusted-host pypi.appdev.proj.coe.ic.gov
+pip install -r requirements-mongo-python-lib.txt --target mongo_lib/lib --trusted-host pypi.appdev.proj.coe.ic.gov
 ```
 
 # Configuration:
@@ -99,6 +99,9 @@ Create MySQL configuration file.  Make the appropriate change to the environment
     - ssl_verify_id = False
     - ssl_verify_cert = False
 
+  * TLS version: Set what TLS versions are allowed in the connection set up.
+    - tls_versions = []
+
 ```
 cd config
 cp mysql_cfg.py.TEMPLATE mysql_cfg.py
@@ -109,7 +112,7 @@ chmod 600 mysql_cfg.py
 Create MySQL definition file.  Make the appropriate change to the environment.
   * Change these entries in the MySQL definition file:
   * Note:  socket use is only required to be set in certain conditions when connecting using localhost.
-    - password="PASSWORD"
+    - password="PSWORD"
     - socket="MYSQL_DIRECTORY/mysql.sock"
 
 ```
@@ -132,8 +135,6 @@ Create Mongo configuration file.  Make the appropriate change to the environment
     - auth = True
     - auth_db = "admin"
     - auth_mech = "SCRAM-SHA-1"
-    - use_arg = True
-    - use_uri = False
 
   * If connecting to a Mongo replica set:
     - repset = "REPLICA_SET_NAME"

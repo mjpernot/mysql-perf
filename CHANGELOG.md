@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [2.4.1] - 2022-06-27
+- Upgrade mysql-connector to v8.0.22
+- Upgrade mysql-libs to v5.3.1
+- Upgrade mongo-libs to v4.2.1
+- Upgrade python-lib to v2.9.2
+- Added TLS capability
+
+### Changed
+- config/mysql_cfg.py.TEMPLATE: Added TLS version entry.
+- config/mongo.py.TEMPLATE: Removed old entries.
+- Documentation updates.
+
+
 ## [2.4.0] - 2021-09-07
 - Updated to work in MySQL 8.0 environment.
 - Updated to work in a SSL environment.
