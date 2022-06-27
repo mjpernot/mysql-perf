@@ -76,6 +76,9 @@
             ssl_verify_id = False
             ssl_verify_cert = False
 
+            # Set what TLS versions are allowed in the connection set up:
+            tls_versions = []
+
         NOTE 1:  Include the cfg_file even if running remotely as the
             file will be used in future releases.
         NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
@@ -88,7 +91,7 @@
 
         Defaults Extra File format (config/mysql.cfg.TEMPLATE):
             [client]
-            password="PASSWORD"
+            password="PSWORD"
             socket="MYSQL_DIRECTORY/mysqld.sock"
 
         NOTE 1:  The socket information can be obtained from the mysqld.cnf
@@ -116,8 +119,6 @@
             conf_file = None
             auth = True
             auth_db = "admin"
-            use_arg = True
-            use_uri = False
 
             Replica Set connection:  Same format as above, but with these
                 additional entries at the end of the configuration file:
