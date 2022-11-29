@@ -11,7 +11,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Upgraded mongo-lib to v4.2.2
 
 ### Changed     
-- convert_dict: Changed from iteritems() to items() for looping on dictionary.
+- convert_dict: Changed from iteritems() to items() and converted the output to a list.
 - Converted imports to use Python 2.7 or Python 3.
 
 

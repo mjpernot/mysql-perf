@@ -229,7 +229,7 @@ def convert_dict(data, mail, **kwargs):
     indent = kwargs.get("indent", 0)
     spc = " "
 
-    for key, val in data.items():
+    for key, val in list(data.items()):
 
         if isinstance(val, dict):
             mail.add_2_msg("{0}{1}:\n".format(spc * indent, key))
