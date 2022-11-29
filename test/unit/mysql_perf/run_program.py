@@ -123,7 +123,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
-        self.func_dict = {"-S": mysql_stat}
+        self.func_names = {"-S": mysql_stat}
         self.args_array = {"-m": True, "-d": True, "-c": True, "-S": True}
         self.args_array2 = {"-m": True, "-d": True, "-c": True, "-S": True,
                             "-e": "ToEmail", "-s": "SubjectLine"}
@@ -146,7 +146,7 @@ class UnitTest(unittest.TestCase):
         mock_inst.return_value = self.server
 
         self.assertFalse(mysql_perf.run_program(self.args_array4,
-                                                self.func_dict))
+                                                self.func_names))
 
     @mock.patch("mysql_perf.mysql_libs.create_instance")
     def test_connect_failure(self, mock_inst):
@@ -165,7 +165,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_perf.run_program(self.args_array3,
-                                                    self.func_dict))
+                                                    self.func_names))
 
     @mock.patch("mysql_perf.mysql_libs.disconnect")
     @mock.patch("mysql_perf.mysql_libs.create_instance")
@@ -183,7 +183,7 @@ class UnitTest(unittest.TestCase):
         mock_disconn.return_value = True
 
         self.assertFalse(mysql_perf.run_program(self.args_array3,
-                                                self.func_dict))
+                                                self.func_names))
 
     @mock.patch("mysql_perf.mysql_libs.disconnect")
     @mock.patch("mysql_perf.gen_libs.load_module")
@@ -203,7 +203,7 @@ class UnitTest(unittest.TestCase):
         mock_disconn.return_value = True
 
         self.assertFalse(mysql_perf.run_program(self.args_array,
-                                                self.func_dict))
+                                                self.func_names))
 
     @mock.patch("mysql_perf.mysql_libs.disconnect")
     @mock.patch("mysql_perf.mysql_libs.create_instance")
@@ -221,7 +221,7 @@ class UnitTest(unittest.TestCase):
         mock_disconn.return_value = True
 
         self.assertFalse(mysql_perf.run_program(self.args_array3,
-                                                self.func_dict))
+                                                self.func_names))
 
 
 if __name__ == "__main__":
