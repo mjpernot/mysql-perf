@@ -167,8 +167,6 @@ from __future__ import absolute_import
 # Standard
 import sys
 import time
-
-# Third-party
 import json
 
 # Local
