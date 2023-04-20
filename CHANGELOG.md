@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [2.4.2] - 2022-11-28
+- Updated to work in Python 3 too
+- Upgraded python-lib to v2.9.4 
+- Upgraded mysql-lib to v5.3.2
+- Upgraded mongo-lib to v4.2.2
+
+### Changed     
+- convert_dict: Changed from iteritems() to items() and converted the output to a list.
+- Converted imports to use Python 2.7 or Python 3.
+
+
 ## [2.4.1] - 2022-06-27
 - Upgrade mysql-connector to v8.0.22
 - Upgrade mysql-libs to v5.3.1
