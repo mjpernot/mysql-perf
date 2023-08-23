@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
+## [2.5.0] - 2023-08-23
+- Upgraded python-lib to v2.10.1
+
+### Changed
+- main: Removed gen_libs.get_inst call.
+
 
 ## [2.4.2] - 2022-11-28
 - Updated to work in Python 3 too
