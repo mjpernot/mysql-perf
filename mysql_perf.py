@@ -216,10 +216,10 @@ def convert_dict(data, mail, **kwargs):
         mail body.
 
     Arguments:
-        (input) data -> Dictionary document.
-        (input) mail -> Mail class instance.
+        (input) data -> Dictionary document
+        (input) mail -> Mail class instance
         (input) kwargs:
-            indent -> Level of indentation for printing.
+            indent -> Level of indentation for printing
 
     """
 
@@ -246,17 +246,17 @@ def mysql_stat_run(server, perf_list=None, **kwargs):
         to a number of locations (e.g. standard out, database, and/or file).
 
     Arguments:
-        (input) server -> Database server instance.
-        (input) perf_list -> List of performance statistics.
+        (input) server -> Database server instance
+        (input) perf_list -> List of performance statistics
         (input) **kwargs:
-            class_cfg -> Mongo server configuration.
-            indent -> Indentation level for JSON document.
-            mode -> File write mode.
-            db_tbl -> database:collection - Name of db and collection.
-            ofile -> file name - Name of output file.
-            no_std -> Suppress standard out.
-            json_fmt -> True|False - convert output to JSON format.
-            mail -> Mail class instance.
+            class_cfg -> Mongo server configuration
+            indent -> Indentation level for JSON document
+            mode -> File write mode
+            db_tbl -> database:collection - Name of db and collection
+            ofile -> file name - Name of output file
+            no_std -> Suppress standard out
+            json_fmt -> True|False - convert output to JSON format
+            mail -> Mail class instance
 
     """
 
@@ -314,11 +314,11 @@ def _process_json(jdata, ofile, mail, mode, no_std):
         mysql_stat_run.
 
     Arguments:
-        (input) jdata -> JSON formatted dictionary data.
-        (input) ofile -> Name of output file.
-        (input) mail -> Mail class instance.
-        (input) mode -> File write mode.
-        (input) no_std -> Suppress standard out.
+        (input) jdata -> JSON formatted dictionary data
+        (input) ofile -> Name of output file
+        (input) mail -> Mail class instance
+        (input) mode -> File write mode
+        (input) no_std -> Suppress standard out
 
     """
 
@@ -332,6 +332,7 @@ def _process_json(jdata, ofile, mail, mode, no_std):
         mail.add_2_msg(jdata)
 
 
+STOPPED HERE
 def mysql_stat(server, args_array, **kwargs):
 
     """Function:  mysql_stat
@@ -340,10 +341,10 @@ def mysql_stat(server, args_array, **kwargs):
         the MySQL statistics based on count and interval options.
 
     Arguments:
-        (input) server -> Database server instance.
-        (input) args_array -> Array of command line options and values.
+        (input) server -> Database server instance
+        (input) args_array -> Array of command line options and values
         (input) **kwargs:
-            class_cfg -> Mongo server configuration.
+            class_cfg -> Mongo server configuration
 
     """
 
@@ -395,36 +396,36 @@ def mysql_stat(server, args_array, **kwargs):
         mail.send_mail(use_mailx=args_array.get("-u", False))
 
 
-def run_program(args_array, func_dict, **kwargs):
+def run_program(args, func_dict, **kwargs):
 
     """Function:  run_program
 
     Description:  Creates class instance(s) and controls flow of the program.
 
     Arguments:
-        (input) args_array -> Dict of command line options and values.
-        (input) func_dict -> Dictionary list of functions and options.
+        (input) args -> ArgParser class instance
+        (input) func_dict -> Dictionary list of functions and options
 
     """
 
     mongo = None
-    args_array = dict(args_array)
     func_dict = dict(func_dict)
-    server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
-                                        mysql_class.Server)
+    server = mysql_libs.create_instance(
+        args.get_val("-c"), args.get_val("-d"), mysql_class.Server)
     server.connect(silent=True)
 
-    if server.conn_msg and not args_array.get("-w", False):
+    if server.conn_msg and not args.arg_exist("-w"):
         print("run_program:  Error encountered on server(%s):  %s" %
               (server.name, server.conn_msg))
 
     elif not server.conn_msg:
-        if args_array.get("-m", False):
-            mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
+        if args.arg_exist("-m"):
+            mongo = gen_libs.load_module(
+                args.get_val("-m"), args.get_val("-d"))
 
         # Call function(s) - intersection of command line and function dict.
-        for opt in set(args_array.keys()) & set(func_dict.keys()):
-            func_dict[opt](server, args_array, class_cfg=mongo, **kwargs)
+        for opt in set(args.get_args_keys()) & set(func_dict.keys()):
+            func_dict[opt](server, args, class_cfg=mongo, **kwargs)
 
         mysql_libs.disconnect(server)
 
@@ -437,24 +438,24 @@ def main():
         line arguments and values.
 
     Variables:
-        dir_chk_list -> contains options which will be directories.
-        file_chk_list -> contains the options which will have files included.
-        file_crt_list -> contains options which require files to be created.
-        func_dict -> dictionary list for the function calls or other options.
-        opt_def_dict -> contains options with their default values.
-        opt_con_req_list -> contains the options that require other options.
-        opt_multi_list -> contains the options that will have multiple values.
-        opt_req_list -> contains options that are required for the program.
-        opt_val_list -> contains options which require values.
+        dir_perms_chk -> contains directories and their octal permissions
+        file_perm_chk -> File check options with their perms in octal
+        file_crt -> contains options which require files to be created
+        func_dict -> dictionary list for the function calls or other options
+        opt_def_dict -> contains options with their default values
+        opt_con_req_list -> contains the options that require other options
+        opt_multi_list -> contains the options that will have multiple values
+        opt_req_list -> contains options that are required for the program
+        opt_val_list -> contains options which require values
 
     Arguments:
-        (input) argv -> Arguments from the command line.
+        (input) argv -> Arguments from the command line
 
     """
 
-    dir_chk_list = ["-d"]
-    file_chk_list = ["-o"]
-    file_crt_list = ["-o"]
+    dir_perms_chk = {"-d": 5}
+    file_perm_chk = {"-o": 6}
+    file_crt = ["-o"]
     func_dict = {"-S": mysql_stat}
     opt_def_dict = {"-i": "sysmon:mysql_perf", "-n": "1", "-b": "1"}
     opt_con_req_list = {"-i": ["-m", "-j"], "-s": ["-t"], "-u": ["-t"]}
@@ -463,34 +464,34 @@ def main():
     opt_val_list = ["-c", "-d", "-b", "-i", "-m", "-n", "-o", "-s", "-t", "-y"]
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(sys.argv, opt_val_list,
-                                       opt_def_dict, multi_val=opt_multi_list)
+    args = gen_class.ArgParser(
+        sys.argv, opt_val=opt_val_list, opt_def=opt_def_dict,
+        multi_val=opt_multi_list, do_parse=True)
 
     # Add required default options and values to argument dictionary.
-    args_array = arg_parser.arg_add_def(args_array, opt_def_dict, opt_req_list)
+    args.arg_add_def(defaults=opt_def_dict, opt_req=opt_req_list)
 
-    if not gen_libs.is_pos_int(int(args_array["-b"])):
-        args_array["-b"] = "1"
+    if not gen_libs.is_pos_int(int(args.get_val("-b"))):
+        args.update_arg(arg_key="-b", arg_val="1")
 
-    if not gen_libs.is_pos_int(int(args_array["-n"])):
-        args_array["-n"] = "1"
+    if not gen_libs.is_pos_int(int(args.get_val("-n"))):
+        args.update_arg(arg_key="-n", arg_val="1")
 
-    if not gen_libs.help_func(args_array, __version__, help_message) \
-       and not arg_parser.arg_require(args_array, opt_req_list) \
-       and arg_parser.arg_cond_req(args_array, opt_con_req_list) \
-       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
-       and not arg_parser.arg_file_chk(args_array, file_chk_list,
-                                       file_crt_list):
+    if not gen_libs.help_func(args, __version__, help_message)              \
+       and args.arg_require(opt_req=opt_req_list)                           \
+       and args.arg_cond_req(opt_con_req=opt_con_req_list)                  \
+       and args.arg_dir_chk(dir_perms_chk=dir_perms_chk)                    \
+       and args.arg_file_chk(file_perm_chk=file_perm_chk, file_crt=file_crt):
 
         try:
             proglock = gen_class.ProgramLock(
-                sys.argv, args_array.get("-y", ""))
-            run_program(args_array, func_dict)
+                sys.argv, args.get_val("-y", def_val=""))
+            run_program(args, func_dict)
             del proglock
 
         except gen_class.SingleInstanceException:
             print("WARNING:  lock in place for mysql_perf with id of: %s"
-                  % (args_array.get("-y", "")))
+                  % (args.get_val("-y", def_val="")))
 
 
 if __name__ == "__main__":
