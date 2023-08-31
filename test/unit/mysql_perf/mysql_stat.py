@@ -27,6 +27,44 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.cmdline = None
+        self.args_array = dict()
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+
 class Mail(object):
 
     """Class:  Mail
@@ -147,21 +185,36 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.mail = Mail()
-        self.args_array = {"-n": 1, "-b": 1}
-        self.args_array2 = {"-n": 3, "-b": 1}
-        self.args_array3 = {"-n": 1, "-b": 1, "-a": True}
-        self.args_array4 = {"-n": 1, "-b": 1, "-f": True}
-        self.args_array5 = {"-n": 0, "-b": 1}
-        self.args_array6 = {"-n": 2, "-b": 2}
-        self.args_array7 = {"-n": 2, "-b": 1}
-        self.args_array8 = {"-n": 2, "-b": 0}
-        self.args_array10 = {"-n": -1, "-b": 1}
-        self.args_array11 = {"-n": 1, "-b": 1, "-t": "email_addr",
-                             "-s": "subject_line"}
-        self.args_array11a = {"-n": 1, "-b": 1, "-t": "email_addr",
-                              "-s": "subject_line", "-u": True}
-        self.args_array12 = {"-n": 1, "-b": 1, "-t": "email_addr"}
-        self.args_array12a = {"-n": 1, "-b": 1, "-t": "email_addr", "-u": True}
+        self.args = ArgParser()
+        self.args2 = ArgParser()
+        self.args3 = ArgParser()
+        self.args4 = ArgParser()
+        self.args5 = ArgParser()
+        self.args6 = ArgParser()
+        self.args7 = ArgParser()
+        self.args8 = ArgParser()
+        self.args10 = ArgParser()
+        self.args11 = ArgParser()
+        self.args11a = ArgParser()
+        self.args12 = ArgParser()
+        self.args12a = ArgParser()
+        self.args.args_array = {"-n": 1, "-b": 1}
+        self.args2.args_array = {"-n": 3, "-b": 1}
+        self.args3.args_array = {"-n": 1, "-b": 1, "-a": True}
+        self.args4.args_array = {"-n": 1, "-b": 1, "-f": True}
+        self.args5.args_array = {"-n": 0, "-b": 1}
+        self.args6.args_array = {"-n": 2, "-b": 2}
+        self.args7.args_array = {"-n": 2, "-b": 1}
+        self.args8.args_array = {"-n": 2, "-b": 0}
+        self.args10.args_array = {"-n": -1, "-b": 1}
+        self.args11.args_array = {
+            "-n": 1, "-b": 1, "-t": "email_addr", "-s": "subject_line"}
+        self.args11a.args_array = {
+            "-n": 1, "-b": 1, "-t": "email_addr", "-s": "subject_line",
+            "-u": True}
+        self.args12.args_array = {"-n": 1, "-b": 1, "-t": "email_addr"}
+        self.args12a.args_array = {
+            "-n": 1, "-b": 1, "-t": "email_addr", "-u": True}
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     @mock.patch("mysql_perf.mysql_stat_run")
@@ -178,8 +231,7 @@ class UnitTest(unittest.TestCase):
         mock_process.return_value = True
         mock_mail.return_value = self.mail
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server,
-                                               self.args_array12a))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args12a))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     @mock.patch("mysql_perf.mysql_stat_run")
@@ -196,8 +248,7 @@ class UnitTest(unittest.TestCase):
         mock_process.return_value = True
         mock_mail.return_value = self.mail
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server,
-                                               self.args_array11a))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args11a))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     @mock.patch("mysql_perf.mysql_stat_run")
@@ -214,7 +265,7 @@ class UnitTest(unittest.TestCase):
         mock_process.return_value = True
         mock_mail.return_value = self.mail
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array12))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args12))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     @mock.patch("mysql_perf.mysql_stat_run")
@@ -231,7 +282,7 @@ class UnitTest(unittest.TestCase):
         mock_process.return_value = True
         mock_mail.return_value = self.mail
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array11))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args11))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_interval_zero(self, mock_process):
@@ -246,7 +297,7 @@ class UnitTest(unittest.TestCase):
 
         mock_process.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array8))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args8))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_interval_one(self, mock_process):
@@ -261,7 +312,7 @@ class UnitTest(unittest.TestCase):
 
         mock_process.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array7))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args7))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_interval_two(self, mock_process):
@@ -276,7 +327,7 @@ class UnitTest(unittest.TestCase):
 
         mock_process.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array6))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args6))
 
     def test_loop_negative(self):
 
@@ -288,7 +339,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array10))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args10))
 
     def test_zero_loop(self):
 
@@ -300,7 +351,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array5))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args5))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_json_flat(self, mock_process):
@@ -315,7 +366,7 @@ class UnitTest(unittest.TestCase):
 
         mock_process.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array4))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args4))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_json_indent(self, mock_process):
@@ -330,7 +381,7 @@ class UnitTest(unittest.TestCase):
 
         mock_process.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_file_write(self, mock_process):
@@ -345,7 +396,7 @@ class UnitTest(unittest.TestCase):
 
         mock_process.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array3))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args3))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_file_append(self, mock_process):
@@ -360,7 +411,7 @@ class UnitTest(unittest.TestCase):
 
         mock_process.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array3))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args3))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_multi_loop(self, mock_process):
@@ -375,7 +426,7 @@ class UnitTest(unittest.TestCase):
 
         mock_process.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array2))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args2))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_default(self, mock_process):
@@ -390,7 +441,7 @@ class UnitTest(unittest.TestCase):
 
         mock_process.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args_array))
+        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args))
 
 
 if __name__ == "__main__":

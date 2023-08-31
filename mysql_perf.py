@@ -332,8 +332,7 @@ def _process_json(jdata, ofile, mail, mode, no_std):
         mail.add_2_msg(jdata)
 
 
-STOPPED HERE
-def mysql_stat(server, args_array, **kwargs):
+def mysql_stat(server, args, **kwargs):
 
     """Function:  mysql_stat
 
@@ -342,7 +341,7 @@ def mysql_stat(server, args_array, **kwargs):
 
     Arguments:
         (input) server -> Database server instance
-        (input) args_array -> Array of command line options and values
+        (input) args -> ArgParser class instance
         (input) **kwargs:
             class_cfg -> Mongo server configuration
 
@@ -350,24 +349,23 @@ def mysql_stat(server, args_array, **kwargs):
 
     global SUBJ_LINE
 
-    args_array = dict(args_array)
-    ofile = args_array.get("-o", False)
-    db_tbl = args_array.get("-i", False)
-    json_fmt = args_array.get("-j", False)
-    no_std = args_array.get("-z", False)
+    ofile = args.get_val("-o", def_val=False)
+    db_tbl = args.get_val("-i", def_val=False)
+    json_fmt = args.get_val("-j", def_val=False)
+    no_std = args.get_val("-z", def_val=False)
     mode = "w"
     indent = 4
     mail = None
 
-    if args_array.get("-a", False):
+    if args.get_val("-a", def_val=False):
         mode = "a"
 
-    if args_array.get("-f", False):
+    if args.get_val("-f", def_val=False):
         indent = None
 
-    if args_array.get("-t", None):
-        mail = gen_class.setup_mail(args_array.get("-t"),
-                                    subj=args_array.get("-s", SUBJ_LINE))
+    if args.get_val("-t", None):
+        mail = gen_class.setup_mail(
+            args.get_val("-t"), subj=args.get_val("-s", def_val=SUBJ_LINE))
 
     # List of performance statistics to be checked.
     perf_list = ["indb_buf_data", "indb_buf_tot", "indb_buf_data_pct",
@@ -380,20 +378,20 @@ def mysql_stat(server, args_array, **kwargs):
                  "indb_buf", "indb_log_buf", "max_conn"]
 
     # Loop iteration based on the -n option.
-    for item in range(0, int(args_array["-n"])):
-        mysql_stat_run(server, perf_list, db_tbl=db_tbl, ofile=ofile,
-                       json_fmt=json_fmt, no_std=no_std, mode=mode,
-                       indent=indent, mail=mail, **kwargs)
+    for item in range(0, int(args.get_val("-n"))):
+        mysql_stat_run(
+            server, perf_list, db_tbl=db_tbl, ofile=ofile, json_fmt=json_fmt,
+            no_std=no_std, mode=mode, indent=indent, mail=mail, **kwargs)
 
         # Append to file after first loop.
         mode = "a"
 
         # Do not sleep on the last loop.
-        if item != int(args_array["-n"]) - 1:
-            time.sleep(float(args_array["-b"]))
+        if item != int(args.get_val("-n")) - 1:
+            time.sleep(float(args.get_val("-b")))
 
     if mail:
-        mail.send_mail(use_mailx=args_array.get("-u", False))
+        mail.send_mail(use_mailx=args.get_val("-u", def_val=False))
 
 
 def run_program(args, func_dict, **kwargs):
