@@ -312,7 +312,7 @@ class UnitTest(unittest.TestCase):
         self.args.opt_req2 = False
 
         mock_arg.return_value = self.args
-        mock_help.return_value = True
+        mock_help.return_value = False
 
         self.assertFalse(mysql_perf.main())
 
@@ -331,7 +331,7 @@ class UnitTest(unittest.TestCase):
         self.args.opt_req2 = False
 
         mock_arg.return_value = self.args
-        mock_help.return_value = True
+        mock_help.return_value = False
 
         self.assertFalse(mysql_perf.main())
 
@@ -350,15 +350,13 @@ class UnitTest(unittest.TestCase):
         self.args.opt_con_req2 = False
 
         mock_arg.return_value = self.args
-        mock_help.return_value = True
+        mock_help.return_value = False
 
         self.assertFalse(mysql_perf.main())
 
-    @mock.patch("mysql_perf.gen_class.ArgParser.arg_cond_req")
-    @mock.patch("mysql_perf.gen_class.ArgParser.arg_require")
     @mock.patch("mysql_perf.gen_libs.help_func")
     @mock.patch("mysql_perf.gen_class.ArgParser")
-    def test_arg_cond_false(self, mock_arg, mock_help, mock_req, mock_cond):
+    def test_arg_cond_false(self, mock_arg, mock_help):
 
         """Function:  test_arg_cond_false
 
@@ -371,7 +369,7 @@ class UnitTest(unittest.TestCase):
         self.args.opt_con_req2 = False
 
         mock_arg.return_value = self.args
-        mock_help.return_value = True
+        mock_help.return_value = False
 
         self.assertFalse(mysql_perf.main())
 
@@ -390,7 +388,7 @@ class UnitTest(unittest.TestCase):
         self.args.dir_perms_chk2 = False
 
         mock_arg.return_value = self.args
-        mock_help.return_value = True
+        mock_help.return_value = False
 
         self.assertFalse(mysql_perf.main())
 
@@ -409,7 +407,7 @@ class UnitTest(unittest.TestCase):
         self.args.dir_perms_chk2 = False
 
         mock_arg.return_value = self.args
-        mock_help.return_value = True
+        mock_help.return_value = False
 
         self.assertFalse(mysql_perf.main())
 
@@ -428,7 +426,7 @@ class UnitTest(unittest.TestCase):
         self.args.arg_file_chk2 = False
 
         mock_arg.return_value = self.args
-        mock_help.return_value = True
+        mock_help.return_value = False
 
         self.assertFalse(mysql_perf.main())
 
@@ -447,7 +445,7 @@ class UnitTest(unittest.TestCase):
         self.args.arg_file_chk2 = False
 
         mock_arg.return_value = self.args
-        mock_help.return_value = True
+        mock_help.return_value = False
 
         self.assertFalse(mysql_perf.main())
 
@@ -466,7 +464,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.return_value = self.args
-        mock_help.return_value = True
+        mock_help.return_value = False
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_perf.main())
@@ -486,7 +484,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.return_value = self.args
-        mock_help.return_value = True
+        mock_help.return_value = False
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_perf.main())
@@ -506,7 +504,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.return_value = self.args
-        mock_help.return_value = True
+        mock_help.return_value = False
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_perf.main())
@@ -526,7 +524,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.return_value = self.args
-        mock_help.return_value = True
+        mock_help.return_value = False
         mock_lock.side_effect = \
             mysql_perf.gen_class.SingleInstanceException
 
@@ -548,7 +546,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.return_value = self.args2
-        mock_help.return_value = True
+        mock_help.return_value = False
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_perf.main())
@@ -568,7 +566,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.return_value = self.args3
-        mock_help.return_value = True
+        mock_help.return_value = False
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_perf.main())
@@ -588,7 +586,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.return_value = self.args4
-        mock_help.return_value = True
+        mock_help.return_value = False
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_perf.main())
@@ -608,7 +606,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.return_value = self.args5
-        mock_help.return_value = True
+        mock_help.return_value = False
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_perf.main())
@@ -628,7 +626,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.return_value = self.args6
-        mock_help.return_value = True
+        mock_help.return_value = False
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_perf.main())
@@ -648,7 +646,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.return_value = self.args7
-        mock_help.return_value = True
+        mock_help.return_value = False
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_perf.main())
@@ -668,7 +666,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.return_value = self.args8
-        mock_help.return_value = True
+        mock_help.return_value = False
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_perf.main())
