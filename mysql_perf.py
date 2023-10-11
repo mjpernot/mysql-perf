@@ -361,7 +361,7 @@ def mysql_stat(server, args, **kwargs):
     if args.get_val("-f", def_val=False):
         indent = None
 
-    if args.get_val("-t", None):
+    if args.get_val("-t", def_val=None):
         mail = gen_class.setup_mail(
             args.get_val("-t"), subj=args.get_val("-s", def_val=SUBJ_LINE))
 
