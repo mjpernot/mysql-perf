@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 ## [2.5.1] - 2023-10-11
+### Fixed
+- mysql_stat: Fixed incorrect syntax for args.get_val call.
 
 
 ## [2.5.0] - 2023-08-23
