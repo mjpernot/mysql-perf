@@ -125,10 +125,10 @@ try:
     from . import version
 
 except (ValueError, ImportError) as err:
-    import lib.gen_libs as gen_libs
-    import lib.gen_class as gen_class
-    import mysql_lib.mysql_libs as mysql_libs
-    import mysql_lib.mysql_class as mysql_class
+    import lib.gen_libs as gen_libs                     # pylint:disable=R0402
+    import lib.gen_class as gen_class                   # pylint:disable=R0402
+    import mysql_lib.mysql_libs as mysql_libs           # pylint:disable=R0402
+    import mysql_lib.mysql_class as mysql_class         # pylint:disable=R0402
     import version
 
 __version__ = version.__version__
@@ -314,7 +314,7 @@ def mysql_stat(server, args):
         mail.send_mail(use_mailx=args.get_val("-u", def_val=False))
 
 
-def run_program(args, func_dict, **kwargs):
+def run_program(args, func_dict):
 
     """Function:  run_program
 

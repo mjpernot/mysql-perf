@@ -58,7 +58,7 @@ class ArgParser():
         """
 
         self.cmdline = None
-        self.args_array = dict()
+        self.args_array = {}
         self.opt_val = None
         self.multi_val = None
         self.do_parse = None

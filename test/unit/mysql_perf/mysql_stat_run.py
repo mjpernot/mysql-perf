@@ -120,8 +120,6 @@ class Server():
 
         """
 
-        pass
-
     def upd_srv_perf(self):
 
         """Method:  upd_srv_perf
@@ -131,8 +129,6 @@ class Server():
         Arguments:
 
         """
-
-        pass
 
 
 class UnitTest(unittest.TestCase):

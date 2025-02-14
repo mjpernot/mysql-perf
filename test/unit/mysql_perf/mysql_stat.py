@@ -50,7 +50,7 @@ class ArgParser():                                      # pylint:disable=R0903
         """
 
         self.cmdline = None
-        self.args_array = dict()
+        self.args_array = {}
 
     def get_val(self, skey, def_val=None):
 
@@ -143,8 +143,6 @@ class Server():                                         # pylint:disable=R0903
         Arguments:
 
         """
-
-        pass
 
 
 class UnitTest(unittest.TestCase):
