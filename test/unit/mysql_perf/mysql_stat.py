@@ -21,13 +21,13 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import mysql_perf
-import version
+import mysql_perf                               # pylint:disable=E0401,C0413
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
 
-class ArgParser(object):
+class ArgParser():                                      # pylint:disable=R0903
 
     """Class:  ArgParser
 
@@ -65,7 +65,7 @@ class ArgParser(object):
         return self.args_array.get(skey, def_val)
 
 
-class Mail(object):
+class Mail():
 
     """Class:  Mail
 
@@ -123,7 +123,7 @@ class Mail(object):
         return status
 
 
-class Server(object):
+class Server():                                         # pylint:disable=R0903
 
     """Class:  Server
 
