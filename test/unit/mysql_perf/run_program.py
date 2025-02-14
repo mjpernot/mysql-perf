@@ -21,14 +21,14 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import mysql_perf
-import lib.gen_libs as gen_libs
-import version
+import mysql_perf                               # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
 
-def mysql_stat(server, args_array, **kwargs):
+def mysql_stat(server, args_array):
 
     """Method:  mysql_stat
 
@@ -37,21 +37,18 @@ def mysql_stat(server, args_array, **kwargs):
     Arguments:
         (input) server -> Server instance.
         (input) args_array -> Stub holder for dictionary of args.
-        (input) **kwargs
-            class_cfg -> Stub holder for Mongo configuration.
 
     """
 
     status = True
-    mongo_cfg = kwargs.get("class_cfg", None)
 
-    if server and args_array and mongo_cfg:
+    if server and args_array:
         status = True
 
     return status
 
 
-class ArgParser(object):
+class ArgParser():
 
     """Class:  ArgParser
 
@@ -76,7 +73,7 @@ class ArgParser(object):
         """
 
         self.cmdline = None
-        self.args_array = dict()
+        self.args_array = {}
 
     def get_args_keys(self):
 
@@ -112,10 +109,10 @@ class ArgParser(object):
 
         """
 
-        return True if arg in self.args_array else False
+        return arg in self.args_array
 
 
-class Server(object):
+class Server():                                         # pylint:disable=R0903
 
     """Class:  Server
 
@@ -169,7 +166,6 @@ class UnitTest(unittest.TestCase):
         test_conn_fail_suppress
         test_connect_failure
         test_connect_success
-        test_mongo
         test_run_program
 
     """
@@ -252,26 +248,6 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(
             mysql_perf.run_program(self.args3, self.func_names))
-
-    @mock.patch("mysql_perf.mysql_libs.disconnect")
-    @mock.patch("mysql_perf.gen_libs.load_module")
-    @mock.patch("mysql_perf.mysql_libs.create_instance")
-    def test_mongo(self, mock_inst, mock_mongo, mock_disconn):
-
-        """Function:  test_mongo
-
-        Description:  Test with mongo option.
-
-        Arguments:
-
-        """
-
-        mock_inst.return_value = self.server
-        mock_mongo.return_value = True
-        mock_disconn.return_value = True
-
-        self.assertFalse(
-            mysql_perf.run_program(self.args, self.func_names))
 
     @mock.patch("mysql_perf.mysql_libs.disconnect")
     @mock.patch("mysql_perf.mysql_libs.create_instance")
