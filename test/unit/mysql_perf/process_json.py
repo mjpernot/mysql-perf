@@ -1,11 +1,11 @@
 # Classification (U)
 
-"""Program:  _process_json.py
+"""Program:  process_json.py
 
-    Description:  Unit testing of _process_json in mysql_perf.py.
+    Description:  Unit testing of process_json in mysql_perf.py.
 
     Usage:
-        test/unit/mysql_perf/_process_json.py
+        test/unit/mysql_perf/process_json.py
 
     Arguments:
 
@@ -21,13 +21,13 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import mysql_perf
-import version
+import mysql_perf                               # pylint:disable=E0401,C0413
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
 
-class Mail(object):
+class Mail():
 
     """Class:  Mail
 
@@ -127,7 +127,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_perf._process_json(
+        self.assertFalse(mysql_perf.process_json(
             self.jdata, self.ofile2, self.mail, self.mode, self.no_std))
 
     @mock.patch("mysql_perf.gen_libs.write_file")
@@ -143,7 +143,7 @@ class UnitTest(unittest.TestCase):
 
         mock_file.return_value = True
 
-        self.assertFalse(mysql_perf._process_json(
+        self.assertFalse(mysql_perf.process_json(
             self.jdata, self.ofile, self.mail2, self.mode, self.no_std))
 
     @mock.patch("mysql_perf.gen_libs.print_data")
@@ -161,7 +161,7 @@ class UnitTest(unittest.TestCase):
         mock_file.return_value = True
         mock_print.return_value = True
 
-        self.assertFalse(mysql_perf._process_json(
+        self.assertFalse(mysql_perf.process_json(
             self.jdata, self.ofile, self.mail2, self.mode, self.no_std2))
 
     @mock.patch("mysql_perf.gen_libs.print_data")
@@ -177,7 +177,7 @@ class UnitTest(unittest.TestCase):
 
         mock_print.return_value = True
 
-        self.assertFalse(mysql_perf._process_json(
+        self.assertFalse(mysql_perf.process_json(
             self.jdata, self.ofile2, self.mail2, self.mode, self.no_std2))
 
     def test_json_no_std(self):
@@ -190,7 +190,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_perf._process_json(
+        self.assertFalse(mysql_perf.process_json(
             self.jdata, self.ofile2, self.mail2, self.mode, self.no_std))
 
     @mock.patch("mysql_perf.gen_libs.write_file")
@@ -206,7 +206,7 @@ class UnitTest(unittest.TestCase):
 
         mock_file.return_value = True
 
-        self.assertFalse(mysql_perf._process_json(
+        self.assertFalse(mysql_perf.process_json(
             self.jdata, self.ofile, self.mail2, self.mode, self.no_std))
 
 

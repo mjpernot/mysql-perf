@@ -8,12 +8,12 @@ coverage erase
 
 echo ""
 echo "Running unit test modules in conjunction with coverage"
-coverage run -a --source=mysql_perf test/unit/mysql_perf/_process_json.py
 coverage run -a --source=mysql_perf test/unit/mysql_perf/convert_dict.py
 coverage run -a --source=mysql_perf test/unit/mysql_perf/help_message.py
 coverage run -a --source=mysql_perf test/unit/mysql_perf/main.py
 coverage run -a --source=mysql_perf test/unit/mysql_perf/mysql_stat.py
 coverage run -a --source=mysql_perf test/unit/mysql_perf/mysql_stat_run.py
+coverage run -a --source=mysql_perf test/unit/mysql_perf/process_json.py
 coverage run -a --source=mysql_perf test/unit/mysql_perf/run_program.py
 
 echo ""

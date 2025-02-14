@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.0.0] - 2025-02-14
+Breaking Changes
+
+- Removed support for Python 2.7.
+- Removed Mongo insert option.
+- Updated mysql-lib v5.4.0
+- Updated python-lib v4.0.0
+
+### Added
+- process_json: Process JSON formatted data.
+
+### Changed
+- mysql_stat_run: Refactored "if" statement.
+- Converted strings to f-strings.
+- Documentation changes.
+
+### Deprecated
+- Support for MySQL 5.6/5.7
+
+### Removed
+- \process_json function.
+
+
 ## [2.5.7] - 2024-11-18
 - Updated python-lib to v3.0.8
 - Updated mysql-lib to v5.3.9

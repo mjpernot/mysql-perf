@@ -21,14 +21,14 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import mysql_perf
-import lib.gen_libs as gen_libs
-import version
+import mysql_perf                               # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
 
-class Mail(object):
+class Mail():
 
     """Class:  Mail
 
@@ -80,7 +80,7 @@ class Mail(object):
         return True
 
 
-class Server(object):
+class Server():
 
     """Class:  Server
 
@@ -120,8 +120,6 @@ class Server(object):
 
         """
 
-        pass
-
     def upd_srv_perf(self):
 
         """Method:  upd_srv_perf
@@ -132,8 +130,6 @@ class Server(object):
 
         """
 
-        pass
-
 
 class UnitTest(unittest.TestCase):
 
@@ -143,8 +139,6 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
-        test_insert_fail
-        test_insert_success
         test_mail_std
         test_mail_json
         test_json_file_no_stdout
@@ -153,9 +147,6 @@ class UnitTest(unittest.TestCase):
         test_json_nostd
         test_json_file
         test_error_handling
-        test_no_mongo_cfg
-        test_no_mongo_db_tbl
-        test_mongo
         test_default
         test_perf_list
         test_perf_empty_list
@@ -183,47 +174,6 @@ class UnitTest(unittest.TestCase):
         self.ofile = "/path/file"
         self.db_tbl = "db:tbl"
 
-    @mock.patch("mysql_perf.mongo_libs.ins_doc")
-    @mock.patch("mysql_perf.gen_libs.print_dict")
-    def test_insert_fail(self, mock_print, mock_mongo):
-
-        """Function:  test_insert_fail
-
-        Description:  Test with failed insert into Mongo.
-
-        Arguments:
-
-        """
-
-        mock_print.return_value = (False, None)
-        mock_mongo.return_value = (False, "Connection Error")
-
-        with gen_libs.no_std_out():
-            self.assertFalse(
-                mysql_perf.mysql_stat_run(
-                    self.server, db_tbl=self.db_tbl, perf_list=self.perf_list,
-                    class_cfg="Cfg"))
-
-    @mock.patch("mysql_perf.mongo_libs.ins_doc")
-    @mock.patch("mysql_perf.gen_libs.print_dict")
-    def test_insert_success(self, mock_print, mock_mongo):
-
-        """Function:  test_insert_success
-
-        Description:  Test with successful insert into Mongo.
-
-        Arguments:
-
-        """
-
-        mock_print.return_value = (False, None)
-        mock_mongo.return_value = (True, None)
-
-        self.assertFalse(
-            mysql_perf.mysql_stat_run(
-                self.server, db_tbl=self.db_tbl, perf_list=self.perf_list,
-                class_cfg="Cfg"))
-
     def test_mail_std(self):
 
         """Function:  test_mail_std
@@ -234,9 +184,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_perf.mysql_stat_run(
-            self.server, self.perf_list, json_fmt=True, mail=self.mail,
-            no_std=True))
+        self.assertFalse(
+            mysql_perf.mysql_stat_run(
+                self.server, self.perf_list, json_fmt=True, mail=self.mail,
+                no_std=True))
 
     def test_mail_json(self):
 
@@ -248,9 +199,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_perf.mysql_stat_run(
-            self.server, self.perf_list, json_fmt=False, mail=self.mail,
-            no_std=True))
+        self.assertFalse(
+            mysql_perf.mysql_stat_run(
+                self.server, self.perf_list, json_fmt=False, mail=self.mail,
+                no_std=True))
 
     @mock.patch("mysql_perf.gen_libs.write_file")
     def test_json_file_no_stdout(self, mock_file):
@@ -265,9 +217,10 @@ class UnitTest(unittest.TestCase):
 
         mock_file.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat_run(
-            self.server, self.perf_list, json_fmt=True, ofile=self.ofile,
-            no_std=True))
+        self.assertFalse(
+            mysql_perf.mysql_stat_run(
+                self.server, self.perf_list, json_fmt=True, ofile=self.ofile,
+                no_std=True))
 
     @mock.patch("mysql_perf.gen_libs.print_data")
     @mock.patch("mysql_perf.gen_libs.write_file")
@@ -284,9 +237,10 @@ class UnitTest(unittest.TestCase):
         mock_file.return_value = True
         mock_print.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat_run(
-            self.server, self.perf_list, json_fmt=True, ofile=self.ofile,
-            no_std=False))
+        self.assertFalse(
+            mysql_perf.mysql_stat_run(
+                self.server, self.perf_list, json_fmt=True, ofile=self.ofile,
+                no_std=False))
 
     @mock.patch("mysql_perf.gen_libs.print_data")
     def test_json_std_out(self, mock_print):
@@ -301,8 +255,9 @@ class UnitTest(unittest.TestCase):
 
         mock_print.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat_run(
-            self.server, self.perf_list, json_fmt=True, no_std=False))
+        self.assertFalse(
+            mysql_perf.mysql_stat_run(
+                self.server, self.perf_list, json_fmt=True, no_std=False))
 
     def test_json_nostd(self):
 
@@ -314,8 +269,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_perf.mysql_stat_run(
-            self.server, self.perf_list, json_fmt=True, no_std=True))
+        self.assertFalse(
+            mysql_perf.mysql_stat_run(
+                self.server, self.perf_list, json_fmt=True, no_std=True))
 
     @mock.patch("mysql_perf.gen_libs.write_file")
     def test_json_file(self, mock_file):
@@ -330,9 +286,10 @@ class UnitTest(unittest.TestCase):
 
         mock_file.return_value = True
 
-        self.assertFalse(mysql_perf.mysql_stat_run(
-            self.server, self.perf_list, json_fmt=True, ofile=self.ofile,
-            no_std=True))
+        self.assertFalse(
+            mysql_perf.mysql_stat_run(
+                self.server, self.perf_list, json_fmt=True, ofile=self.ofile,
+                no_std=True))
 
     @mock.patch("mysql_perf.gen_libs.print_dict")
     def test_error_handling(self, mock_print):
@@ -350,58 +307,6 @@ class UnitTest(unittest.TestCase):
         with gen_libs.no_std_out():
             self.assertFalse(mysql_perf.mysql_stat_run(
                 self.server, perf_list=self.perf_list))
-
-    @mock.patch("mysql_perf.gen_libs.print_dict")
-    def test_no_mongo_cfg(self, mock_print):
-
-        """Function:  test_no_mongo_cfg
-
-        Description:  Test with no config for mongo passed.
-
-        Arguments:
-
-        """
-
-        mock_print.return_value = (False, None)
-
-        self.assertFalse(mysql_perf.mysql_stat_run(
-            self.server, perf_list=self.perf_list, db_tbl=self.db_tbl))
-
-    @mock.patch("mysql_perf.gen_libs.print_dict")
-    def test_no_mongo_db_tbl(self, mock_print):
-
-        """Function:  test_no_mongo_db_tbl
-
-        Description:  Test with no db_tbl for mongo passed.
-
-        Arguments:
-
-        """
-
-        mock_print.return_value = (False, None)
-
-        self.assertFalse(mysql_perf.mysql_stat_run(
-            self.server, perf_list=self.perf_list, class_cfg="Cfg"))
-
-    @mock.patch("mysql_perf.mongo_libs.ins_doc")
-    @mock.patch("mysql_perf.gen_libs.print_dict")
-    def test_mongo(self, mock_print, mock_mongo):
-
-        """Function:  test_mongo
-
-        Description:  Test with mongo connection.
-
-        Arguments:
-
-        """
-
-        mock_print.return_value = (False, None)
-        mock_mongo.return_value = (True, None)
-
-        self.assertFalse(
-            mysql_perf.mysql_stat_run(
-                self.server, db_tbl=self.db_tbl, perf_list=self.perf_list,
-                class_cfg="Cfg"))
 
     @mock.patch("mysql_perf.gen_libs.print_dict")
     def test_default(self, mock_print):
@@ -431,8 +336,8 @@ class UnitTest(unittest.TestCase):
 
         mock_print.return_value = (False, None)
 
-        self.assertFalse(mysql_perf.mysql_stat_run(self.server,
-                                                   perf_list=self.perf_list))
+        self.assertFalse(
+            mysql_perf.mysql_stat_run(self.server, perf_list=self.perf_list))
 
     @mock.patch("mysql_perf.gen_libs.print_dict")
     def test_perf_empty_list(self, mock_print):
@@ -447,8 +352,8 @@ class UnitTest(unittest.TestCase):
 
         mock_print.return_value = (False, None)
 
-        self.assertFalse(mysql_perf.mysql_stat_run(self.server,
-                                                   perf_list=self.perf_list2))
+        self.assertFalse(
+            mysql_perf.mysql_stat_run(self.server, perf_list=self.perf_list2))
 
     @mock.patch("mysql_perf.gen_libs.print_dict")
     def test_no_perf_list(self, mock_print):
