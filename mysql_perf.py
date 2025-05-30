@@ -295,8 +295,7 @@ def mysql_stat(server, args):
                  "indb_buf_read", "indb_buf_reqt", "indb_buf_read_pct",
                  "indb_buf_ahd", "indb_buf_evt", "indb_buf_evt_pct",
                  "indb_buf_free", "crt_tmp_tbls", "cur_conn", "uptime",
-                 "indb_buf", "indb_log_buf", "max_conn",
-                 "innodb_buffer_pool_write_requests"]
+                 "indb_buf", "indb_log_buf", "max_conn"]
 
     # Loop iteration based on the -n option.
     for item in range(0, int(args.get_val("-n"))):
