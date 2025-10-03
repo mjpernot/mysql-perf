@@ -4,12 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
-## [3.1.0] - 2025-10-03
+## [4.0.0] - 2025-10-03
+- Converted output to JSON format only.
 - Updated simplejson=3.19.2
 - Added support for Python 3.13
 - Updated mock==5.2.0
 - Updated python-lib to v4.1.0
 - Updated mysql-lib to v5.5.2
+
+### Changed
+- Documentation changes.
 
 
 ## [3.0.1] - 2025-05-30

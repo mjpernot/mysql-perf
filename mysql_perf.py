@@ -17,8 +17,8 @@
             [-v | -h]
 
     Arguments:
-        -c file => MySQL server configuration file.  Required arg.
-        -d dir path => Directory path to config file (-c). Required arg.
+        -c file => MySQL server configuration file.
+        -d dir path => Directory path to config file (-c).
 
         -S => MySQL Database Performance Statistics option.
             -j => Return output in JSON format.
@@ -26,7 +26,7 @@
             -n count => Number of loops to run the program.  Default:  1
             -b seconds => Polling interval in seconds.  Default:  1
             -o [path]/file => Directory path and file name for output.
-            -a => Append output to output file.
+                -a => Append output to output file.  Default is write.
             -t email_addr email_addr2 => Enables emailing capability for an
                 option if the option allows it.  Sends output to one or more
                 email addresses.
