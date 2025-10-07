@@ -102,7 +102,7 @@
             connect to different databases with different names.
 
     Example:
-        mysql_perf.py -c mysql_cfg -d config -S -j -n 9 -b 5
+        mysql_perf.py -c mysql_cfg -d config -S -p -n 9 -b 5
 
 """
 
@@ -111,6 +111,7 @@
 # Standard
 import sys
 import time
+import pprint
 
 try:
     import simplejson as json
@@ -149,6 +150,66 @@ def help_message():
     """
 
     print(__doc__)
+
+
+def data_out(data, **kwargs):
+
+    """Function:  data_out
+
+    Description:  Outputs the data in a variety of formats and media.
+
+    Arguments:
+        (input) data -> JSON data document
+        (input) kwargs:
+            to_addr -> To email address
+            subj -> Email subject line
+            mailx -> True|False - Use mailx command
+            outfile -> Name of output file name
+            mode -> w|a => Write or append mode for file
+            expand -> True|False - Expand the JSON format
+            indent -> Indentation of JSON document if expanded
+            suppress -> True|False - Suppress standard out
+        (output) state -> True|False - Successful operation
+        (output) msg -> None or error message
+
+    """
+
+    state = True
+    msg = None
+
+    if not isinstance(data, dict):
+        return False, f"Error: Is not a dictionary: {data}"
+
+    mail = None
+    data = dict(data)
+    cfg = {"indent": kwargs.get("indent", 4)} if kwargs.get("indent", False) \
+        else {}
+
+    if kwargs.get("to_addr", False):
+        subj = kwargs.get("subj", "NoSubjectLinePassed")
+        mail = gen_class.setup_mail(kwargs.get("to_addr"), subj=subj)
+        mail.add_2_msg(json.dumps(data, **cfg))
+        mail.send_mail(use_mailx=kwargs.get("mailx", False))
+
+    if kwargs.get("outfile", False):
+        if kwargs.get("expand", False):
+            with open(kwargs.get("outfile"), kwargs.get("mode", "w"),
+                      encoding="UTF-8") as outfile:
+                pprint.pprint(data, stream=outfile, **cfg)
+
+        else:
+            gen_libs.write_file(
+                kwargs.get("outfile"), kwargs.get("mode", "w"),
+                json.dumps(data, indent=kwargs.get("indent")))
+
+    if not kwargs.get("suppress", False):
+        if kwargs.get("expand", False):
+            pprint.pprint(data, **cfg)
+
+        else:
+            print(data)
+
+    return state, msg
 
 
 def create_data_config(args):
@@ -296,7 +357,7 @@ def mysql_stat(server, args):
     """
 
     ofile = args.get_val("-o", def_val=False)
-    json_fmt = args.get_val("-j", def_val=False)
+#    json_fmt = args.get_val("-j", def_val=False)
     no_std = args.get_val("-z", def_val=False)
     mode = "w"
     indent = 4
@@ -305,8 +366,8 @@ def mysql_stat(server, args):
     if args.get_val("-a", def_val=False):
         mode = "a"
 
-    if args.get_val("-f", def_val=False):
-        indent = None
+#    if args.get_val("-f", def_val=False):
+#        indent = None
 
     if args.get_val("-t", def_val=None):
         mail = gen_class.setup_mail(
