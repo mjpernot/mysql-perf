@@ -10,9 +10,9 @@
 
     Usage:
         mysql_perf.py -c file -d path
-            {-S [-j [-f]] [-n count] [-b seconds]
+            {-S [-p [-i count]] [-n count] [-b seconds]
                 [-t email_addr [email_addr2 ...] [-s subject_line] [-u]]
-                [-o [dir_path]/file [-a]] [-w] [-z]}
+                [-o [dir_path]/file [-a a|w]] [-w] [-z]}
             [-y flavor_id]
             [-v | -h]
 
@@ -21,12 +21,13 @@
         -d dir path => Directory path to config file (-c).
 
         -S => MySQL Database Performance Statistics option.
-            -j => Return output in JSON format.
-                -f => Flatten the JSON data structure to file and standard out.
+            -p => Expand the JSON format.
+                -i count => Indentation spacing for expanded JSON format.
             -n count => Number of loops to run the program.  Default:  1
             -b seconds => Polling interval in seconds.  Default:  1
             -o [path]/file => Directory path and file name for output.
-                -a => Append output to output file.  Default is write.
+                -a a|w => Append or write to output to output file. Default is
+                    write.
             -t email_addr email_addr2 => Enables emailing capability for an
                 option if the option allows it.  Sends output to one or more
                 email addresses.
@@ -148,6 +149,31 @@ def help_message():
     """
 
     print(__doc__)
+
+
+def create_data_config(args):
+
+    """Function:  create_data_config
+
+    Description:  Create data_out config parameters.
+
+    Arguments:
+        (input) args -> ArgParser class instance
+        (output) data_config -> Dictionary for data_out config parameters
+
+    """
+
+    data_config = {}
+    data_config["to_addr"] = args.get_val("-t")
+    data_config["subj"] = args.get_val("-s")
+    data_config["mailx"] = args.get_val("-u", def_val=False)
+    data_config["outfile"] = args.get_val("-o")
+    data_config["mode"] = args.get_val("-a", def_val="w")
+    data_config["expand"] = args.get_val("-p", def_val=False)
+    data_config["indent"] = args.get_val("-i")
+    data_config["suppress"] = args.get_val("-z", def_val=False)
+
+    return data_config
 
 
 def convert_dict(data, mail, **kwargs):
@@ -371,11 +397,11 @@ def main():
     file_perm_chk = {"-o": 6}
     file_crt = ["-o"]
     func_dict = {"-S": mysql_stat}
-    opt_def_dict = {"-n": "1", "-b": "1"}
-    opt_con_req_list = {"-s": ["-t"], "-u": ["-t"]}
+    opt_def_dict = {"-n": "1", "-b": "1", "-i": 4}
+    opt_con_req_list = {"-s": ["-t"], "-u": ["-t"], "-a": ["-o"]}
     opt_multi_list = ["-s", "-t"]
     opt_req_list = ["-c", "-d", "-b", "-n"]
-    opt_val_list = ["-c", "-d", "-b", "-n", "-o", "-s", "-t", "-y"]
+    opt_val_list = ["-c", "-d", "-b", "-n", "-o", "-s", "-t", "-y", "-a"]
 
     # Process argument list from command line.
     args = gen_class.ArgParser(

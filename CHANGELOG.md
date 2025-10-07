@@ -5,14 +5,23 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [4.0.0] - 2025-10-03
+Breaking Changes
+
 - Converted output to JSON format only.
 - Updated simplejson=3.19.2
 - Added support for Python 3.13
 - Updated mock==5.2.0
 - Updated python-lib to v4.1.0
 - Updated mysql-lib to v5.5.2
+- Removed -j and -f options.
+- Added -p option to expand JSON format and -i option to set indent spacing for expansion.
+- Changed -a option from True or False to "a" or "w" argument.
+
+### Added
+- create_data_config: Create data_out config parameters.
 
 ### Changed
+- main: Added -i option to opt_def_dict, added -a to opt_con_req_list and opt_val_list.
 - Documentation changes.
 
 
