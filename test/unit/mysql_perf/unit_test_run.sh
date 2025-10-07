@@ -8,6 +8,8 @@ echo ""
 echo "Unit testing..."
 /usr/bin/python test/unit/mysql_perf/convert_dict.py
 /usr/bin/python test/unit/mysql_perf/create_data_config.py
+/usr/bin/python test/unit/mysql_perf/create_header.py
+/usr/bin/python test/unit/mysql_perf/data_out.py
 /usr/bin/python test/unit/mysql_perf/help_message.py
 /usr/bin/python test/unit/mysql_perf/main.py
 /usr/bin/python test/unit/mysql_perf/mysql_stat.py

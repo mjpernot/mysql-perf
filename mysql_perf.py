@@ -152,6 +152,27 @@ def help_message():
     print(__doc__)
 
 
+def create_header(dtg, server):
+
+    """Function:  create_header
+
+    Description:  Create standard header for JSON object.
+
+    Arguments:
+        (input) dtg -> TimeFormat instance
+        (input) server -> Database server instance
+        (output) header -> Dictionary header for reports
+
+    """
+
+    header = {
+        "Application": "MySQL_Perf",
+        "Server": server.name,
+        "AsOf": dtg.get_time(timeform="zulu", current=True)}
+
+    return header
+
+
 def data_out(data, **kwargs):
 
     """Function:  data_out

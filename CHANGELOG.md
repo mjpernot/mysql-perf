@@ -18,6 +18,7 @@ Breaking Changes
 - Changed -a option from True or False to "a" or "w" argument.
 
 ### Added
+- create_header: Create standard header for JSON object.
 - data_out: Outputs the data in a variety of formats and media.
 - create_data_config: Create data_out config parameters.
 
