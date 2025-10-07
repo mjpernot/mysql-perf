@@ -10,7 +10,7 @@
 
     Usage:
         mysql_perf.py -c file -d path
-            {-S [-p [-i count]] [-n count] [-b seconds]
+            {-S [-p [-i spaces]] [-n count] [-b seconds]
                 [-t email_addr [email_addr2 ...] [-s subject_line] [-u]]
                 [-o [dir_path]/file [-a a|w]] [-w] [-z]}
             [-y flavor_id]
@@ -22,7 +22,7 @@
 
         -S => MySQL Database Performance Statistics option.
             -p => Expand the JSON format.
-                -i count => Indentation spacing for expanded JSON format.
+                -i spaces => Indentation spacing for expanded JSON format.
             -n count => Number of loops to run the program.  Default:  1
             -b seconds => Polling interval in seconds.  Default:  1
             -o [path]/file => Directory path and file name for output.
@@ -152,7 +152,7 @@ def help_message():
     print(__doc__)
 
 
-def create_header(dtg, server):
+def create_header(dtg, server, timeform="zulu", current=True):
 
     """Function:  create_header
 
@@ -161,6 +161,8 @@ def create_header(dtg, server):
     Arguments:
         (input) dtg -> TimeFormat instance
         (input) server -> Database server instance
+        (input) timeform -> Time format name
+        (input) current -> True|False - Use current time hack
         (output) header -> Dictionary header for reports
 
     """
@@ -168,7 +170,7 @@ def create_header(dtg, server):
     header = {
         "Application": "MySQL_Perf",
         "Server": server.name,
-        "AsOf": dtg.get_time(timeform="zulu", current=True)}
+        "AsOf": dtg.get_time(timeform=timeform, current=current)}
 
     return header
 
@@ -258,113 +260,122 @@ def create_data_config(args):
     return data_config
 
 
-def convert_dict(data, mail, **kwargs):
+#def convert_dict(data, mail, **kwargs):
+#
+#    """Function:  convert_dict
+#
+#    Description:  Convert dictionary document to standard format and add to
+#        mail body.
+#
+#    Arguments:
+#        (input) data -> Dictionary document
+#        (input) mail -> Mail class instance
+#        (input) kwargs:
+#            indent -> Level of indentation for printing
+#
+#    """
+#
+#    data = dict(data)
+#    indent = kwargs.get("indent", 0)
+#    spc = " "
+#
+#    for key, val in list(data.items()):
+#
+#        if isinstance(val, dict):
+#            mail.add_2_msg(f"{spc * indent}{key}:\n")
+#            convert_dict(val, mail, indent=indent + 4)
+#
+#        else:
+#            mail.add_2_msg(f"{spc * indent}{key}:  {val}\n")
 
-    """Function:  convert_dict
 
-    Description:  Convert dictionary document to standard format and add to
-        mail body.
-
-    Arguments:
-        (input) data -> Dictionary document
-        (input) mail -> Mail class instance
-        (input) kwargs:
-            indent -> Level of indentation for printing
-
-    """
-
-    data = dict(data)
-    indent = kwargs.get("indent", 0)
-    spc = " "
-
-    for key, val in list(data.items()):
-
-        if isinstance(val, dict):
-            mail.add_2_msg(f"{spc * indent}{key}:\n")
-            convert_dict(val, mail, indent=indent + 4)
-
-        else:
-            mail.add_2_msg(f"{spc * indent}{key}:  {val}\n")
-
-
-def mysql_stat_run(server, perf_list=None, **kwargs):
+#def mysql_stat_run(server, perf_list=None, **kwargs):
+def mysql_stat_run(server, perf_list, dtg, timeform, current):
 
     """Function:  mysql_stat_run
 
-    Description:  Updated the class' server and performance statistics.  Send
-        to output in a number of different formats (e.g. standard, or JSON) and
-        to a number of locations (e.g. standard out, database, and/or file).
+    Description:  Updated the class server and performance statistics.  Loop
+        on each statistic passed and return as a dictionary all statitics to
+        the calling function.
 
     Arguments:
         (input) server -> Database server instance
         (input) perf_list -> List of performance statistics
-        (input) **kwargs:
-            indent -> Indentation level for JSON document
-            mode -> File write mode
-            ofile -> file name - Name of output file
-            no_std -> Suppress standard out
-            json_fmt -> True|False - convert output to JSON format
-            mail -> Mail class instance
+        (input) dtg -> TimeFormat instance
+        (input) timeform -> Time format name
+        (input) current -> True|False - Use current time
+        (output) data -> Dictionary of all statistics checked along with header
+#        (input) **kwargs:
+#            indent -> Indentation level for JSON document
+#            mode -> File write mode
+#            ofile -> file name - Name of output file
+#            no_std -> Suppress standard out
+#            json_fmt -> True|False - convert output to JSON format
+#            mail -> Mail class instance
 
     """
 
-    json_fmt = kwargs.get("json_fmt", False)
-    indent = kwargs.get("indent", 4)
-    ofile = kwargs.get("ofile", None)
-    mode = kwargs.get("mode", "w")
-    no_std = kwargs.get("no_std", False)
-    mail = kwargs.get("mail", None)
-    perf_list = [] if perf_list is None else list(perf_list)
+#    json_fmt = kwargs.get("json_fmt", False)
+#    indent = kwargs.get("indent", 4)
+#    ofile = kwargs.get("ofile", None)
+#    mode = kwargs.get("mode", "w")
+#    no_std = kwargs.get("no_std", False)
+#    mail = kwargs.get("mail", None)
+    perf_list = list(perf_list)
     server.upd_srv_stat()
     server.upd_srv_perf()
-    data = {"Server": server.name,
-            "AsOf": gen_libs.get_date() + " " + gen_libs.get_time(),
-            "PerfStats": {}}
+#    data = {"Server": server.name,
+#            "AsOf": gen_libs.get_date() + " " + gen_libs.get_time(),
+#            "PerfStats": {}}
+    data = create_header(dtg, server, timeform, current)
+    data["PerfStats"] = {}
 
     for item in perf_list:
         data["PerfStats"].update({item: getattr(server, item)})
 
-    if json_fmt:
-        jdata = json.dumps(data, indent=indent)
-        process_json(jdata, ofile, mail, mode, no_std)
+#    if json_fmt:
+#        jdata = json.dumps(data, indent=indent)
+#        process_json(jdata, ofile, mail, mode, no_std)
+#
+#    else:
+#        err_flag, err_msg = gen_libs.print_dict(
+#            data, ofile=ofile, no_std=no_std, mode=mode)
+#
+#        if err_flag:
+#            print(err_msg)
+#
+#        if mail:
+#            convert_dict(data, mail)
 
-    else:
-        err_flag, err_msg = gen_libs.print_dict(
-            data, ofile=ofile, no_std=no_std, mode=mode)
-
-        if err_flag:
-            print(err_msg)
-
-        if mail:
-            convert_dict(data, mail)
-
-
-def process_json(jdata, ofile, mail, mode, no_std):
-
-    """Function:  process_json
-
-    Description:  Process JSON formatted data.
-
-    Arguments:
-        (input) jdata -> JSON formatted dictionary data
-        (input) ofile -> Name of output file
-        (input) mail -> Mail class instance
-        (input) mode -> File write mode
-        (input) no_std -> Suppress standard out
-
-    """
-
-    if ofile:
-        gen_libs.write_file(ofile, mode, jdata)
-
-    if not no_std:
-        gen_libs.print_data(jdata)
-
-    if mail:
-        mail.add_2_msg(jdata)
+    return data
 
 
-def mysql_stat(server, args):
+#def process_json(jdata, ofile, mail, mode, no_std):
+#
+#    """Function:  process_json
+#
+#    Description:  Process JSON formatted data.
+#
+#    Arguments:
+#        (input) jdata -> JSON formatted dictionary data
+#        (input) ofile -> Name of output file
+#        (input) mail -> Mail class instance
+#        (input) mode -> File write mode
+#        (input) no_std -> Suppress standard out
+#
+#    """
+#
+#    if ofile:
+#        gen_libs.write_file(ofile, mode, jdata)
+#
+#    if not no_std:
+#        gen_libs.print_data(jdata)
+#
+#    if mail:
+#        mail.add_2_msg(jdata)
+
+
+def mysql_stat(server, args, dtg, data_config):
 
     """Function:  mysql_stat
 
@@ -374,52 +385,63 @@ def mysql_stat(server, args):
     Arguments:
         (input) server -> Database server instance
         (input) args -> ArgParser class instance
+        (input) dtg -> TimeFormat instance
+        (input) data_config -> Dictionary of data_out configuration options
 
     """
 
-    ofile = args.get_val("-o", def_val=False)
+#    ofile = args.get_val("-o", def_val=False)
 #    json_fmt = args.get_val("-j", def_val=False)
-    no_std = args.get_val("-z", def_val=False)
-    mode = "w"
-    indent = 4
-    mail = None
-
-    if args.get_val("-a", def_val=False):
-        mode = "a"
-
+#    no_std = args.get_val("-z", def_val=False)
+#    mode = "w"
+#    indent = 4
+#    mail = None
+#
+#    if args.get_val("-a", def_val=False):
+#        mode = "a"
+#
 #    if args.get_val("-f", def_val=False):
 #        indent = None
+#
+#    if args.get_val("-t", def_val=None):
+#        mail = gen_class.setup_mail(
+#            args.get_val("-t"),
+#            subj=args.get_val("-s", def_val="MySQL_Performance"))
 
-    if args.get_val("-t", def_val=None):
-        mail = gen_class.setup_mail(
-            args.get_val("-t"),
-            subj=args.get_val("-s", def_val="MySQL_Performance"))
+    data_config = dict(data_config)
+    perf_run = []
 
     # List of performance statistics to be checked.
-    perf_list = ["indb_buf_data", "indb_buf_tot", "indb_buf_data_pct",
-                 "indb_buf_drty", "max_use_conn", "uptime_flush",
-                 "binlog_disk", "binlog_use", "binlog_tot", "indb_buf_wait",
-                 "indb_log_wait", "indb_lock_avg", "indb_lock_max",
-                 "indb_buf_read", "indb_buf_reqt", "indb_buf_read_pct",
-                 "indb_buf_ahd", "indb_buf_evt", "indb_buf_evt_pct",
-                 "indb_buf_free", "crt_tmp_tbls", "cur_conn", "uptime",
-                 "indb_buf", "indb_log_buf", "max_conn"]
+    perf_list = [
+        "indb_buf_data", "indb_buf_tot", "indb_buf_data_pct", "indb_buf_drty",
+        "max_use_conn", "uptime_flush", "binlog_disk", "binlog_use",
+        "binlog_tot", "indb_buf_wait", "indb_log_wait", "indb_lock_avg",
+        "indb_lock_max", "indb_buf_read", "indb_buf_reqt", "indb_buf_read_pct",
+        "indb_buf_ahd", "indb_buf_evt", "indb_buf_evt_pct", "indb_buf_free",
+        "crt_tmp_tbls", "cur_conn", "uptime", "indb_buf", "indb_log_buf",
+        "max_conn"]
 
     # Loop iteration based on the -n option.
     for item in range(0, int(args.get_val("-n"))):
-        mysql_stat_run(
-            server, perf_list, ofile=ofile, json_fmt=json_fmt,  no_std=no_std,
-            mode=mode, indent=indent, mail=mail)
-
-        # Append to file after first loop.
-        mode = "a"
+        perf_run.append(
+            mysql_stat_run(
+                server, perf_list, dtg, timeform="zulu", current=True))
+#        mysql_stat_run(
+#            server, perf_list, ofile=ofile, json_fmt=json_fmt,  no_std=no_std,
+#            mode=mode, indent=indent, mail=mail)
+#
+#        # Append to file after first loop.
+#        mode = "a"
 
         # Do not sleep on the last loop.
         if item != int(args.get_val("-n")) - 1:
             time.sleep(float(args.get_val("-b")))
 
-    if mail:
-        mail.send_mail(use_mailx=args.get_val("-u", def_val=False))
+#    if mail:
+#        mail.send_mail(use_mailx=args.get_val("-u", def_val=False))
+
+    ### Add Data Out here - determine how to handle multiple runs.
+    print(perf_run)
 
 
 def run_program(args, func_dict):
@@ -438,6 +460,9 @@ def run_program(args, func_dict):
     server = mysql_libs.create_instance(
         args.get_val("-c"), args.get_val("-d"), mysql_class.Server)
     server.connect(silent=True)
+    dtg = gen_class.TimeFormat()
+    dtg.create_time()
+    data_config = create_data_config(args)
 
     if server.conn_msg and not args.arg_exist("-w"):
         print(f"run_program:  Error encountered on server {server.name}:"
@@ -447,7 +472,7 @@ def run_program(args, func_dict):
 
         # Call function(s) - intersection of command line and function dict.
         for opt in set(args.get_args_keys()) & set(func_dict.keys()):
-            func_dict[opt](server, args)
+            func_dict[opt](server, args, dtg, data_config)
 
         mysql_libs.disconnect(server)
 

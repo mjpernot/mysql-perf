@@ -16,6 +16,7 @@
 # Standard
 import sys
 import os
+import time
 import unittest
 
 # Local
@@ -59,6 +60,10 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
+        test_current_false
+        test_current_true
+        test_timeform_new
+        test_timeform_default
         test_header2
         test_header
 
@@ -76,9 +81,67 @@ class UnitTest(unittest.TestCase):
 
         self.dtg = gen_class.TimeFormat()
         self.dtg.create_time()
+        time.sleep(1)
         self.server = Server("ServerName")
         self.results = "ServerName"
         self.results2 = "MySQL_Perf"
+
+    def test_current_false(self):
+
+        """Function:  test_current_false
+
+        Description:  Test with current set to false.
+
+        Arguments:
+
+        """
+
+        self.assertEqual(
+            mysql_perf.create_header(
+                self.dtg, self.server, current=False)["AsOf"],
+            self.dtg.get_time(timeform="zulu"))
+
+    def test_current_true(self):
+
+        """Function:  test_current_true
+
+        Description:  Test with current set to true.
+
+        Arguments:
+
+        """
+
+        self.assertNotEqual(
+            mysql_perf.create_header(
+                self.dtg, self.server)["AsOf"],
+            self.dtg.get_time(timeform="zulu"))
+
+    def test_timeform_new(self):
+
+        """Function:  test_timeform_new
+
+        Description:  Test with new timeform name.
+
+        Arguments:
+
+        """
+
+        self.assertEqual(
+            len(mysql_perf.create_header(
+                self.dtg, self.server, timeform="dtg")["AsOf"]), 15)
+
+    def test_timeform_default(self):
+
+        """Function:  test_timeform_default
+
+        Description:  Test with default timeform name.
+
+        Arguments:
+
+        """
+
+        self.assertEqual(
+            len(mysql_perf.create_header(self.dtg, self.server)["AsOf"]), 20)
 
     def test_header2(self):
 

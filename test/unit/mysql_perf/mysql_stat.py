@@ -22,6 +22,7 @@ import mock
 # Local
 sys.path.append(os.getcwd())
 import mysql_perf                               # pylint:disable=E0401,C0413
+import lib.gen_class as gen_class           # pylint:disable=E0401,C0413,R0402
 import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
@@ -65,64 +66,6 @@ class ArgParser():                                      # pylint:disable=R0903
         return self.args_array.get(skey, def_val)
 
 
-class Mail():
-
-    """Class:  Mail
-
-    Description:  Class stub holder for gen_class.Mail class.
-
-    Methods:
-        __init__
-        add_2_msg
-        send_mail
-
-    """
-
-    def __init__(self):
-
-        """Method:  __init__
-
-        Description:  Class initialization.
-
-        Arguments:
-
-        """
-
-        self.data = None
-
-    def add_2_msg(self, data):
-
-        """Method:  add_2_msg
-
-        Description:  Stub method holder for Mail.add_2_msg.
-
-        Arguments:
-
-        """
-
-        self.data = data
-
-        return True
-
-    def send_mail(self, use_mailx=False):
-
-        """Method:  send_mail
-
-        Description:  Stub method holder for Mail.send_mail.
-
-        Arguments:
-            (input) use_mailx -> True|False - To use mailx command.
-
-        """
-
-        status = True
-
-        if use_mailx:
-            status = True
-
-        return status
-
-
 class Server():                                         # pylint:disable=R0903
 
     """Class:  Server
@@ -153,19 +96,11 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
-        test_email_no_subj_mailx
-        test_email_mailx
-        test_email_no_subj
-        test_email
         test_interval_zero
         test_interval_one
         test_interval_two
         test_loop_negative
         test_zero_loop
-        test_json_flat
-        test_json_indent
-        test_file_write
-        test_file_append
         test_multi_loop
         test_default
 
@@ -181,106 +116,25 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.dtg = gen_class.TimeFormat()
+        self.dtg.create_time()
+        self.data_config = {"option": "value"}
         self.server = Server()
-        self.mail = Mail()
         self.args = ArgParser()
         self.args2 = ArgParser()
-        self.args3 = ArgParser()
-        self.args4 = ArgParser()
         self.args5 = ArgParser()
         self.args6 = ArgParser()
         self.args7 = ArgParser()
         self.args8 = ArgParser()
         self.args10 = ArgParser()
-        self.args11 = ArgParser()
-        self.args11a = ArgParser()
-        self.args12 = ArgParser()
-        self.args12a = ArgParser()
         self.args.args_array = {"-n": 1, "-b": 1}
         self.args2.args_array = {"-n": 3, "-b": 1}
-        self.args3.args_array = {"-n": 1, "-b": 1, "-a": True}
-        self.args4.args_array = {"-n": 1, "-b": 1, "-f": True}
         self.args5.args_array = {"-n": 0, "-b": 1}
         self.args6.args_array = {"-n": 2, "-b": 2}
         self.args7.args_array = {"-n": 2, "-b": 1}
         self.args8.args_array = {"-n": 2, "-b": 0}
         self.args10.args_array = {"-n": -1, "-b": 1}
-        self.args11.args_array = {
-            "-n": 1, "-b": 1, "-t": "email_addr", "-s": "subject_line"}
-        self.args11a.args_array = {
-            "-n": 1, "-b": 1, "-t": "email_addr", "-s": "subject_line",
-            "-u": True}
-        self.args12.args_array = {"-n": 1, "-b": 1, "-t": "email_addr"}
-        self.args12a.args_array = {
-            "-n": 1, "-b": 1, "-t": "email_addr", "-u": True}
-
-    @mock.patch("mysql_perf.gen_class.setup_mail")
-    @mock.patch("mysql_perf.mysql_stat_run")
-    def test_email_no_subj_mailx(self, mock_process, mock_mail):
-
-        """Function:  test_email_no_subj_mailx
-
-        Description:  Test with email but no subject using mailx.
-
-        Arguments:
-
-        """
-
-        mock_process.return_value = True
-        mock_mail.return_value = self.mail
-
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args12a))
-
-    @mock.patch("mysql_perf.gen_class.setup_mail")
-    @mock.patch("mysql_perf.mysql_stat_run")
-    def test_email_mailx(self, mock_process, mock_mail):
-
-        """Function:  test_email_mailx
-
-        Description:  Test with email option set using mailx.
-
-        Arguments:
-
-        """
-
-        mock_process.return_value = True
-        mock_mail.return_value = self.mail
-
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args11a))
-
-    @mock.patch("mysql_perf.gen_class.setup_mail")
-    @mock.patch("mysql_perf.mysql_stat_run")
-    def test_email_no_subj(self, mock_process, mock_mail):
-
-        """Function:  test_email_no_subj
-
-        Description:  Test with email but no subject in args.
-
-        Arguments:
-
-        """
-
-        mock_process.return_value = True
-        mock_mail.return_value = self.mail
-
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args12))
-
-    @mock.patch("mysql_perf.gen_class.setup_mail")
-    @mock.patch("mysql_perf.mysql_stat_run")
-    def test_email(self, mock_process, mock_mail):
-
-        """Function:  test_email
-
-        Description:  Test with email option set.
-
-        Arguments:
-
-        """
-
-        mock_process.return_value = True
-        mock_mail.return_value = self.mail
-
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args11))
+        self.mysql_stat_run = {"Stats": "Stats_Here"}
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_interval_zero(self, mock_process):
@@ -293,9 +147,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_process.return_value = True
+        mock_process.return_value = self.mysql_stat_run
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args8))
+        self.assertFalse(
+            mysql_perf.mysql_stat(
+                self.server, self.args8, self.dtg, self.data_config))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_interval_one(self, mock_process):
@@ -308,24 +164,28 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_process.return_value = True
+        mock_process.return_value = self.mysql_stat_run
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args7))
+        self.assertFalse(
+            mysql_perf.mysql_stat(
+                self.server, self.args7, self.dtg, self.data_config))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_interval_two(self, mock_process):
 
         """Function:  test_interval_two
 
-        Description:  Test with -b option set to > one.
+        Description:  Test with -b option set to greater than one.
 
         Arguments:
 
         """
 
-        mock_process.return_value = True
+        mock_process.return_value = self.mysql_stat_run
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args6))
+        self.assertFalse(
+            mysql_perf.mysql_stat(
+                self.server, self.args6, self.dtg, self.data_config))
 
     def test_loop_negative(self):
 
@@ -337,7 +197,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args10))
+        self.assertFalse(
+            mysql_perf.mysql_stat(
+                self.server, self.args10, self.dtg, self.data_config))
 
     def test_zero_loop(self):
 
@@ -349,67 +211,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args5))
-
-    @mock.patch("mysql_perf.mysql_stat_run")
-    def test_json_flat(self, mock_process):
-
-        """Function:  test_json_flat
-
-        Description:  Test with flatten indentation for JSON.
-
-        Arguments:
-
-        """
-
-        mock_process.return_value = True
-
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args4))
-
-    @mock.patch("mysql_perf.mysql_stat_run")
-    def test_json_indent(self, mock_process):
-
-        """Function:  test_json_indent
-
-        Description:  Test with default indentation for JSON.
-
-        Arguments:
-
-        """
-
-        mock_process.return_value = True
-
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args))
-
-    @mock.patch("mysql_perf.mysql_stat_run")
-    def test_file_write(self, mock_process):
-
-        """Function:  test_file_write
-
-        Description:  Test with setting file write.
-
-        Arguments:
-
-        """
-
-        mock_process.return_value = True
-
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args3))
-
-    @mock.patch("mysql_perf.mysql_stat_run")
-    def test_file_append(self, mock_process):
-
-        """Function:  test_file_append
-
-        Description:  Test with setting file append.
-
-        Arguments:
-
-        """
-
-        mock_process.return_value = True
-
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args3))
+        self.assertFalse(
+            mysql_perf.mysql_stat(
+                self.server, self.args5, self.dtg, self.data_config))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_multi_loop(self, mock_process):
@@ -422,9 +226,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_process.return_value = True
+        mock_process.return_value = self.mysql_stat_run
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args2))
+        self.assertFalse(
+            mysql_perf.mysql_stat(
+                self.server, self.args2, self.dtg, self.data_config))
 
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_default(self, mock_process):
@@ -437,9 +243,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_process.return_value = True
+        mock_process.return_value = self.mysql_stat_run
 
-        self.assertFalse(mysql_perf.mysql_stat(self.server, self.args))
+        self.assertFalse(
+            mysql_perf.mysql_stat(
+                self.server, self.args, self.dtg, self.data_config))
 
 
 if __name__ == "__main__":

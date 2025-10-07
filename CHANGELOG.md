@@ -23,8 +23,15 @@ Breaking Changes
 - create_data_config: Create data_out config parameters.
 
 ### Changed
+- mysql_stat_run: Removed all output from the function, also added call to create_header and return all statistics in a dictionary format.
+- mysql_stat: Removed all output from the function, will be in data_out call, also put each performance run output into a list for further processing.
+- run_program: Added instance call to gen_class.TimeFormat and passed as argument to all functions, also called create_data_config to create data_config for data_out and passed as argument to all functions.
 - main: Added -i option to opt_def_dict, added -a to opt_con_req_list and opt_val_list.
 - Documentation changes.
+
+### Removed
+- convert_dict function.
+- process_json function.
 
 
 ## [3.0.1] - 2025-05-30

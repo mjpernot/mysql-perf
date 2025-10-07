@@ -28,7 +28,7 @@ import version                                  # pylint:disable=E0401,C0413
 __version__ = version.__version__
 
 
-def mysql_stat(server, args_array):
+def mysql_stat(server, args_array, dtg, data_config):
 
     """Method:  mysql_stat
 
@@ -42,7 +42,7 @@ def mysql_stat(server, args_array):
 
     status = True
 
-    if server and args_array:
+    if server and args_array and dtg and data_config:
         status = True
 
     return status
