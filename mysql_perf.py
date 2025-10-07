@@ -175,14 +175,14 @@ def create_header(dtg, server, timeform="zulu", current=True):
     return header
 
 
-def data_out(data, **kwargs):
+def data_out(perf_run, **kwargs):
 
     """Function:  data_out
 
     Description:  Outputs the data in a variety of formats and media.
 
     Arguments:
-        (input) data -> JSON data document
+        (input) perf_run -> List of JSON data documents (i.e. performance runs)
         (input) kwargs:
             to_addr -> To email address
             subj -> Email subject line
@@ -192,47 +192,35 @@ def data_out(data, **kwargs):
             expand -> True|False - Expand the JSON format
             indent -> Indentation of JSON document if expanded
             suppress -> True|False - Suppress standard out
-        (output) state -> True|False - Successful operation
-        (output) msg -> None or error message
 
     """
 
-    state = True
-    msg = None
+    for data in list(perf_run):
+        mail = None
+        cfg = {"indent": kwargs.get("indent", 4)} if kwargs.get(
+            "indent", False) else {}
 
-    if not isinstance(data, dict):
-        return False, f"Error: Is not a dictionary: {data}"
+        if kwargs.get("to_addr", False):
+            subj = kwargs.get("subj", "NoSubjectLinePassed")
+            mail = gen_class.setup_mail(kwargs.get("to_addr"), subj=subj)
+            mail.add_2_msg(json.dumps(data, **cfg))
+            mail.send_mail(use_mailx=kwargs.get("mailx", False))
 
-    mail = None
-    data = dict(data)
-    cfg = {"indent": kwargs.get("indent", 4)} if kwargs.get("indent", False) \
-        else {}
-
-    if kwargs.get("to_addr", False):
-        subj = kwargs.get("subj", "NoSubjectLinePassed")
-        mail = gen_class.setup_mail(kwargs.get("to_addr"), subj=subj)
-        mail.add_2_msg(json.dumps(data, **cfg))
-        mail.send_mail(use_mailx=kwargs.get("mailx", False))
-
-    if kwargs.get("outfile", False):
-        if kwargs.get("expand", False):
+        if kwargs.get("outfile", False) and kwargs.get("expand", False):
             with open(kwargs.get("outfile"), kwargs.get("mode", "w"),
                       encoding="UTF-8") as outfile:
                 pprint.pprint(data, stream=outfile, **cfg)
 
-        else:
+        elif kwargs.get("outfile", False):
             gen_libs.write_file(
                 kwargs.get("outfile"), kwargs.get("mode", "w"),
                 json.dumps(data, indent=kwargs.get("indent")))
 
-    if not kwargs.get("suppress", False):
-        if kwargs.get("expand", False):
+        if not kwargs.get("suppress", False) and kwargs.get("expand", False):
             pprint.pprint(data, **cfg)
 
-        else:
+        elif not kwargs.get("suppress", False):
             print(data)
-
-    return state, msg
 
 
 def create_data_config(args):
@@ -440,8 +428,7 @@ def mysql_stat(server, args, dtg, data_config):
 #    if mail:
 #        mail.send_mail(use_mailx=args.get_val("-u", def_val=False))
 
-    ### Add Data Out here - determine how to handle multiple runs.
-    print(perf_run)
+    data_out(perf_run, **data_config)
 
 
 def run_program(args, func_dict):

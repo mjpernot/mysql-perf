@@ -128,7 +128,6 @@ class UnitTest(unittest.TestCase):
         test_suppress_false_expand2
         test_suppress_false_expand
         test_suppress_false
-        test_not_dictionary
 
     """
 
@@ -143,8 +142,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.mail = MailTest("toaddr")
-        self.data = {"key": "value", "key2": ["list1", "list2"]}
-        self.data2 = ["key", "value"]
+        self.data = [{"key": "value", "key2": ["list1", "list2"]}]
         self.to_addr = "To_Address"
         self.subj = "EmailSubject"
         self.mailx = True
@@ -157,10 +155,6 @@ class UnitTest(unittest.TestCase):
         self.indent = 4
         self.suppress = True
         self.suppress2 = False
-        self.results = (True, None)
-        self.results2 = (
-            False, "Error: Is not a dictionary: %s" % (self.data2))
-        self.results3 = (False, "Error Message")
         self.outfile = "path/to/open"
 
     @mock.patch("mysql_perf.pprint.pprint", mock.Mock(return_value=True))
@@ -179,10 +173,10 @@ class UnitTest(unittest.TestCase):
             self.outfile).read() == "data"
         mock_file.assert_called_with(self.outfile)
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
                 self.data, suppress=self.suppress, outfile=self.outfile,
-                mode=self.mode2, expand=True), self.results)
+                mode=self.mode2, expand=True))
 
     @mock.patch("mysql_perf.pprint.pprint", mock.Mock(return_value=True))
     @mock.patch("builtins.open", new_callable=mock.mock_open, read_data="data")
@@ -200,10 +194,10 @@ class UnitTest(unittest.TestCase):
             self.outfile).read() == "data"
         mock_file.assert_called_with(self.outfile)
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
                 self.data, suppress=self.suppress, outfile=self.outfile,
-                mode=self.mode, expand=True), self.results)
+                mode=self.mode, expand=True))
 
     @mock.patch("mysql_perf.pprint.pprint", mock.Mock(return_value=True))
     @mock.patch("builtins.open", new_callable=mock.mock_open, read_data="data")
@@ -221,10 +215,10 @@ class UnitTest(unittest.TestCase):
             self.outfile).read() == "data"
         mock_file.assert_called_with(self.outfile)
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
                 self.data, suppress=self.suppress, outfile=self.outfile,
-                expand=True), self.results)
+                expand=True))
 
     @mock.patch("mysql_perf.gen_libs.write_file",
                 mock.Mock(return_value=True))
@@ -238,10 +232,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
                 self.data, suppress=self.suppress, outfile=self.outfile,
-                mode=self.mode2), self.results)
+                mode=self.mode2))
 
     @mock.patch("mysql_perf.gen_libs.write_file",
                 mock.Mock(return_value=True))
@@ -255,10 +249,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
                 self.data, suppress=self.suppress, outfile=self.outfile,
-                mode=self.mode), self.results)
+                mode=self.mode))
 
     @mock.patch("mysql_perf.gen_libs.write_file",
                 mock.Mock(return_value=True))
@@ -272,10 +266,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
-                self.data, suppress=self.suppress, outfile=self.outfile),
-            self.results)
+                self.data, suppress=self.suppress, outfile=self.outfile))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     def test_email_subj(self, mock_mail):
@@ -290,10 +283,10 @@ class UnitTest(unittest.TestCase):
 
         mock_mail.return_value = self.mail
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
                 self.data, suppress=self.suppress, to_addr=self.to_addr,
-                subj=self.subj), self.results)
+                subj=self.subj))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     def test_email_no_subj(self, mock_mail):
@@ -308,10 +301,9 @@ class UnitTest(unittest.TestCase):
 
         mock_mail.return_value = self.mail
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
-                self.data, suppress=self.suppress, to_addr=self.to_addr),
-            self.results)
+                self.data, suppress=self.suppress, to_addr=self.to_addr))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     def test_email_mailx2(self, mock_mail):
@@ -326,10 +318,10 @@ class UnitTest(unittest.TestCase):
 
         mock_mail.return_value = self.mail
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
                 self.data, suppress=self.suppress, to_addr=self.to_addr,
-                mailx=self.mailx2), self.results)
+                mailx=self.mailx2))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     def test_email_mailx(self, mock_mail):
@@ -344,10 +336,10 @@ class UnitTest(unittest.TestCase):
 
         mock_mail.return_value = self.mail
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
                 self.data, suppress=self.suppress, to_addr=self.to_addr,
-                mailx=self.mailx), self.results)
+                mailx=self.mailx))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     def test_email_indent(self, mock_mail):
@@ -362,10 +354,10 @@ class UnitTest(unittest.TestCase):
 
         mock_mail.return_value = self.mail
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
                 self.data, suppress=self.suppress, to_addr=self.to_addr,
-                indent=self.indent), self.results)
+                indent=self.indent))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     def test_email(self, mock_mail):
@@ -380,10 +372,9 @@ class UnitTest(unittest.TestCase):
 
         mock_mail.return_value = self.mail
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
-                self.data, suppress=self.suppress, to_addr=self.to_addr),
-            self.results)
+                self.data, suppress=self.suppress, to_addr=self.to_addr))
 
     def test_indent_true(self):
 
@@ -395,10 +386,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(
+        self.assertFalse(
             mysql_perf.data_out(
-                self.data, suppress=self.suppress, indent=self.indent),
-            self.results)
+                self.data, suppress=self.suppress, indent=self.indent))
 
     def test_indent_false(self):
 
@@ -410,9 +400,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress), self.results)
+        self.assertFalse(
+            mysql_perf.data_out(self.data, suppress=self.suppress))
 
     def test_suppress_true(self):
 
@@ -424,9 +413,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress), self.results)
+        self.assertFalse(
+            mysql_perf.data_out(self.data, suppress=self.suppress))
 
     def test_suppress_false_expand2(self):
 
@@ -439,10 +427,10 @@ class UnitTest(unittest.TestCase):
         """
 
         with gen_libs.no_std_out():
-            self.assertEqual(
+            self.assertFalse(
                 mysql_perf.data_out(
                     self.data, suppress=self.suppress2, expand=self.expand2,
-                    indent=self.indent), self.results)
+                    indent=self.indent))
 
     def test_suppress_false_expand(self):
 
@@ -455,10 +443,10 @@ class UnitTest(unittest.TestCase):
         """
 
         with gen_libs.no_std_out():
-            self.assertEqual(
+            self.assertFalse(
                 mysql_perf.data_out(
                     self.data, suppress=self.suppress2, expand=self.expand,
-                    indent=self.indent), self.results)
+                    indent=self.indent))
 
     def test_suppress_false(self):
 
@@ -471,21 +459,9 @@ class UnitTest(unittest.TestCase):
         """
 
         with gen_libs.no_std_out():
-            self.assertEqual(
+            self.assertFalse(
                 mysql_perf.data_out(
-                    self.data, suppress=self.suppress2), self.results)
-
-    def test_not_dictionary(self):
-
-        """Function:  test_not_dictionary
-
-        Description:  Test data is not a dictionary.
-
-        Arguments:
-
-        """
-
-        self.assertEqual(mysql_perf.data_out(self.data2), self.results2)
+                    self.data, suppress=self.suppress2))
 
 
 if __name__ == "__main__":

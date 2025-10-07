@@ -136,6 +136,7 @@ class UnitTest(unittest.TestCase):
         self.args10.args_array = {"-n": -1, "-b": 1}
         self.mysql_stat_run = {"Stats": "Stats_Here"}
 
+    @mock.patch("mysql_perf.data_out", mock.Mock(return_value=True))
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_interval_zero(self, mock_process):
 
@@ -153,6 +154,7 @@ class UnitTest(unittest.TestCase):
             mysql_perf.mysql_stat(
                 self.server, self.args8, self.dtg, self.data_config))
 
+    @mock.patch("mysql_perf.data_out", mock.Mock(return_value=True))
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_interval_one(self, mock_process):
 
@@ -170,6 +172,7 @@ class UnitTest(unittest.TestCase):
             mysql_perf.mysql_stat(
                 self.server, self.args7, self.dtg, self.data_config))
 
+    @mock.patch("mysql_perf.data_out", mock.Mock(return_value=True))
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_interval_two(self, mock_process):
 
@@ -187,6 +190,7 @@ class UnitTest(unittest.TestCase):
             mysql_perf.mysql_stat(
                 self.server, self.args6, self.dtg, self.data_config))
 
+    @mock.patch("mysql_perf.data_out", mock.Mock(return_value=True))
     def test_loop_negative(self):
 
         """Function:  test_loop_negative
@@ -201,6 +205,7 @@ class UnitTest(unittest.TestCase):
             mysql_perf.mysql_stat(
                 self.server, self.args10, self.dtg, self.data_config))
 
+    @mock.patch("mysql_perf.data_out", mock.Mock(return_value=True))
     def test_zero_loop(self):
 
         """Function:  test_zero_loop
@@ -215,6 +220,7 @@ class UnitTest(unittest.TestCase):
             mysql_perf.mysql_stat(
                 self.server, self.args5, self.dtg, self.data_config))
 
+    @mock.patch("mysql_perf.data_out", mock.Mock(return_value=True))
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_multi_loop(self, mock_process):
 
@@ -232,6 +238,7 @@ class UnitTest(unittest.TestCase):
             mysql_perf.mysql_stat(
                 self.server, self.args2, self.dtg, self.data_config))
 
+    @mock.patch("mysql_perf.data_out", mock.Mock(return_value=True))
     @mock.patch("mysql_perf.mysql_stat_run")
     def test_default(self, mock_process):
 
