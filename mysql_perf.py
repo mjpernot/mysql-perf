@@ -11,7 +11,7 @@
     Usage:
         mysql_perf.py -c file -d path
             {-S [-p [-i spaces]] [-n count] [-b seconds]
-                [-t email_addr [email_addr2 ...] [-s subject_line] [-u]]
+                [-t email_addr [email_addr2 ...] [-s subject_line] [-u] [-x]]
                 [-o [dir_path]/file [-a a|w]] [-w] [-z]}
             [-y flavor_id]
             [-v | -h]
@@ -34,6 +34,7 @@
                 -s subject_line => Subject line of email.  If none is provided
                     then a default one will be used.
                 -u => Override the default mail command and use mailx.
+                -x => Mail each performance run separately.
             -w => Suppress printing initial connection errors.
             -z => Suppress standard out.
 
@@ -192,20 +193,43 @@ def data_out(perf_run, **kwargs):
             expand -> True|False - Expand the JSON format
             indent -> Indentation of JSON document if expanded
             suppress -> True|False - Suppress standard out
+            separate -> True|False - Mail each performance run separately
 
     """
 
-    for data in list(perf_run):
-        mail = None
-        cfg = {"indent": kwargs.get("indent", 4)} if kwargs.get(
-            "indent", False) else {}
+### Check for complexity level here
+    ### Move the second-half of each first "if" into their own function.
 
-        if kwargs.get("to_addr", False):
-            subj = kwargs.get("subj", "NoSubjectLinePassed")
+    cfg = {"indent": kwargs.get("indent", 4)} if kwargs.get(
+        "indent", False) else {}
+
+    mail = None
+    subj = kwargs.get("subj", "NoSubjectLinePassed")
+
+    if kwargs.get("to_addr", False) and not kwargs.get("separate", False):
+        mail = gen_class.setup_mail(kwargs.get("to_addr"), subj=subj)
+
+    for data in list(perf_run):
+        #######################################################################
+        ### Function: mail_out
+        #if kwargs.get("to_addr", False):
+        #    mail_out(mail, data, kwargs.get("to_addr"),
+        #        kwargs.get("mailx", False), kwargs.get("separate", False))
+        #######################################################################
+        if kwargs.get("to_addr", False) and kwargs.get("separate", False):
             mail = gen_class.setup_mail(kwargs.get("to_addr"), subj=subj)
             mail.add_2_msg(json.dumps(data, **cfg))
             mail.send_mail(use_mailx=kwargs.get("mailx", False))
 
+        elif kwargs.get("to_addr", False):
+            mail.add_2_msg(json.dumps(data, **cfg))
+        #######################################################################
+
+        #######################################################################
+        ### Function: file_out
+        #if kwargs.get("outfile", False):
+        #    file_out(kwargs.get("outfile"), data, kwargs.get("mode", "w"), cfg)
+        #######################################################################
         if kwargs.get("outfile", False) and kwargs.get("expand", False):
             with open(kwargs.get("outfile"), kwargs.get("mode", "w"),
                       encoding="UTF-8") as outfile:
@@ -214,13 +238,23 @@ def data_out(perf_run, **kwargs):
         elif kwargs.get("outfile", False):
             gen_libs.write_file(
                 kwargs.get("outfile"), kwargs.get("mode", "w"),
-                json.dumps(data, indent=kwargs.get("indent")))
+                json.dumps(data, indent=None))
+        #######################################################################
 
+        #######################################################################
+        ### Function: std_out
+        #if not kwargs.get("suppress", False):
+        #    std_out(data, cfg, kwargs.get("expand", False))
+        #######################################################################
         if not kwargs.get("suppress", False) and kwargs.get("expand", False):
             pprint.pprint(data, **cfg)
 
         elif not kwargs.get("suppress", False):
             print(data)
+        #######################################################################
+
+    if mail and not kwargs.get("separate", False):
+        mail.send_mail(use_mailx=kwargs.get("mailx", False))
 
 
 def create_data_config(args):
@@ -244,6 +278,7 @@ def create_data_config(args):
     data_config["expand"] = args.get_val("-p", def_val=False)
     data_config["indent"] = args.get_val("-i")
     data_config["suppress"] = args.get_val("-z", def_val=False)
+    data_config["separate"] = args.get_val("-x", def_val=False)
 
     return data_config
 
@@ -495,7 +530,7 @@ def main():
     opt_con_req_list = {"-s": ["-t"], "-u": ["-t"], "-a": ["-o"]}
     opt_multi_list = ["-s", "-t"]
     opt_req_list = ["-c", "-d", "-b", "-n"]
-    opt_val_list = ["-c", "-d", "-b", "-n", "-o", "-s", "-t", "-y", "-a"]
+    opt_val_list = ["-c", "-d", "-b", "-n", "-o", "-s", "-t", "-y", "-a", "-i"]
 
     # Process argument list from command line.
     args = gen_class.ArgParser(

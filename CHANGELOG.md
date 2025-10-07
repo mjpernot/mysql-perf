@@ -15,7 +15,8 @@ Breaking Changes
 - Updated mysql-lib to v5.5.2
 - Removed -j and -f options.
 - Added -p option to expand JSON format and -i option to set indent spacing for expansion.
-- Changed -a option from True or False to "a" or "w" argument.
+- Changed -a option from a boolean to string argument.
+- Added -x option to mail each performance run separately.
 
 ### Added
 - create_header: Create standard header for JSON object.
@@ -26,7 +27,7 @@ Breaking Changes
 - mysql_stat_run: Removed all output from the function, also added call to create_header and return all statistics in a dictionary format.
 - mysql_stat: Removed all output from the function, will be in data_out call, also put each performance run output into a list for further processing.
 - run_program: Added instance call to gen_class.TimeFormat and passed as argument to all functions, also called create_data_config to create data_config for data_out and passed as argument to all functions.
-- main: Added -i option to opt_def_dict, added -a to opt_con_req_list and opt_val_list.
+- main: Added -i option to opt_def_dict and opt_val_list, added -a to opt_con_req_list and opt_val_list.
 - Documentation changes.
 
 ### Removed
