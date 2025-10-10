@@ -9,8 +9,11 @@ echo "Unit testing..."
 /usr/bin/python test/unit/mysql_perf/create_data_config.py
 /usr/bin/python test/unit/mysql_perf/create_header.py
 /usr/bin/python test/unit/mysql_perf/data_out.py
+/usr/bin/python test/unit/mysql_perf/file_out.py
 /usr/bin/python test/unit/mysql_perf/help_message.py
+/usr/bin/python test/unit/mysql_perf/mail_out.py
 /usr/bin/python test/unit/mysql_perf/main.py
 /usr/bin/python test/unit/mysql_perf/mysql_stat.py
 /usr/bin/python test/unit/mysql_perf/mysql_stat_run.py
 /usr/bin/python test/unit/mysql_perf/run_program.py
+/usr/bin/python test/unit/mysql_perf/std_out.py

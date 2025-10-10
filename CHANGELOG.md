@@ -19,6 +19,9 @@ Breaking Changes
 - Added -x option to mail each performance run separately.
 
 ### Added
+- std_out: Prints out data to standard out in as either flatten or expanded JSON or suppresses standard out.
+- file_out: Writes data to file in as either flatten or expanded JSON.
+- mail_out: Emails data and will determine if data will be email as a single email or as separate emails.
 - create_header: Create standard header for JSON object.
 - data_out: Outputs the data in a variety of formats and media.
 - create_data_config: Create data_out config parameters.

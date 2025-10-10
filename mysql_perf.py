@@ -176,14 +176,16 @@ def create_header(dtg, server, timeform="zulu", current=True):
     return header
 
 
-def data_out(perf_run, **kwargs):
+def std_out(data, cfg, **kwargs):
 
-    """Function:  data_out
+    """Function:  std_out
 
-    Description:  Outputs the data in a variety of formats and media.
+    Description:  Prints out data to standard out in as either flatten or
+        expanded JSON or suppresses standard out.
 
     Arguments:
-        (input) perf_run -> List of JSON data documents (i.e. performance runs)
+        (input) data -> Performance data of a single performance run
+        (input) cfg -> General configuration option settings
         (input) kwargs:
             to_addr -> To email address
             subj -> Email subject line
@@ -197,61 +199,127 @@ def data_out(perf_run, **kwargs):
 
     """
 
-### Check for complexity level here
-    ### Move the second-half of each first "if" into their own function.
+    cfg = dict(cfg)
+
+    if kwargs.get("expand", False):
+        pprint.pprint(data, **cfg)
+
+    else:
+        print(data)
+
+
+def file_out(data, cfg, **kwargs):
+
+    """Function:  file_out
+
+    Description:  Writes data to file in as either flatten or expanded JSON.
+
+    Arguments:
+        (input) data -> Performance data of a single performance run
+        (input) cfg -> General configuration option settings
+        (input) kwargs:
+            to_addr -> To email address
+            subj -> Email subject line
+            mailx -> True|False - Use mailx command
+            outfile -> Name of output file name
+            mode -> w|a => Write or append mode for file
+            expand -> True|False - Expand the JSON format
+            indent -> Indentation of JSON document if expanded
+            suppress -> True|False - Suppress standard out
+            separate -> True|False - Mail each performance run separately
+
+    """
+
+    cfg = dict(cfg)
+
+    if kwargs.get("expand", False):
+        with open(kwargs.get("outfile"), kwargs.get("mode", "w"),
+                  encoding="UTF-8") as outfile:
+            pprint.pprint(data, stream=outfile, **cfg)
+
+    else:
+        gen_libs.write_file(
+            kwargs.get("outfile"), kwargs.get("mode", "w"),
+            json.dumps(data, indent=None))
+
+
+def mail_out(mail, data, cfg, **kwargs):
+
+    """Function:  mail_out
+
+    Description:  Emails data and will determine if data will be email as a
+        single email or as separate emails.
+
+    Arguments:
+        (input) mail -> Mail instance
+        (input) data -> Performance data of a single performance run
+        (input) cfg -> General configuration option settings
+        (input) kwargs:
+            to_addr -> To email address
+            subj -> Email subject line
+            mailx -> True|False - Use mailx command
+            outfile -> Name of output file name
+            mode -> w|a => Write or append mode for file
+            expand -> True|False - Expand the JSON format
+            indent -> Indentation of JSON document if expanded
+            suppress -> True|False - Suppress standard out
+            separate -> True|False - Mail each performance run separately
+
+    """
+
+    cfg = dict(cfg)
+
+    if kwargs.get("separate", False):
+        mail2 = gen_class.setup_mail(
+            kwargs.get("to_addr"), subj=kwargs.get("subj", "NoSubjectLine"))
+        mail2.add_2_msg(json.dumps(data, **cfg))
+        mail2.send_mail(use_mailx=kwargs.get("mailx", False))
+
+    else:
+        mail.add_2_msg(json.dumps(data, **cfg))
+
+
+def data_out(perf_run, data_config, **kwargs):
+
+    """Function:  data_out
+
+    Description:  Outputs the data in a variety of formats and media.
+
+    Arguments:
+        (input) perf_run -> List of JSON data documents (i.e. performance runs)
+        (input) data_config -> Dictionary of data_out configuration options
+        (input) kwargs:
+            to_addr -> To email address
+            subj -> Email subject line
+            mailx -> True|False - Use mailx command
+            outfile -> Name of output file name
+            mode -> w|a => Write or append mode for file
+            expand -> True|False - Expand the JSON format
+            indent -> Indentation of JSON document if expanded
+            suppress -> True|False - Suppress standard out
+            separate -> True|False - Mail each performance run separately
+
+    """
 
     cfg = {"indent": kwargs.get("indent", 4)} if kwargs.get(
         "indent", False) else {}
 
+    data_config = dict(data_config)
     mail = None
-    subj = kwargs.get("subj", "NoSubjectLinePassed")
 
     if kwargs.get("to_addr", False) and not kwargs.get("separate", False):
-        mail = gen_class.setup_mail(kwargs.get("to_addr"), subj=subj)
+        mail = gen_class.setup_mail(
+            kwargs.get("to_addr"), subj=kwargs.get("subj", "NoSubjectLine"))
 
     for data in list(perf_run):
-        #######################################################################
-        ### Function: mail_out
-        #if kwargs.get("to_addr", False):
-        #    mail_out(mail, data, kwargs.get("to_addr"),
-        #        kwargs.get("mailx", False), kwargs.get("separate", False))
-        #######################################################################
-        if kwargs.get("to_addr", False) and kwargs.get("separate", False):
-            mail = gen_class.setup_mail(kwargs.get("to_addr"), subj=subj)
-            mail.add_2_msg(json.dumps(data, **cfg))
-            mail.send_mail(use_mailx=kwargs.get("mailx", False))
+        if kwargs.get("to_addr", False):
+            mail_out(mail, data, cfg, **data_config)
 
-        elif kwargs.get("to_addr", False):
-            mail.add_2_msg(json.dumps(data, **cfg))
-        #######################################################################
+        if kwargs.get("outfile", False):
+            file_out(data, cfg, **data_config)
 
-        #######################################################################
-        ### Function: file_out
-        #if kwargs.get("outfile", False):
-        #    file_out(kwargs.get("outfile"), data, kwargs.get("mode", "w"), cfg)
-        #######################################################################
-        if kwargs.get("outfile", False) and kwargs.get("expand", False):
-            with open(kwargs.get("outfile"), kwargs.get("mode", "w"),
-                      encoding="UTF-8") as outfile:
-                pprint.pprint(data, stream=outfile, **cfg)
-
-        elif kwargs.get("outfile", False):
-            gen_libs.write_file(
-                kwargs.get("outfile"), kwargs.get("mode", "w"),
-                json.dumps(data, indent=None))
-        #######################################################################
-
-        #######################################################################
-        ### Function: std_out
-        #if not kwargs.get("suppress", False):
-        #    std_out(data, cfg, kwargs.get("expand", False))
-        #######################################################################
-        if not kwargs.get("suppress", False) and kwargs.get("expand", False):
-            pprint.pprint(data, **cfg)
-
-        elif not kwargs.get("suppress", False):
-            print(data)
-        #######################################################################
+        if not kwargs.get("suppress", False):
+            std_out(data, cfg, **data_config)
 
     if mail and not kwargs.get("separate", False):
         mail.send_mail(use_mailx=kwargs.get("mailx", False))
@@ -283,36 +351,6 @@ def create_data_config(args):
     return data_config
 
 
-#def convert_dict(data, mail, **kwargs):
-#
-#    """Function:  convert_dict
-#
-#    Description:  Convert dictionary document to standard format and add to
-#        mail body.
-#
-#    Arguments:
-#        (input) data -> Dictionary document
-#        (input) mail -> Mail class instance
-#        (input) kwargs:
-#            indent -> Level of indentation for printing
-#
-#    """
-#
-#    data = dict(data)
-#    indent = kwargs.get("indent", 0)
-#    spc = " "
-#
-#    for key, val in list(data.items()):
-#
-#        if isinstance(val, dict):
-#            mail.add_2_msg(f"{spc * indent}{key}:\n")
-#            convert_dict(val, mail, indent=indent + 4)
-#
-#        else:
-#            mail.add_2_msg(f"{spc * indent}{key}:  {val}\n")
-
-
-#def mysql_stat_run(server, perf_list=None, **kwargs):
 def mysql_stat_run(server, perf_list, dtg, timeform, current):
 
     """Function:  mysql_stat_run
@@ -328,74 +366,19 @@ def mysql_stat_run(server, perf_list, dtg, timeform, current):
         (input) timeform -> Time format name
         (input) current -> True|False - Use current time
         (output) data -> Dictionary of all statistics checked along with header
-#        (input) **kwargs:
-#            indent -> Indentation level for JSON document
-#            mode -> File write mode
-#            ofile -> file name - Name of output file
-#            no_std -> Suppress standard out
-#            json_fmt -> True|False - convert output to JSON format
-#            mail -> Mail class instance
 
     """
 
-#    json_fmt = kwargs.get("json_fmt", False)
-#    indent = kwargs.get("indent", 4)
-#    ofile = kwargs.get("ofile", None)
-#    mode = kwargs.get("mode", "w")
-#    no_std = kwargs.get("no_std", False)
-#    mail = kwargs.get("mail", None)
     perf_list = list(perf_list)
     server.upd_srv_stat()
     server.upd_srv_perf()
-#    data = {"Server": server.name,
-#            "AsOf": gen_libs.get_date() + " " + gen_libs.get_time(),
-#            "PerfStats": {}}
     data = create_header(dtg, server, timeform, current)
     data["PerfStats"] = {}
 
     for item in perf_list:
         data["PerfStats"].update({item: getattr(server, item)})
 
-#    if json_fmt:
-#        jdata = json.dumps(data, indent=indent)
-#        process_json(jdata, ofile, mail, mode, no_std)
-#
-#    else:
-#        err_flag, err_msg = gen_libs.print_dict(
-#            data, ofile=ofile, no_std=no_std, mode=mode)
-#
-#        if err_flag:
-#            print(err_msg)
-#
-#        if mail:
-#            convert_dict(data, mail)
-
     return data
-
-
-#def process_json(jdata, ofile, mail, mode, no_std):
-#
-#    """Function:  process_json
-#
-#    Description:  Process JSON formatted data.
-#
-#    Arguments:
-#        (input) jdata -> JSON formatted dictionary data
-#        (input) ofile -> Name of output file
-#        (input) mail -> Mail class instance
-#        (input) mode -> File write mode
-#        (input) no_std -> Suppress standard out
-#
-#    """
-#
-#    if ofile:
-#        gen_libs.write_file(ofile, mode, jdata)
-#
-#    if not no_std:
-#        gen_libs.print_data(jdata)
-#
-#    if mail:
-#        mail.add_2_msg(jdata)
 
 
 def mysql_stat(server, args, dtg, data_config):
@@ -412,24 +395,6 @@ def mysql_stat(server, args, dtg, data_config):
         (input) data_config -> Dictionary of data_out configuration options
 
     """
-
-#    ofile = args.get_val("-o", def_val=False)
-#    json_fmt = args.get_val("-j", def_val=False)
-#    no_std = args.get_val("-z", def_val=False)
-#    mode = "w"
-#    indent = 4
-#    mail = None
-#
-#    if args.get_val("-a", def_val=False):
-#        mode = "a"
-#
-#    if args.get_val("-f", def_val=False):
-#        indent = None
-#
-#    if args.get_val("-t", def_val=None):
-#        mail = gen_class.setup_mail(
-#            args.get_val("-t"),
-#            subj=args.get_val("-s", def_val="MySQL_Performance"))
 
     data_config = dict(data_config)
     perf_run = []
@@ -449,21 +414,12 @@ def mysql_stat(server, args, dtg, data_config):
         perf_run.append(
             mysql_stat_run(
                 server, perf_list, dtg, timeform="zulu", current=True))
-#        mysql_stat_run(
-#            server, perf_list, ofile=ofile, json_fmt=json_fmt,  no_std=no_std,
-#            mode=mode, indent=indent, mail=mail)
-#
-#        # Append to file after first loop.
-#        mode = "a"
 
         # Do not sleep on the last loop.
         if item != int(args.get_val("-n")) - 1:
             time.sleep(float(args.get_val("-b")))
 
-#    if mail:
-#        mail.send_mail(use_mailx=args.get_val("-u", def_val=False))
-
-    data_out(perf_run, **data_config)
+    data_out(perf_run, data_config, **data_config)
 
 
 def run_program(args, func_dict):

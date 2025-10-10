@@ -22,7 +22,7 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import mysql_perf                           # pylint:disable=E0401,C0413
+import mysql_perf                               # pylint:disable=E0401,C0413
 import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
 import version                                  # pylint:disable=E0401,C0413
 
@@ -121,6 +121,8 @@ class UnitTest(unittest.TestCase):
         test_email_mailx2
         test_email_mailx
         test_email_indent
+        test_separate_true
+        test_separate_false
         test_email
         test_indent_true
         test_indent_false
@@ -147,7 +149,7 @@ class UnitTest(unittest.TestCase):
         self.subj = "EmailSubject"
         self.mailx = True
         self.mailx2 = False
-        self.outfile = "/path/file"
+        self.outfile = "/path/to/file"
         self.mode = "a"
         self.mode2 = "w"
         self.expand = True
@@ -155,7 +157,8 @@ class UnitTest(unittest.TestCase):
         self.indent = 4
         self.suppress = True
         self.suppress2 = False
-        self.outfile = "path/to/open"
+        self.separate = False
+        self.separate2 = True
 
     @mock.patch("mysql_perf.pprint.pprint", mock.Mock(return_value=True))
     @mock.patch("builtins.open", new_callable=mock.mock_open, read_data="data")
@@ -173,10 +176,14 @@ class UnitTest(unittest.TestCase):
             self.outfile).read() == "data"
         mock_file.assert_called_with(self.outfile)
 
+        data_config = {}
+        data_config["outfile"] = self.outfile
+        data_config["mode"] = self.mode2
+        data_config["expand"] = self.expand
+        data_config["suppress"] = self.suppress
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, outfile=self.outfile,
-                mode=self.mode2, expand=True))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     @mock.patch("mysql_perf.pprint.pprint", mock.Mock(return_value=True))
     @mock.patch("builtins.open", new_callable=mock.mock_open, read_data="data")
@@ -194,10 +201,14 @@ class UnitTest(unittest.TestCase):
             self.outfile).read() == "data"
         mock_file.assert_called_with(self.outfile)
 
+        data_config = {}
+        data_config["outfile"] = self.outfile
+        data_config["mode"] = self.mode
+        data_config["expand"] = self.expand
+        data_config["suppress"] = self.suppress
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, outfile=self.outfile,
-                mode=self.mode, expand=True))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     @mock.patch("mysql_perf.pprint.pprint", mock.Mock(return_value=True))
     @mock.patch("builtins.open", new_callable=mock.mock_open, read_data="data")
@@ -215,10 +226,13 @@ class UnitTest(unittest.TestCase):
             self.outfile).read() == "data"
         mock_file.assert_called_with(self.outfile)
 
+        data_config = {}
+        data_config["outfile"] = self.outfile
+        data_config["expand"] = self.expand
+        data_config["suppress"] = self.suppress
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, outfile=self.outfile,
-                expand=True))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     @mock.patch("mysql_perf.gen_libs.write_file",
                 mock.Mock(return_value=True))
@@ -232,10 +246,13 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        data_config = {}
+        data_config["outfile"] = self.outfile
+        data_config["mode"] = self.mode2
+        data_config["suppress"] = self.suppress
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, outfile=self.outfile,
-                mode=self.mode2))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     @mock.patch("mysql_perf.gen_libs.write_file",
                 mock.Mock(return_value=True))
@@ -249,10 +266,13 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        data_config = {}
+        data_config["outfile"] = self.outfile
+        data_config["mode"] = self.mode
+        data_config["suppress"] = self.suppress
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, outfile=self.outfile,
-                mode=self.mode))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     @mock.patch("mysql_perf.gen_libs.write_file",
                 mock.Mock(return_value=True))
@@ -266,9 +286,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        data_config = {}
+        data_config["outfile"] = self.outfile
+        data_config["suppress"] = self.suppress
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, outfile=self.outfile))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     def test_email_subj(self, mock_mail):
@@ -283,10 +306,14 @@ class UnitTest(unittest.TestCase):
 
         mock_mail.return_value = self.mail
 
+        data_config = {}
+        data_config["to_addr"] = self.to_addr
+        data_config["subj"] = self.subj
+        data_config["suppress"] = self.suppress
+        data_config["separate"] = self.separate
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, to_addr=self.to_addr,
-                subj=self.subj))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     def test_email_no_subj(self, mock_mail):
@@ -301,9 +328,13 @@ class UnitTest(unittest.TestCase):
 
         mock_mail.return_value = self.mail
 
+        data_config = {}
+        data_config["to_addr"] = self.to_addr
+        data_config["suppress"] = self.suppress
+        data_config["separate"] = self.separate
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, to_addr=self.to_addr))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     def test_email_mailx2(self, mock_mail):
@@ -318,10 +349,14 @@ class UnitTest(unittest.TestCase):
 
         mock_mail.return_value = self.mail
 
+        data_config = {}
+        data_config["to_addr"] = self.to_addr
+        data_config["mailx"] = self.mailx2
+        data_config["suppress"] = self.suppress
+        data_config["separate"] = self.separate
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, to_addr=self.to_addr,
-                mailx=self.mailx2))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     def test_email_mailx(self, mock_mail):
@@ -336,10 +371,14 @@ class UnitTest(unittest.TestCase):
 
         mock_mail.return_value = self.mail
 
+        data_config = {}
+        data_config["to_addr"] = self.to_addr
+        data_config["mailx"] = self.mailx
+        data_config["suppress"] = self.suppress
+        data_config["separate"] = self.separate
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, to_addr=self.to_addr,
-                mailx=self.mailx))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     def test_email_indent(self, mock_mail):
@@ -354,10 +393,56 @@ class UnitTest(unittest.TestCase):
 
         mock_mail.return_value = self.mail
 
+        data_config = {}
+        data_config["to_addr"] = self.to_addr
+        data_config["indent"] = self.indent
+        data_config["suppress"] = self.suppress
+        data_config["separate"] = self.separate
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, to_addr=self.to_addr,
-                indent=self.indent))
+            mysql_perf.data_out(self.data, data_config, **data_config))
+
+    @mock.patch("mysql_perf.gen_class.setup_mail")
+    def test_separate_true(self, mock_mail):
+
+        """Function:  test_separate_true
+
+        Description:  Test with separate option set to true.
+
+        Arguments:
+
+        """
+
+        mock_mail.return_value = self.mail
+
+        data_config = {}
+        data_config["to_addr"] = self.to_addr
+        data_config["suppress"] = self.suppress
+        data_config["separate"] = self.separate2
+
+        self.assertFalse(
+            mysql_perf.data_out(self.data, data_config, **data_config))
+
+    @mock.patch("mysql_perf.gen_class.setup_mail")
+    def test_separate_false(self, mock_mail):
+
+        """Function:  test_separate_false
+
+        Description:  Test with separate option set to false.
+
+        Arguments:
+
+        """
+
+        mock_mail.return_value = self.mail
+
+        data_config = {}
+        data_config["to_addr"] = self.to_addr
+        data_config["suppress"] = self.suppress
+        data_config["separate"] = self.separate
+
+        self.assertFalse(
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     @mock.patch("mysql_perf.gen_class.setup_mail")
     def test_email(self, mock_mail):
@@ -372,9 +457,13 @@ class UnitTest(unittest.TestCase):
 
         mock_mail.return_value = self.mail
 
+        data_config = {}
+        data_config["to_addr"] = self.to_addr
+        data_config["suppress"] = self.suppress
+        data_config["separate"] = self.separate
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, to_addr=self.to_addr))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     def test_indent_true(self):
 
@@ -386,9 +475,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        data_config = {}
+        data_config["indent"] = self.indent
+        data_config["suppress"] = self.suppress
+
         self.assertFalse(
-            mysql_perf.data_out(
-                self.data, suppress=self.suppress, indent=self.indent))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     def test_indent_false(self):
 
@@ -400,8 +492,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        data_config = {}
+        data_config["suppress"] = self.suppress
+
         self.assertFalse(
-            mysql_perf.data_out(self.data, suppress=self.suppress))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     def test_suppress_true(self):
 
@@ -413,8 +508,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        data_config = {}
+        data_config["suppress"] = self.suppress
+
         self.assertFalse(
-            mysql_perf.data_out(self.data, suppress=self.suppress))
+            mysql_perf.data_out(self.data, data_config, **data_config))
 
     def test_suppress_false_expand2(self):
 
@@ -426,11 +524,14 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        data_config = {}
+        data_config["expand"] = self.expand2
+        data_config["indent"] = self.indent
+        data_config["suppress"] = self.suppress2
+
         with gen_libs.no_std_out():
             self.assertFalse(
-                mysql_perf.data_out(
-                    self.data, suppress=self.suppress2, expand=self.expand2,
-                    indent=self.indent))
+                mysql_perf.data_out(self.data, data_config, **data_config))
 
     def test_suppress_false_expand(self):
 
@@ -442,11 +543,14 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        data_config = {}
+        data_config["expand"] = self.expand
+        data_config["indent"] = self.indent
+        data_config["suppress"] = self.suppress2
+
         with gen_libs.no_std_out():
             self.assertFalse(
-                mysql_perf.data_out(
-                    self.data, suppress=self.suppress2, expand=self.expand,
-                    indent=self.indent))
+                mysql_perf.data_out(self.data, data_config, **data_config))
 
     def test_suppress_false(self):
 
@@ -458,10 +562,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        data_config = {}
+        data_config["suppress"] = self.suppress2
+
         with gen_libs.no_std_out():
             self.assertFalse(
-                mysql_perf.data_out(
-                    self.data, suppress=self.suppress2))
+                mysql_perf.data_out(self.data, data_config, **data_config))
 
 
 if __name__ == "__main__":
