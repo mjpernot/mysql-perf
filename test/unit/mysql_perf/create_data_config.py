@@ -51,8 +51,8 @@ class ArgParser():                                      # pylint:disable=R0903
 
         self.args_array = {
             "-c": "mysql_cfg", "-d": "config", "-t": "to_addr",
-            "-o": "outfile", "-i": "indentation", "-s": "subject",
-            "-i": "1", "-a": "a", "-p": False, "-u": True}
+            "-o": "outfile", "-s": "subject", "-i": "1", "-a": "a",
+            "-p": False, "-u": True}
 
     def get_val(self, skey, def_val=None):
 
