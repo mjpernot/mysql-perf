@@ -4,6 +4,40 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [4.0.0] - 2025-10-03
+Breaking Changes
+
+- Converted output to JSON format only.
+- Updated simplejson=3.19.2
+- Added support for Python 3.13
+- Updated mock==5.2.0
+- Updated python-lib to v4.1.0
+- Updated mysql-lib to v5.5.2
+- Removed -j and -f options.
+- Added -p option to expand JSON format and -i option to set indent spacing for expansion.
+- Changed -a option from a boolean to string argument.
+- Added -x option to mail each performance run separately.
+
+### Added
+- std_out: Prints out data to standard out in as either flatten or expanded JSON or suppresses standard out.
+- file_out: Writes data to file in as either flatten or expanded JSON.
+- mail_out: Emails data and will determine if data will be email as a single email or as separate emails.
+- create_header: Create standard header for JSON object.
+- data_out: Outputs the data in a variety of formats and media.
+- create_data_config: Create data_out config parameters.
+
+### Changed
+- mysql_stat_run: Removed all output from the function, also added call to create_header and return all statistics in a dictionary format.
+- mysql_stat: Removed all output from the function, will be in data_out call, also put each performance run output into a list for further processing.
+- run_program: Added instance call to gen_class.TimeFormat and passed as argument to all functions, also called create_data_config to create data_config for data_out and passed as argument to all functions.
+- main: Added -i option to opt_def_dict and opt_val_list, added -a to opt_con_req_list and opt_val_list.
+- Documentation changes.
+
+### Removed
+- convert_dict function.
+- process_json function.
+
+
 ## [3.0.1] - 2025-05-30
 - Updated python-lib to v4.0.1
 - Updated mysql-lib to v5.5.1

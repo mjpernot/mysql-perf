@@ -22,62 +22,10 @@ import mock
 # Local
 sys.path.append(os.getcwd())
 import mysql_perf                               # pylint:disable=E0401,C0413
-import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import lib.gen_class as gen_class           # pylint:disable=E0401,C0413,R0402
 import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
-
-
-class Mail():
-
-    """Class:  Mail
-
-    Description:  Class stub holder for gen_class.Mail class.
-
-    Methods:
-        __init__
-        add_2_msg
-        send_mail
-
-    """
-
-    def __init__(self):
-
-        """Method:  __init__
-
-        Description:  Class initialization.
-
-        Arguments:
-
-        """
-
-        self.data = None
-
-    def add_2_msg(self, data):
-
-        """Method:  add_2_msg
-
-        Description:  Stub method holder for Mail.add_2_msg.
-
-        Arguments:
-
-        """
-
-        self.data = data
-
-        return True
-
-    def send_mail(self):
-
-        """Method:  send_mail
-
-        Description:  Stub method holder for Mail.send_mail.
-
-        Arguments:
-
-        """
-
-        return True
 
 
 class Server():
@@ -139,18 +87,9 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
-        test_mail_std
-        test_mail_json
-        test_json_file_no_stdout
-        test_json_file_stdout
-        test_json_std_out
-        test_json_nostd
-        test_json_file
-        test_error_handling
         test_default
         test_perf_list
         test_perf_empty_list
-        test_no_perf_list
 
     """
 
@@ -164,183 +103,61 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.dtg = gen_class.TimeFormat()
+        self.dtg.create_time()
+        self.timeform = "zulu"
+        self.current = True
         self.server = Server()
-        self.mail = Mail()
-        self.args_array = {"-j": True}
-        self.args_array2 = {}
         self.perf_list = ["uptime_flush", "binlog_disk", "cur_conn", "uptime",
                           "max_conn"]
         self.perf_list2 = []
-        self.ofile = "/path/file"
-        self.db_tbl = "db:tbl"
+        self.perf_list3 = ["uptime_flush"]
+        self.header = {
+            "Application": "MySQL_Perf", "Server": "ServerName",
+            "AsOf": "YYYYMMDDTHHMMSS"}
+        self.results = "uptime_flush"
+        self.results2 = "uptime"
 
-    def test_mail_std(self):
+    @mock.patch("mysql_perf.create_header")
+    def test_perf_list2(self, mock_hdr):
 
-        """Function:  test_mail_std
+        """Function:  test_perf_list2
 
-        Description:  Test with email in standard format.
+        Description:  Test with multiple items in perf_list.
 
         Arguments:
 
         """
 
-        self.assertFalse(
+        mock_hdr.return_value = self.header
+
+        self.assertEqual(
             mysql_perf.mysql_stat_run(
-                self.server, self.perf_list, json_fmt=True, mail=self.mail,
-                no_std=True))
+                self.server, self.perf_list, self.dtg, self.timeform,
+                self.current)["PerfStats"]["uptime"],
+            self.results2)
 
-    def test_mail_json(self):
-
-        """Function:  test_mail_json
-
-        Description:  Test with email in JSON format.
-
-        Arguments:
-
-        """
-
-        self.assertFalse(
-            mysql_perf.mysql_stat_run(
-                self.server, self.perf_list, json_fmt=False, mail=self.mail,
-                no_std=True))
-
-    @mock.patch("mysql_perf.gen_libs.write_file")
-    def test_json_file_no_stdout(self, mock_file):
-
-        """Function:  test_json_file_stdout
-
-        Description:  Test with JSON on and output to a file but no std out.
-
-        Arguments:
-
-        """
-
-        mock_file.return_value = True
-
-        self.assertFalse(
-            mysql_perf.mysql_stat_run(
-                self.server, self.perf_list, json_fmt=True, ofile=self.ofile,
-                no_std=True))
-
-    @mock.patch("mysql_perf.gen_libs.print_data")
-    @mock.patch("mysql_perf.gen_libs.write_file")
-    def test_json_file_stdout(self, mock_file, mock_print):
-
-        """Function:  test_json_file_stdout
-
-        Description:  Test with JSON on and output to a file and std out.
-
-        Arguments:
-
-        """
-
-        mock_file.return_value = True
-        mock_print.return_value = True
-
-        self.assertFalse(
-            mysql_perf.mysql_stat_run(
-                self.server, self.perf_list, json_fmt=True, ofile=self.ofile,
-                no_std=False))
-
-    @mock.patch("mysql_perf.gen_libs.print_data")
-    def test_json_std_out(self, mock_print):
-
-        """Function:  test_json_nostd
-
-        Description:  Test with JSON on and no standard out.
-
-        Arguments:
-
-        """
-
-        mock_print.return_value = True
-
-        self.assertFalse(
-            mysql_perf.mysql_stat_run(
-                self.server, self.perf_list, json_fmt=True, no_std=False))
-
-    def test_json_nostd(self):
-
-        """Function:  test_json_nostd
-
-        Description:  Test with JSON on and no standard out.
-
-        Arguments:
-
-        """
-
-        self.assertFalse(
-            mysql_perf.mysql_stat_run(
-                self.server, self.perf_list, json_fmt=True, no_std=True))
-
-    @mock.patch("mysql_perf.gen_libs.write_file")
-    def test_json_file(self, mock_file):
-
-        """Function:  test_json_file
-
-        Description:  Test with JSON on and output to a file.
-
-        Arguments:
-
-        """
-
-        mock_file.return_value = True
-
-        self.assertFalse(
-            mysql_perf.mysql_stat_run(
-                self.server, self.perf_list, json_fmt=True, ofile=self.ofile,
-                no_std=True))
-
-    @mock.patch("mysql_perf.gen_libs.print_dict")
-    def test_error_handling(self, mock_print):
-
-        """Function:  test_error_handling
-
-        Description:  Test error handling.
-
-        Arguments:
-
-        """
-
-        mock_print.return_value = (True, "Error Message")
-
-        with gen_libs.no_std_out():
-            self.assertFalse(mysql_perf.mysql_stat_run(
-                self.server, perf_list=self.perf_list))
-
-    @mock.patch("mysql_perf.gen_libs.print_dict")
-    def test_default(self, mock_print):
-
-        """Function:  test_default
-
-        Description:  Test with default settings.
-
-        Arguments:
-
-        """
-
-        mock_print.return_value = (False, None)
-
-        self.assertFalse(mysql_perf.mysql_stat_run(self.server))
-
-    @mock.patch("mysql_perf.gen_libs.print_dict")
-    def test_perf_list(self, mock_print):
+    @mock.patch("mysql_perf.create_header")
+    def test_perf_list(self, mock_hdr):
 
         """Function:  test_perf_list
 
-        Description:  Test with perf_list populated.
+        Description:  Test with one item in perf_list.
 
         Arguments:
 
         """
 
-        mock_print.return_value = (False, None)
+        mock_hdr.return_value = self.header
 
-        self.assertFalse(
-            mysql_perf.mysql_stat_run(self.server, perf_list=self.perf_list))
+        self.assertEqual(
+            mysql_perf.mysql_stat_run(
+                self.server, self.perf_list3, self.dtg, self.timeform,
+                self.current)["PerfStats"]["uptime_flush"],
+            self.results)
 
-    @mock.patch("mysql_perf.gen_libs.print_dict")
-    def test_perf_empty_list(self, mock_print):
+    @mock.patch("mysql_perf.create_header")
+    def test_perf_empty_list(self, mock_hdr):
 
         """Function:  test_perf_empty_list
 
@@ -350,25 +167,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_print.return_value = (False, None)
+        mock_hdr.return_value = self.header
 
-        self.assertFalse(
-            mysql_perf.mysql_stat_run(self.server, perf_list=self.perf_list2))
-
-    @mock.patch("mysql_perf.gen_libs.print_dict")
-    def test_no_perf_list(self, mock_print):
-
-        """Function:  test_no_perf_list
-
-        Description:  Test with no perf_list passed.
-
-        Arguments:
-
-        """
-
-        mock_print.return_value = (False, None)
-
-        self.assertFalse(mysql_perf.mysql_stat_run(self.server))
+        self.assertEqual(
+            mysql_perf.mysql_stat_run(
+                self.server, self.perf_list2, self.dtg, self.timeform,
+                self.current)["PerfStats"], {})
 
 
 if __name__ == "__main__":
